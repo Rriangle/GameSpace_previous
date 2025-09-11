@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using GameSpace.Areas.MiniGame.Models;
+using GameSpace.Areas.MiniGame.Services;
 
 namespace GameSpace.Areas.MiniGame.Controllers
 {
@@ -10,53 +11,24 @@ namespace GameSpace.Areas.MiniGame.Controllers
     [Area("MiniGame")]
     public class PetController : Controller
     {
+        private readonly IPetInteractionService _petService;
+
+        public PetController(IPetInteractionService petService)
+        {
+            _petService = petService;
+        }
         /// <summary>
         /// 寵物主頁面 - 顯示寵物狀態與基本資訊
         /// </summary>
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "我的寵物";
             
-            // 模擬資料 - 對應 database.sql Pet 架構，實際邏輯將在 Stage 4 實作
-            var viewModel = new PetStatusDisplayViewModel
-            {
-                Pet = new PetViewModel
-                {
-                    PetID = 1,
-                    UserID = 1,
-                    PetName = "小火龍",
-                    Level = 5,
-                    LevelUpTime = DateTime.Now.AddDays(-5),
-                    Experience = 320,
-                    Hunger = 80,
-                    Mood = 75,
-                    Stamina = 60,
-                    Cleanliness = 90,
-                    Health = 95,
-                    SkinColor = "#FF6B35",
-                    BackgroundColor = "#FFE5B4",
-                    SkinColorChangedTime = DateTime.Now.AddDays(-10),
-                    BackgroundColorChangedTime = DateTime.Now.AddDays(-15)
-                },
-                NextLevelExpRequired = 500,
-                ExpProgressPercentage = 64.0, // 320/500 = 0.64
-                HungerStatus = "飽足",
-                MoodStatus = "愉快",
-                OverallHealthScore = 80,
-                NeedsCare = false,
-                SuggestedCareActions = new List<string> { "建議陪玩增加心情", "補充體力" },
-                RecentActivities = new List<PetActivityLogViewModel>
-                {
-                    new PetActivityLogViewModel { ActivityType = "餵食", Description = "餵食了美味的寵物糧食", ActivityTime = DateTime.Now.AddHours(-2), IconClass = "fas fa-utensils text-warning" },
-                    new PetActivityLogViewModel { ActivityType = "陪玩", Description = "完成了一場愉快的遊戲", ActivityTime = DateTime.Now.AddHours(-5), IconClass = "fas fa-gamepad text-info" },
-                    new PetActivityLogViewModel { ActivityType = "升級", Description = "等級提升到 Lv.5", ActivityTime = DateTime.Now.AddDays(-1), IconClass = "fas fa-level-up-alt text-success" }
-                },
-                LevelUpHistory = new List<PetLevelUpHistoryViewModel>
-                {
-                    new PetLevelUpHistoryViewModel { Level = 5, LevelUpTime = DateTime.Now.AddDays(-1), PointsReward = 25 },
-                    new PetLevelUpHistoryViewModel { Level = 4, LevelUpTime = DateTime.Now.AddDays(-8), PointsReward = 20 }
-                }
-            };
+            const int currentUserId = 1; // 實際會從認證系統取得
+            const int petId = 1; // 實際會查詢使用者的寵物列表
+            
+            // 使用寵物服務取得實際狀態資料
+            var viewModel = await _petService.GetPetStatusAsync(petId, currentUserId);
             
             return View(viewModel);
         }
@@ -82,45 +54,117 @@ namespace GameSpace.Areas.MiniGame.Controllers
         }
 
         /// <summary>
-        /// 餵食寵物動作 - POST 方法
+        /// 餵食寵物動作 - POST 方法，實作真實餵食邏輯
         /// </summary>
         [HttpPost]
-        public IActionResult Feed(int id)
+        public async Task<IActionResult> Feed(int id)
         {
-            // 目前回傳成功訊息，實際邏輯待後續階段實作
-            TempData["SuccessMessage"] = "餵食成功！寵物飢餓度 +20";
+            const int currentUserId = 1; // 實際會從認證系統取得
+            
+            var result = await _petService.FeedPetAsync(id, currentUserId);
+            
+            if (result.Success)
+            {
+                var message = result.Message;
+                if (result.LevelUpTriggered && result.LevelUpReward != null)
+                {
+                    message += $" 恭喜升級到 Lv.{result.LevelUpReward.NewLevel}！獲得 {result.LevelUpReward.PointsReward} 積分！";
+                }
+                TempData["SuccessMessage"] = message;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+            
             return RedirectToAction(nameof(Index));
         }
 
         /// <summary>
-        /// 與寵物玩耍動作 - POST 方法
+        /// 與寵物玩耍動作 - POST 方法，實作真實陪玩邏輯
         /// </summary>
         [HttpPost]
-        public IActionResult Play(int id)
+        public async Task<IActionResult> Play(int id)
         {
-            // 目前回傳成功訊息，實際邏輯待後續階段實作
-            TempData["SuccessMessage"] = "陪玩成功！寵物心情 +15";
+            const int currentUserId = 1; // 實際會從認證系統取得
+            
+            var result = await _petService.PlayWithPetAsync(id, currentUserId);
+            
+            if (result.Success)
+            {
+                var message = result.Message;
+                if (result.LevelUpTriggered && result.LevelUpReward != null)
+                {
+                    message += $" {result.LevelUpReward.Message}獲得 {result.LevelUpReward.PointsReward} 積分！";
+                }
+                TempData["SuccessMessage"] = message;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+            
             return RedirectToAction(nameof(Index));
         }
 
         /// <summary>
-        /// 取得寵物目前狀態 - AJAX 端點
+        /// 清潔寵物動作 - POST 方法，實作真實清潔邏輯
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> Clean(int id)
+        {
+            const int currentUserId = 1; // 實際會從認證系統取得
+            
+            var result = await _petService.CleanPetAsync(id, currentUserId);
+            
+            if (result.Success)
+            {
+                TempData["SuccessMessage"] = result.Message;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+            
+            return RedirectToAction(nameof(Index));
+        }
+
+        /// <summary>
+        /// 取得寵物目前狀態 - AJAX 端點，實作真實狀態查詢
         /// </summary>
         [HttpGet]
-        public IActionResult GetPetStatus(int id)
+        public async Task<IActionResult> GetPetStatus(int id)
         {
-            // 目前回傳假資料，實際邏輯待後續階段實作
-            return Json(new { 
-                petId = id,
-                name = "可愛小龍",
-                level = 5,
-                experience = 320,
-                hunger = 80,
-                mood = 75,
-                stamina = 60,
-                cleanliness = 90,
-                health = 95
-            });
+            const int currentUserId = 1; // 實際會從認證系統取得
+            
+            try
+            {
+                var petStatus = await _petService.GetPetStatusAsync(id, currentUserId);
+                
+                return Json(new { 
+                    success = true,
+                    petId = petStatus.Pet.PetID,
+                    name = petStatus.Pet.PetName,
+                    level = petStatus.Pet.Level,
+                    experience = petStatus.Pet.Experience,
+                    nextLevelExp = petStatus.NextLevelExpRequired,
+                    hunger = petStatus.Pet.Hunger,
+                    mood = petStatus.Pet.Mood,
+                    stamina = petStatus.Pet.Stamina,
+                    cleanliness = petStatus.Pet.Cleanliness,
+                    health = petStatus.Pet.Health,
+                    overallScore = petStatus.OverallHealthScore,
+                    needsCare = petStatus.NeedsCare,
+                    suggestedActions = petStatus.SuggestedCareActions
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { 
+                    success = false,
+                    message = "取得寵物狀態失敗" 
+                });
+            }
         }
     }
 }
