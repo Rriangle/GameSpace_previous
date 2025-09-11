@@ -1,0 +1,285 @@
+@model GameSpace.Areas.MiniGame.Models.PetStatusDisplayViewModel
+@{
+    ViewData["Title"] = "寵物外觀設定";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">@ViewData["Title"] - @Model.Pet.PetName</h2>
+            
+            <!-- 返回按鈕 -->
+            <div class="mb-3">
+                <a asp-action="Details" asp-route-id="@Model.Pet.PetID" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>返回詳細資訊
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 寵物預覽 -->
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">外觀預覽</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div id="petPreview" class="pet-preview mb-4" style="background-color: @Model.Pet.BackgroundColor; padding: 40px; border-radius: 15px; min-height: 250px; position: relative;">
+                        <div id="petAvatar" style="width: 150px; height: 150px; background-color: @Model.Pet.SkinColor; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                            <i class="fas fa-dragon fa-4x text-white"></i>
+                        </div>
+                        <div class="mt-3">
+                            <h5>@Model.Pet.PetName</h5>
+                            <p class="text-muted">Lv.@Model.Pet.Level</p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-muted">
+                        <small>上次外觀變更：</small><br>
+                        <small>皮膚 @Model.Pet.SkinColorChangedTime.ToString("yyyy/MM/dd")</small><br>
+                        <small>背景 @Model.Pet.BackgroundColorChangedTime.ToString("yyyy/MM/dd")</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自訂設定 -->
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">外觀自訂</h5>
+                </div>
+                <div class="card-body">
+                    <!-- 皮膚顏色選擇 -->
+                    <div class="mb-4">
+                        <h6 class="mb-3">
+                            <i class="fas fa-palette me-2"></i>皮膚顏色 
+                            <span class="text-muted">(需要 @Model.Pet.PointsChanged_SkinColor 積分)</span>
+                        </h6>
+                        <div class="row">
+                            @{
+                                var skinColors = new[] { "#FF6B35", "#F7931E", "#FFD23F", "#06FFA5", "#3A86FF", "#8338EC", "#FB8500", "#023047" };
+                            }
+                            @foreach (var color in skinColors)
+                            {
+                                <div class="col-3 col-md-2 mb-2">
+                                    <button type="button" 
+                                            class="btn color-option @(color == Model.Pet.SkinColor ? "selected" : "")" 
+                                            style="background-color: @color; width: 100%; height: 50px; border: 3px solid @(color == Model.Pet.SkinColor ? "#000" : "transparent");"
+                                            onclick="selectSkinColor('@color')">
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- 背景顏色選擇 -->
+                    <div class="mb-4">
+                        <h6 class="mb-3">
+                            <i class="fas fa-image me-2"></i>背景顏色 
+                            <span class="text-muted">(需要 @Model.Pet.PointsChanged_BackgroundColor 積分)</span>
+                        </h6>
+                        <div class="row">
+                            @{
+                                var bgColors = new[] { "#FFE5B4", "#FFECD1", "#E8F5E8", "#E3F2FD", "#F3E5F5", "#FFF3E0", "#FCE4EC", "#F1F8E9" };
+                            }
+                            @foreach (var color in bgColors)
+                            {
+                                <div class="col-3 col-md-2 mb-2">
+                                    <button type="button" 
+                                            class="btn color-option @(color == Model.Pet.BackgroundColor ? "selected" : "")" 
+                                            style="background-color: @color; width: 100%; height: 50px; border: 3px solid @(color == Model.Pet.BackgroundColor ? "#000" : "transparent");"
+                                            onclick="selectBackgroundColor('@color')">
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- 預設樣式 -->
+                    <div class="mb-4">
+                        <h6 class="mb-3">
+                            <i class="fas fa-star me-2"></i>預設主題樣式
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <button class="btn btn-outline-primary w-100" onclick="applyTheme('fire')">
+                                    <i class="fas fa-fire me-2"></i>火焰主題
+                                </button>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <button class="btn btn-outline-success w-100" onclick="applyTheme('nature')">
+                                    <i class="fas fa-leaf me-2"></i>自然主題
+                                </button>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <button class="btn btn-outline-info w-100" onclick="applyTheme('ocean')">
+                                    <i class="fas fa-water me-2"></i>海洋主題
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 操作按鈕 -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-primary w-100" id="saveChangesBtn">
+                                <i class="fas fa-save me-2"></i>儲存變更
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-secondary w-100" onclick="resetToDefault()">
+                                <i class="fas fa-undo me-2"></i>重設為預設
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.color-option {
+    border-radius: 8px !important;
+    transition: all 0.3s ease;
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.color-option.selected {
+    border-width: 3px !important;
+    border-color: #000 !important;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+
+.pet-preview {
+    border: 3px dashed #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 6px;
+    border-left: 3px solid #28a745;
+}
+</style>
+
+<script>
+let currentSkinColor = '@Model.Pet.SkinColor';
+let currentBackgroundColor = '@Model.Pet.BackgroundColor';
+
+function selectSkinColor(color) {
+    currentSkinColor = color;
+    updatePreview();
+    
+    // 更新選中狀態
+    document.querySelectorAll('.color-option').forEach(btn => {
+        btn.classList.remove('selected');
+        btn.style.border = '3px solid transparent';
+    });
+    
+    event.target.classList.add('selected');
+    event.target.style.border = '3px solid #000';
+}
+
+function selectBackgroundColor(color) {
+    currentBackgroundColor = color;
+    updatePreview();
+    
+    // 更新選中狀態 - 只處理背景顏色按鈕
+    const bgSection = event.target.closest('.mb-4');
+    bgSection.querySelectorAll('.color-option').forEach(btn => {
+        btn.classList.remove('selected');
+        btn.style.border = '3px solid transparent';
+    });
+    
+    event.target.classList.add('selected');
+    event.target.style.border = '3px solid #000';
+}
+
+function updatePreview() {
+    const preview = document.getElementById('petPreview');
+    const avatar = document.getElementById('petAvatar');
+    
+    preview.style.backgroundColor = currentBackgroundColor;
+    avatar.style.backgroundColor = currentSkinColor;
+}
+
+function applyTheme(themeName) {
+    const themes = {
+        fire: { skin: '#FF6B35', background: '#FFE5B4' },
+        nature: { skin: '#06FFA5', background: '#F1F8E9' },
+        ocean: { skin: '#3A86FF', background: '#E3F2FD' }
+    };
+    
+    if (themes[themeName]) {
+        currentSkinColor = themes[themeName].skin;
+        currentBackgroundColor = themes[themeName].background;
+        updatePreview();
+        
+        // 更新按鈕選中狀態
+        updateColorButtonSelection();
+        
+        alert(`已套用${themeName === 'fire' ? '火焰' : themeName === 'nature' ? '自然' : '海洋'}主題`);
+    }
+}
+
+function updateColorButtonSelection() {
+    // 重設所有選中狀態
+    document.querySelectorAll('.color-option').forEach(btn => {
+        btn.classList.remove('selected');
+        btn.style.border = '3px solid transparent';
+    });
+    
+    // 設定當前顏色為選中
+    document.querySelectorAll('.color-option').forEach(btn => {
+        const btnColor = btn.style.backgroundColor;
+        if (btnColor === currentSkinColor || btnColor === currentBackgroundColor) {
+            btn.classList.add('selected');
+            btn.style.border = '3px solid #000';
+        }
+    });
+}
+
+function resetToDefault() {
+    if (confirm('確定要重設為預設外觀嗎？')) {
+        currentSkinColor = '#FF6B35';
+        currentBackgroundColor = '#FFE5B4';
+        updatePreview();
+        updateColorButtonSelection();
+        alert('已重設為預設外觀');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const saveBtn = document.getElementById('saveChangesBtn');
+    
+    saveBtn.addEventListener('click', function() {
+        // 儲存變更邏輯將在 Stage 4 實作
+        if (confirm('確定要儲存外觀變更嗎？這將消耗對應的積分。')) {
+            alert('外觀設定儲存成功！');
+            // 實際情況下會導向詳細頁面或重新整理
+        }
+    });
+});
+</script>
