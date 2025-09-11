@@ -1,3 +1,4 @@
+@model GameSpace.Areas.MiniGame.Models.SignInStatsDisplayViewModel
 @{
     ViewData["Title"] = "每日簽到";
 }
@@ -32,23 +33,23 @@
                     <h5 class="card-title">簽到統計</h5>
                     <div class="row text-center mt-3">
                         <div class="col-4">
-                            <h4 class="text-success">7</h4>
+                            <h4 class="text-success">@Model.ConsecutiveDays</h4>
                             <small class="text-muted">連續簽到</small>
                         </div>
                         <div class="col-4">
-                            <h4 class="text-info">23</h4>
+                            <h4 class="text-info">@Model.MonthlySignInDays</h4>
                             <small class="text-muted">本月簽到</small>
                         </div>
                         <div class="col-4">
-                            <h4 class="text-warning">156</h4>
+                            <h4 class="text-warning">@Model.TotalSignInDays</h4>
                             <small class="text-muted">總簽到天數</small>
                         </div>
                     </div>
                     <hr>
                     <div class="text-center">
                         <p class="mb-2"><strong>今日獎勵：</strong></p>
-                        <span class="badge bg-primary me-2">積分 +10</span>
-                        <span class="badge bg-success">經驗值 +5</span>
+                        <span class="badge bg-primary me-2">積分 +@Model.TodayPointsReward</span>
+                        <span class="badge bg-success">經驗值 +@Model.TodayExpReward</span>
                     </div>
                 </div>
             </div>

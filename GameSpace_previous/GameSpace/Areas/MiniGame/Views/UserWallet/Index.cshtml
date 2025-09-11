@@ -1,3 +1,4 @@
+@model GameSpace.Areas.MiniGame.Models.WalletOverviewDisplayViewModel
 @{
     ViewData["Title"] = "我的錢包";
 }
@@ -15,7 +16,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">目前積分</h5>
-                    <h3 class="text-primary">1,250</h3>
+                    <h3 class="text-primary">@Model.CurrentPoints.ToString("N0")</h3>
                     <p class="card-text">可用於兌換獎品</p>
                 </div>
             </div>
@@ -25,7 +26,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">可用優惠券</h5>
-                    <h3 class="text-success">5</h3>
+                    <h3 class="text-success">@Model.AvailableCouponsCount</h3>
                     <p class="card-text">尚未使用的優惠券</p>
                 </div>
             </div>
@@ -35,7 +36,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">電子禮券</h5>
-                    <h3 class="text-warning">2</h3>
+                    <h3 class="text-warning">@Model.AvailableEVouchersCount</h3>
                     <p class="card-text">可兌換的電子禮券</p>
                 </div>
             </div>
@@ -45,7 +46,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">本月消費</h5>
-                    <h3 class="text-info">320</h3>
+                    <h3 class="text-info">@Model.MonthlyPointsSpent.ToString("N0")</h3>
                     <p class="card-text">積分消費統計</p>
                 </div>
             </div>
@@ -90,24 +91,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>2024/09/11</td>
-                                    <td><span class="badge bg-success">獲得</span></td>
-                                    <td class="text-success">+10</td>
-                                    <td>每日簽到</td>
-                                </tr>
-                                <tr>
-                                    <td>2024/09/11</td>
-                                    <td><span class="badge bg-info">獲得</span></td>
-                                    <td class="text-success">+50</td>
-                                    <td>完成小遊戲</td>
-                                </tr>
-                                <tr>
-                                    <td>2024/09/10</td>
-                                    <td><span class="badge bg-warning">消費</span></td>
-                                    <td class="text-danger">-30</td>
-                                    <td>兌換優惠券</td>
-                                </tr>
+                                @foreach (var transaction in Model.RecentTransactions)
+                                {
+                                    <tr>
+                                        <td>@transaction.ChangeTime.ToString("yyyy/MM/dd HH:mm")</td>
+                                        <td>
+                                            @if (transaction.PointsChanged > 0)
+                                            {
+                                                <span class="badge bg-success">@transaction.ChangeType</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">@transaction.ChangeType</span>
+                                            }
+                                        </td>
+                                        <td class="@(transaction.PointsChanged > 0 ? "text-success" : "text-danger")">
+                                            @(transaction.PointsChanged > 0 ? "+" : "")@transaction.PointsChanged
+                                        </td>
+                                        <td>@transaction.Description</td>
+                                    </tr>
+                                }
+                                @if (!Model.RecentTransactions.Any())
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">目前沒有交易記錄</td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
