@@ -1,3 +1,4 @@
+@model GameSpace.Areas.MiniGame.Models.GameHallDisplayViewModel
 @{
     ViewData["Title"] = "小遊戲大廳";
 }
@@ -15,7 +16,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">今日遊戲</h5>
-                    <h3 class="text-primary">3</h3>
+                    <h3 class="text-primary">@Model.TodayGameCount</h3>
                     <p class="card-text">次</p>
                 </div>
             </div>
@@ -24,7 +25,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">今日獲得積分</h5>
-                    <h3 class="text-success">150</h3>
+                    <h3 class="text-success">@Model.TodayPointsEarned.ToString("N0")</h3>
                     <p class="card-text">分</p>
                 </div>
             </div>
@@ -33,7 +34,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">最高分數</h5>
-                    <h3 class="text-warning">2,450</h3>
+                    <h3 class="text-warning">@Model.HighestScore.ToString("N0")</h3>
                     <p class="card-text">分</p>
                 </div>
             </div>
@@ -42,7 +43,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">遊戲等級</h5>
-                    <h3 class="text-info">12</h3>
+                    <h3 class="text-info">@Model.CurrentGameLevel</h3>
                     <p class="card-text">級</p>
                 </div>
             </div>
@@ -58,56 +59,36 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="card game-card">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-crosshairs fa-3x text-danger mb-3"></i>
-                                    <h5 class="card-title">打怪獸</h5>
-                                    <p class="card-text">經典射擊遊戲，考驗反應速度與準確度</p>
-                                    <div class="mb-3">
-                                        <span class="badge bg-primary">積分獎勵: 50</span>
-                                        <span class="badge bg-secondary">難度: ★★★☆☆</span>
+                        @foreach (var game in Model.AvailableGames)
+                        {
+                            <div class="col-md-4 mb-3">
+                                <div class="card game-card">
+                                    <div class="card-body text-center">
+                                        <i class="@game.IconClass fa-3x mb-3"></i>
+                                        <h5 class="card-title">@game.GameName</h5>
+                                        <p class="card-text">@game.Description</p>
+                                        <div class="mb-3">
+                                            <span class="badge bg-primary">積分獎勵: @game.PointsReward</span>
+                                            <span class="badge bg-secondary">
+                                                難度: @(new string('★', game.DifficultyLevel))@(new string('☆', 5 - game.DifficultyLevel))
+                                            </span>
+                                        </div>
+                                        @if (game.IsEnabled)
+                                        {
+                                            <a asp-action="Play" asp-route-id="@game.GameId" class="btn btn-primary">
+                                                <i class="fas fa-play me-2"></i>開始遊戲
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-secondary" disabled>
+                                                <i class="fas fa-lock me-2"></i>暫時關閉
+                                            </button>
+                                        }
                                     </div>
-                                    <a asp-action="Play" asp-route-id="1" class="btn btn-primary">
-                                        <i class="fas fa-play me-2"></i>開始遊戲
-                                    </a>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="col-md-4 mb-3">
-                            <div class="card game-card">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-map fa-3x text-success mb-3"></i>
-                                    <h5 class="card-title">寵物冒險</h5>
-                                    <p class="card-text">策略冒險遊戲，與寵物一起探索未知世界</p>
-                                    <div class="mb-3">
-                                        <span class="badge bg-primary">積分獎勵: 75</span>
-                                        <span class="badge bg-secondary">難度: ★★★★☆</span>
-                                    </div>
-                                    <a asp-action="Play" asp-route-id="2" class="btn btn-success">
-                                        <i class="fas fa-play me-2"></i>開始遊戲
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-4 mb-3">
-                            <div class="card game-card">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-brain fa-3x text-warning mb-3"></i>
-                                    <h5 class="card-title">記憶挑戰</h5>
-                                    <p class="card-text">記憶力訓練遊戲，提升專注力與記憶能力</p>
-                                    <div class="mb-3">
-                                        <span class="badge bg-primary">積分獎勵: 30</span>
-                                        <span class="badge bg-secondary">難度: ★★☆☆☆</span>
-                                    </div>
-                                    <a asp-action="Play" asp-route-id="3" class="btn btn-warning">
-                                        <i class="fas fa-play me-2"></i>開始遊戲
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -136,30 +117,43 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><i class="fas fa-crosshairs text-danger me-2"></i>打怪獸</td>
-                                    <td>1,250</td>
-                                    <td>5</td>
-                                    <td class="text-success">+50</td>
-                                    <td>3:45</td>
-                                    <td>2024/09/11</td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-brain text-warning me-2"></i>記憶挑戰</td>
-                                    <td>800</td>
-                                    <td>3</td>
-                                    <td class="text-success">+30</td>
-                                    <td>2:30</td>
-                                    <td>2024/09/11</td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-map text-success me-2"></i>寵物冒險</td>
-                                    <td>2,100</td>
-                                    <td>8</td>
-                                    <td class="text-success">+75</td>
-                                    <td>8:20</td>
-                                    <td>2024/09/10</td>
-                                </tr>
+                                @if (Model.RecentGameHistory.Any())
+                                {
+                                    @foreach (var game in Model.RecentGameHistory)
+                                    {
+                                        @{
+                                            var gameInfo = Model.AvailableGames.FirstOrDefault(g => g.GameId == game.PlayID % 3 + 1);
+                                            var duration = game.EndTime.HasValue ? game.EndTime.Value - game.StartTime : TimeSpan.Zero;
+                                        }
+                                        <tr>
+                                            <td>
+                                                @if (gameInfo != null)
+                                                {
+                                                    <i class="@gameInfo.IconClass me-2"></i>@gameInfo.GameName
+                                                }
+                                                else
+                                                {
+                                                    <i class="fas fa-gamepad me-2"></i>未知遊戲
+                                                }
+                                            </td>
+                                            <td>@((game.Level * 50 + game.ExpGained * 10).ToString("N0"))</td>
+                                            <td>@game.Level</td>
+                                            <td class="text-success">+@game.PointsGained</td>
+                                            <td>@duration.ToString(@"mm\:ss")</td>
+                                            <td>@game.StartTime.ToString("yyyy/MM/dd")</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">
+                                            <i class="fas fa-gamepad fa-3x text-muted mb-3"></i>
+                                            <h5 class="text-muted">目前沒有遊戲記錄</h5>
+                                            <p class="text-muted">開始第一場遊戲來建立記錄</p>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
