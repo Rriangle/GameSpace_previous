@@ -1,0 +1,10 @@
+C:\Users\n2029\Desktop\GameSpace\GameSpace\obj\Debug\net8.0\GameSpace.csproj.AssemblyReference.cache
+C:\Users\n2029\Desktop\GameSpace\GameSpace\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\n2029\Desktop\GameSpace\GameSpace\obj\Debug\net8.0\GameSpace.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\n2029\Desktop\GameSpace\GameSpace\obj\Debug\net8.0\GameSpace.AssemblyInfoInputs.cache
+C:\Users\n2029\Desktop\GameSpace\GameSpace\obj\Debug\net8.0\GameSpace.AssemblyInfo.cs
+C:\Users\n2029\Desktop\GameSpace\GameSpace\obj\Debug\net8.0\GameSpace.csproj.CoreCompileInputs.cache
+C:\Users\n2029\Desktop\GameSpace\GameSpace\obj\Debug\net8.0\GameSpace.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\n2029\Desktop\GameSpace\GameSpace\obj\Debug\net8.0\GameSpace.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\n2029\Desktop\GameSpace\GameSpace\obj\Debug\net8.0\GameSpace.RazorAssemblyInfo.cache
+C:\Users\n2029\Desktop\GameSpace\GameSpace\obj\Debug\net8.0\GameSpace.RazorAssemblyInfo.cs

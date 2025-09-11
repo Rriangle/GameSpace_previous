@@ -1,0 +1,49 @@
+﻿@model GameSpace.Models.Mute
+@{
+    ViewData["Title"] = "新增穢語";
+}
+
+<div class="card shadow">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-3">
+            <h5 class="m-0">@ViewData["Title"]</h5>
+            <span class="badge bg-success">建立</span>
+        </div>
+        <a asp-area="social_hub" asp-controller="Mutes" asp-action="Index" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> 返回
+        </a>
+    </div>
+
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="MuteName" class="form-label"></label>
+                <input asp-for="MuteName" class="form-control" placeholder="請輸入要遮蔽的字詞" />
+                <span asp-validation-for="MuteName" class="text-danger"></span>
+            </div>
+
+            <div class="form-check form-switch mb-3">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label">啟用</label>
+            </div>
+
+            @* CreatedAt / ManagerId 改由伺服器端設定，不從表單接收 *@
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> 儲存
+                </button>
+                <a asp-area="social_hub" asp-controller="Mutes" asp-action="Index" class="btn btn-outline-secondary">
+                    取消
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
