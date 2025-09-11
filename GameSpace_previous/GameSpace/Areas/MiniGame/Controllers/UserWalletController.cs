@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using GameSpace.Areas.MiniGame.Models;
+using GameSpace.Areas.MiniGame.Services;
 
 namespace GameSpace.Areas.MiniGame.Controllers
 {
@@ -10,41 +11,23 @@ namespace GameSpace.Areas.MiniGame.Controllers
     [Area("MiniGame")]
     public class UserWalletController : Controller
     {
+        private readonly IWalletService _walletService;
+
+        public UserWalletController(IWalletService walletService)
+        {
+            _walletService = walletService;
+        }
         /// <summary>
         /// 錢包總覽頁面 - 顯示目前積分、優惠券、電子禮券摘要
         /// </summary>
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "我的錢包";
             
-            // 模擬資料 - 對應 database.sql 架構，實際邏輯將在 Stage 4 實作
-            var viewModel = new WalletOverviewDisplayViewModel
-            {
-                UserId = 1,
-                UserName = "測試使用者",
-                CurrentPoints = 1250,
-                AvailableCouponsCount = 5,
-                UsedCouponsCount = 3,
-                AvailableEVouchersCount = 2,
-                UsedEVouchersCount = 1,
-                MonthlyPointsEarned = 480,
-                MonthlyPointsSpent = 320,
-                RecentTransactions = new List<WalletHistoryViewModel>
-                {
-                    new WalletHistoryViewModel { LogID = 1, ChangeType = "獲得", PointsChanged = 10, Description = "每日簽到", ChangeTime = DateTime.Now.AddHours(-2) },
-                    new WalletHistoryViewModel { LogID = 2, ChangeType = "獲得", PointsChanged = 50, Description = "完成小遊戲", ChangeTime = DateTime.Now.AddHours(-5) },
-                    new WalletHistoryViewModel { LogID = 3, ChangeType = "消費", PointsChanged = -30, Description = "兌換優惠券", ChangeTime = DateTime.Now.AddDays(-1) }
-                },
-                AvailableCoupons = new List<CouponViewModel>
-                {
-                    new CouponViewModel { CouponID = 1, CouponCode = "GAME50", IsUsed = false, AcquiredTime = DateTime.Now.AddDays(-3) },
-                    new CouponViewModel { CouponID = 2, CouponCode = "SHOP20", IsUsed = false, AcquiredTime = DateTime.Now.AddDays(-7) }
-                },
-                AvailableEVouchers = new List<EVoucherViewModel>
-                {
-                    new EVoucherViewModel { EVoucherID = 1, EVoucherCode = "EV100NT", IsUsed = false, AcquiredTime = DateTime.Now.AddDays(-5) }
-                }
-            };
+            const int currentUserId = 1; // 實際會從認證系統取得
+            
+            // 使用錢包服務取得實際總覽資料
+            var viewModel = await _walletService.GetWalletOverviewAsync(currentUserId);
             
             return View(viewModel);
         }
@@ -84,5 +67,150 @@ namespace GameSpace.Areas.MiniGame.Controllers
             ViewData["Title"] = "交易紀錄";
             return View();
         }
+
+        /// <summary>
+        /// 使用優惠券 - AJAX API
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> UseCoupon([FromBody] UseCouponRequest request)
+        {
+            const int currentUserId = 1; // 實際會從認證系統取得
+
+            try
+            {
+                var result = await _walletService.UseCouponAsync(request.CouponId, currentUserId, request.OrderId);
+                
+                return Json(new
+                {
+                    success = result.Success,
+                    message = result.Message,
+                    couponCode = result.CouponCode,
+                    remainingPoints = result.RemainingPoints,
+                    operationTime = result.OperationTime.ToString("yyyy-MM-dd HH:mm:ss")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "使用優惠券時發生錯誤" });
+            }
+        }
+
+        /// <summary>
+        /// 兌換優惠券 - AJAX API
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> ExchangeCoupon([FromBody] ExchangeCouponRequest request)
+        {
+            const int currentUserId = 1; // 實際會從認證系統取得
+
+            try
+            {
+                var result = await _walletService.ExchangeCouponAsync(request.CouponTypeId, currentUserId);
+                
+                return Json(new
+                {
+                    success = result.Success,
+                    message = result.Message,
+                    couponCode = result.CouponCode,
+                    pointsCost = result.PointsCost,
+                    remainingPoints = result.RemainingPoints,
+                    operationTime = result.OperationTime.ToString("yyyy-MM-dd HH:mm:ss")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "兌換優惠券時發生錯誤" });
+            }
+        }
+
+        /// <summary>
+        /// 使用電子禮券 - AJAX API
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> UseEVoucher([FromBody] UseEVoucherRequest request)
+        {
+            const int currentUserId = 1; // 實際會從認證系統取得
+
+            try
+            {
+                var result = await _walletService.UseEVoucherAsync(request.EVoucherId, currentUserId);
+                
+                return Json(new
+                {
+                    success = result.Success,
+                    message = result.Message,
+                    voucherCode = result.EVoucherCode,
+                    remainingPoints = result.RemainingPoints,
+                    operationTime = result.OperationTime.ToString("yyyy-MM-dd HH:mm:ss")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "使用電子禮券時發生錯誤" });
+            }
+        }
+
+        /// <summary>
+        /// 兌換電子禮券 - AJAX API
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> ExchangeEVoucher([FromBody] ExchangeEVoucherRequest request)
+        {
+            const int currentUserId = 1; // 實際會從認證系統取得
+
+            try
+            {
+                var result = await _walletService.ExchangeEVoucherAsync(request.EVoucherTypeId, currentUserId);
+                
+                return Json(new
+                {
+                    success = result.Success,
+                    message = result.Message,
+                    voucherCode = result.EVoucherCode,
+                    pointsCost = result.PointsCost,
+                    remainingPoints = result.RemainingPoints,
+                    generatedToken = result.GeneratedToken,
+                    tokenExpiresAt = result.TokenExpiresAt?.ToString("yyyy-MM-dd HH:mm:ss"),
+                    operationTime = result.OperationTime.ToString("yyyy-MM-dd HH:mm:ss")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "兌換電子禮券時發生錯誤" });
+            }
+        }
+    }
+
+    /// <summary>
+    /// 使用優惠券請求模型
+    /// </summary>
+    public class UseCouponRequest
+    {
+        public int CouponId { get; set; }
+        public int? OrderId { get; set; }
+    }
+
+    /// <summary>
+    /// 兌換優惠券請求模型
+    /// </summary>
+    public class ExchangeCouponRequest
+    {
+        public int CouponTypeId { get; set; }
+    }
+
+    /// <summary>
+    /// 使用電子禮券請求模型
+    /// </summary>
+    public class UseEVoucherRequest
+    {
+        public int EVoucherId { get; set; }
+    }
+
+    /// <summary>
+    /// 兌換電子禮券請求模型
+    /// </summary>
+    public class ExchangeEVoucherRequest
+    {
+        public int EVoucherTypeId { get; set; }
     }
 }
