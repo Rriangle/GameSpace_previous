@@ -7,7 +7,7 @@ using System.Transactions;
 namespace GameSpace.Infrastructure.Repositories
 {
     /// <summary>
-    /// ¥Î¤á¬ÛÃö¼g¤J¦sÀx®w¹ê²{
+    /// ï¿½Î¤ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Jï¿½sï¿½xï¿½wï¿½ï¿½{
     /// </summary>
     public class UserWriteRepository : IUserWriteRepository
     {
@@ -19,35 +19,35 @@ namespace GameSpace.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// ³B²z¥Î¤áÃ±¨ì
+        /// ï¿½Bï¿½zï¿½Î¤ï¿½Ã±ï¿½ï¿½
         /// </summary>
         public async Task<SignInResponse> ProcessSignInAsync(SignInRequest request)
         {
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             try
             {
-                // ÀË¬d¾­µ¥©Êª÷Æ_
+                // ï¿½Ë¬dï¿½ï¿½ï¿½ï¿½ï¿½Êªï¿½ï¿½_
                 if (await IsIdempotencyKeyUsedAsync(request.IdempotencyKey))
                 {
                     return new SignInResponse
                     {
                         Success = false,
-                        Message = "Ã±¨ì½Ğ¨D¤w³B²z¹L¡A½Ğ¤Å­«½Æ´£¥æ"
+                        Message = "Ã±ï¿½ï¿½Ğ¨Dï¿½wï¿½Bï¿½zï¿½Lï¿½Aï¿½Ğ¤Å­ï¿½ï¿½Æ´ï¿½ï¿½ï¿½"
                     };
                 }
 
-                // Àò¨ú¥Î¤á¸ê°T
+                // ï¿½ï¿½ï¿½ï¿½Î¤ï¿½ï¿½T
                 var user = await _context.Users.FindAsync(request.UserId);
                 if (user == null)
                 {
                     return new SignInResponse
                     {
                         Success = false,
-                        Message = "¥Î¤á¤£¦s¦b"
+                        Message = "ï¿½Î¤á¤£ï¿½sï¿½b"
                     };
                 }
 
-                // Àò¨ú©Î³Ğ«Ø¿ú¥]
+                // ï¿½ï¿½ï¿½ï¿½Î³Ğ«Ø¿ï¿½ï¿½]
                 var wallet = await _context.UserWallets
                     .FirstOrDefaultAsync(w => w.UserID == request.UserId);
                 
@@ -63,7 +63,7 @@ namespace GameSpace.Infrastructure.Repositories
                     _context.UserWallets.Add(wallet);
                 }
 
-                // Àò¨ú©Î³Ğ«ØÃ±¨ì²Î­p
+                // ï¿½ï¿½ï¿½ï¿½Î³Ğ«ï¿½Ã±ï¿½ï¿½Î­p
                 var signInStats = await _context.UserSignInStats
                     .FirstOrDefaultAsync(s => s.UserID == request.UserId);
                 
@@ -81,20 +81,20 @@ namespace GameSpace.Infrastructure.Repositories
                     _context.UserSignInStats.Add(signInStats);
                 }
 
-                // ­pºâ¼úÀy
-                var pointsEarned = 100; // °òÂ¦ÂI¼Æ
-                var expEarned = 50; // °òÂ¦¸gÅç­È
+                // ï¿½pï¿½ï¿½ï¿½ï¿½y
+                var pointsEarned = 100; // ï¿½ï¿½Â¦ï¿½Iï¿½ï¿½
+                var expEarned = 50; // ï¿½ï¿½Â¦ï¿½gï¿½ï¿½ï¿½
                 var consecutiveDays = 1;
                 var hasBonusReward = false;
                 var bonusDescription = "";
 
-                // ÀË¬d³sÄòÃ±¨ì
+                // ï¿½Ë¬dï¿½sï¿½ï¿½Ã±ï¿½ï¿½
                 if (signInStats.SignInDate.Date == DateTime.Today)
                 {
                     return new SignInResponse
                     {
                         Success = false,
-                        Message = "¤µ¤é¤wÃ±¨ì¡A½Ğ©ú¤Ñ¦A¨Ó"
+                        Message = "ï¿½ï¿½ï¿½ï¿½wÃ±ï¿½ï¿½Aï¿½Ğ©ï¿½ï¿½Ñ¦Aï¿½ï¿½"
                     };
                 }
                 else if (signInStats.SignInDate.Date == DateTime.Today.AddDays(-1))
@@ -102,48 +102,48 @@ namespace GameSpace.Infrastructure.Repositories
                     consecutiveDays = signInStats.ConsecutiveDays + 1;
                 }
 
-                // ³sÄòÃ±¨ì¼úÀy
+                // ï¿½sï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½y
                 if (consecutiveDays >= 7)
                 {
                     pointsEarned += 200;
                     expEarned += 100;
                     hasBonusReward = true;
-                    bonusDescription = "³sÄòÃ±¨ì7¤Ñ¼úÀy¡I";
+                    bonusDescription = "ï¿½sï¿½ï¿½Ã±ï¿½ï¿½7ï¿½Ñ¼ï¿½ï¿½yï¿½I";
                 }
                 else if (consecutiveDays >= 3)
                 {
                     pointsEarned += 50;
                     expEarned += 25;
                     hasBonusReward = true;
-                    bonusDescription = "³sÄòÃ±¨ì3¤Ñ¼úÀy¡I";
+                    bonusDescription = "ï¿½sï¿½ï¿½Ã±ï¿½ï¿½3ï¿½Ñ¼ï¿½ï¿½yï¿½I";
                 }
 
-                // §ó·s¿ú¥]
+                // ï¿½ï¿½sï¿½ï¿½ï¿½]
                 wallet.Points += pointsEarned;
                 wallet.UpdatedAt = DateTime.Now;
 
-                // §ó·sÃ±¨ì²Î­p
+                // ï¿½ï¿½sÃ±ï¿½ï¿½Î­p
                 signInStats.ConsecutiveDays = consecutiveDays;
                 signInStats.SignInDate = DateTime.Now;
                 signInStats.PointsEarned = pointsEarned;
                 signInStats.UpdatedAt = DateTime.Now;
                 signInStats.LastUpdated = DateTime.Now;
 
-                // ²K¥[¿ú¥]¾ú¥v°O¿ı
+                // ï¿½Kï¿½[ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½vï¿½Oï¿½ï¿½
                 await AddWalletHistoryAsync(request.UserId, pointsEarned, 
-                    $"Ã±¨ì¼úÀy (³sÄò{consecutiveDays}¤Ñ)", "signin");
+                    $"Ã±ï¿½ï¿½ï¿½ï¿½y (ï¿½sï¿½ï¿½{consecutiveDays}ï¿½ï¿½)", "signin");
 
-                // §ó·sÃdª«¸gÅç­È
+                // ï¿½ï¿½sï¿½dï¿½ï¿½ï¿½gï¿½ï¿½ï¿½
                 await UpdatePetExpAsync(request.UserId, expEarned);
 
-                // «O¦sÅÜ§ó
+                // ï¿½Oï¿½sï¿½Ü§ï¿½
                 await _context.SaveChangesAsync();
                 scope.Complete();
 
                 return new SignInResponse
                 {
                     Success = true,
-                    Message = "Ã±¨ì¦¨¥\¡I",
+                    Message = "ç°½åˆ°æˆåŠŸ",
                     PointsEarned = pointsEarned,
                     ExpEarned = expEarned,
                     ConsecutiveDays = consecutiveDays,
@@ -156,13 +156,13 @@ namespace GameSpace.Infrastructure.Repositories
                 return new SignInResponse
                 {
                     Success = false,
-                    Message = $"Ã±¨ì³B²z¥¢±Ñ: {ex.Message}"
+                    Message = $"Ã±ï¿½ï¿½Bï¿½zï¿½ï¿½ï¿½ï¿½: {ex.Message}"
                 };
             }
         }
 
         /// <summary>
-        /// §ó·s¥Î¤á¿ú¥]
+        /// ï¿½ï¿½sï¿½Î¤ï¿½ï¿½ï¿½]
         /// </summary>
         public async Task<bool> UpdateUserWalletAsync(int userId, int pointsChange, string description)
         {
@@ -195,7 +195,7 @@ namespace GameSpace.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// ²K¥[¿ú¥]¾ú¥v°O¿ı
+        /// ï¿½Kï¿½[ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½vï¿½Oï¿½ï¿½
         /// </summary>
         public async Task<bool> AddWalletHistoryAsync(int userId, int pointsChange, string description, string transactionType)
         {
@@ -221,7 +221,7 @@ namespace GameSpace.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// §ó·sÃdª«¸gÅç­È©Mµ¥¯Å
+        /// ï¿½ï¿½sï¿½dï¿½ï¿½ï¿½gï¿½ï¿½È©Mï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public async Task<bool> UpdatePetExpAsync(int userId, int expGained)
         {
@@ -232,11 +232,11 @@ namespace GameSpace.Infrastructure.Repositories
                 
                 if (pet == null)
                 {
-                    // ³Ğ«Ø·sÃdª«
+                    // ï¿½Ğ«Ø·sï¿½dï¿½ï¿½
                     pet = new Pet
                     {
                         UserID = userId,
-                        PetName = "¤p¹Ù¦ñ",
+                        PetName = "ï¿½pï¿½Ù¦ï¿½",
                         PetType = "default",
                         Level = 1,
                         Experience = 0,
@@ -248,7 +248,7 @@ namespace GameSpace.Infrastructure.Repositories
 
                 pet.Experience += expGained;
 
-                // ÀË¬d¤É¯Å
+                // ï¿½Ë¬dï¿½É¯ï¿½
                 var requiredExp = pet.Level * 100;
                 while (pet.Experience >= requiredExp)
                 {
@@ -268,7 +268,7 @@ namespace GameSpace.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// §I´«Àu´f¨é
+        /// ï¿½Iï¿½ï¿½ï¿½uï¿½fï¿½ï¿½
         /// </summary>
         public async Task<bool> RedeemCouponAsync(int userId, int couponId)
         {
@@ -294,7 +294,7 @@ namespace GameSpace.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// §I´«Â§¨é
+        /// ï¿½Iï¿½ï¿½Â§ï¿½ï¿½
         /// </summary>
         public async Task<bool> RedeemEVoucherAsync(int userId, int evoucherId)
         {
@@ -320,12 +320,12 @@ namespace GameSpace.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// ÀË¬d¾­µ¥©Êª÷Æ_¬O§_¤w¨Ï¥Î
+        /// ï¿½Ë¬dï¿½ï¿½ï¿½ï¿½ï¿½Êªï¿½ï¿½_ï¿½Oï¿½_ï¿½wï¿½Ï¥ï¿½
         /// </summary>
         public async Task<bool> IsIdempotencyKeyUsedAsync(string idempotencyKey)
         {
-            // ³o¸Ì¥i¥H¨Ï¥Î Redis ©Î¸ê®Æ®w¨Ó¦sÀx¾­µ¥©Êª÷Æ_
-            // Â²¤Æ¹ê²{¡GÀË¬d¿ú¥]¾ú¥v°O¿ı¤¤¬O§_¦³¬Û¦Pªº´y­z
+            // ï¿½oï¿½Ì¥iï¿½Hï¿½Ï¥ï¿½ Redis ï¿½Î¸ï¿½Æ®wï¿½Ó¦sï¿½xï¿½ï¿½ï¿½ï¿½ï¿½Êªï¿½ï¿½_
+            // Â²ï¿½Æ¹ï¿½{ï¿½Gï¿½Ë¬dï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½vï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½_ï¿½ï¿½ï¿½Û¦Pï¿½ï¿½ï¿½yï¿½z
             var exists = await _context.WalletHistory
                 .AnyAsync(h => h.Description.Contains(idempotencyKey));
             

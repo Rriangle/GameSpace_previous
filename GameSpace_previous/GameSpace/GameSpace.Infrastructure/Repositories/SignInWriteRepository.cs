@@ -8,8 +8,8 @@ using System.Text.Json;
 namespace GameSpace.Infrastructure.Repositories
 {
     /// <summary>
-    /// Ã±¨ì¼g¤J±M¥Î¦sÀx®w¹ê²{ - Stage 3 ¼g¤J¾Ş§@
-    /// ¹ê²{Ã±¨ì¬ÛÃöªº¼g¤J¾Ş§@¡A¥]§t¥æ©ö³B²z©M¾­µ¥©Ê
+    /// Ã±ï¿½ï¿½gï¿½Jï¿½Mï¿½Î¦sï¿½xï¿½wï¿½ï¿½{ - Stage 3 ï¿½gï¿½Jï¿½Ş§@
+    /// ï¿½ï¿½{Ã±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Jï¿½Ş§@ï¿½Aï¿½]ï¿½tï¿½ï¿½ï¿½ï¿½Bï¿½zï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public class SignInWriteRepository : ISignInWriteRepository
     {
@@ -23,39 +23,39 @@ namespace GameSpace.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// °õ¦æ¥Î¤áÃ±¨ì¾Ş§@¡]¥]§t¥æ©ö³B²z©M¾­µ¥©ÊÀË¬d¡^
+        /// ï¿½ï¿½ï¿½ï¿½Î¤ï¿½Ã±ï¿½ï¿½Ş§@ï¿½]ï¿½]ï¿½tï¿½ï¿½ï¿½ï¿½Bï¿½zï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¬dï¿½^
         /// </summary>
         public async Task<SignInResponse> ProcessSignInAsync(SignInRequest request)
         {
-            // 1. ÀË¬d¾­µ¥©Ê
+            // 1. ï¿½Ë¬dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var existingResponse = await CheckIdempotencyAsync(request.IdempotencyKey);
             if (existingResponse != null)
             {
-                _logger.LogInformation("Ã±¨ì½Ğ¨D¤w³B²z¹L¡Aªğ¦^§Ö¨úµ²ªG IdempotencyKey: {IdempotencyKey}", request.IdempotencyKey);
+                _logger.LogInformation("Ã±ï¿½ï¿½Ğ¨Dï¿½wï¿½Bï¿½zï¿½Lï¿½Aï¿½ï¿½^ï¿½Ö¨ï¿½ï¿½ï¿½ï¿½G IdempotencyKey: {IdempotencyKey}", request.IdempotencyKey);
                 return existingResponse;
             }
 
-            // 2. ¨Ï¥Î¥æ©ö³B²zÃ±¨ìÅŞ¿è
+            // 2. ï¿½Ï¥Î¥ï¿½ï¿½ï¿½Bï¿½zÃ±ï¿½ï¿½ï¿½Ş¿ï¿½
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var signInTime = request.SignInTime ?? DateTime.UtcNow;
                 
-                // Àò¨úÃ±¨ì²Î­p
+                // ï¿½ï¿½ï¿½Ã±ï¿½ï¿½Î­p
                 var stats = await GetOrCreateSignInStatsAsync(request.UserId);
                 
-                // ÀË¬d¬O§_¤µ¤Ñ¤w¸gÃ±¨ì
+                // ï¿½Ë¬dï¿½Oï¿½_ï¿½ï¿½ï¿½Ñ¤wï¿½gÃ±ï¿½ï¿½
                 if (stats.LastSignInDate.Date == signInTime.Date)
                 {
                     var duplicateResponse = new SignInResponse
                     {
                         Success = false,
-                        Message = "¤µ¤Ñ¤w¸gÃ±¨ì¹L¤F",
+                        Message = "ï¿½ï¿½ï¿½Ñ¤wï¿½gÃ±ï¿½ï¿½Lï¿½F",
                         SignInTime = stats.LastSignInDate,
                         IdempotencyKey = request.IdempotencyKey
                     };
                     
-                    // «O¦s¾­µ¥©Ê°O¿ı
+                    // ï¿½Oï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Ê°Oï¿½ï¿½
                     await SaveIdempotencyRecordAsync(new IdempotencyRecord
                     {
                         IdempotencyKey = request.IdempotencyKey,
@@ -70,23 +70,23 @@ namespace GameSpace.Infrastructure.Repositories
                     return duplicateResponse;
                 }
 
-                // ­pºâ³sÄòÃ±¨ì¤Ñ¼Æ
+                // ï¿½pï¿½ï¿½sï¿½ï¿½Ã±ï¿½ï¿½Ñ¼ï¿½
                 var consecutiveDays = CalculateConsecutiveDays(stats.LastSignInDate, signInTime);
                 
-                // ­pºâ¼úÀy
+                // ï¿½pï¿½ï¿½ï¿½ï¿½y
                 var pointsGained = CalculateSignInPoints(consecutiveDays);
                 var expGained = CalculateSignInExp(consecutiveDays);
                 
-                // §ó·s¥Î¤á¿n¤À
-                var totalPoints = await UpdateUserPointsAsync(request.UserId, pointsGained, "¨C¤éÃ±¨ì¼úÀy", "SIGNIN");
+                // ï¿½ï¿½sï¿½Î¤ï¿½nï¿½ï¿½
+                var totalPoints = await UpdateUserPointsAsync(request.UserId, pointsGained, "ï¿½Cï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½y", "SIGNIN");
                 
-                // §ó·sÃdª«¸gÅç­È
+                // ï¿½ï¿½sï¿½dï¿½ï¿½ï¿½gï¿½ï¿½ï¿½
                 await UpdatePetExpAsync(request.UserId, expGained);
                 
-                // ¥Í¦¨ÀH¾÷Àu´f¨é
+                // ï¿½Í¦ï¿½ï¿½Hï¿½ï¿½ï¿½uï¿½fï¿½ï¿½
                 var couponGained = await GenerateRandomCouponAsync(request.UserId, consecutiveDays);
                 
-                // §ó·sÃ±¨ì²Î­p
+                // ï¿½ï¿½sÃ±ï¿½ï¿½Î­p
                 stats.LastSignInDate = signInTime;
                 stats.ConsecutiveDays = consecutiveDays;
                 stats.TotalSignIns++;
@@ -96,7 +96,7 @@ namespace GameSpace.Infrastructure.Repositories
                 var response = new SignInResponse
                 {
                     Success = true,
-                    Message = $"Ã±¨ì¦¨¥\¡I³sÄòÃ±¨ì {consecutiveDays} ¤Ñ",
+                    Message = $"ç°½åˆ°æˆåŠŸï¼é€£çºŒç°½åˆ° {consecutiveDays} å¤©",
                     SignInTime = signInTime,
                     PointsGained = pointsGained,
                     ExpGained = expGained,
@@ -106,7 +106,7 @@ namespace GameSpace.Infrastructure.Repositories
                     IdempotencyKey = request.IdempotencyKey
                 };
 
-                // «O¦s¾­µ¥©Ê°O¿ı
+                // ï¿½Oï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Ê°Oï¿½ï¿½
                 await SaveIdempotencyRecordAsync(new IdempotencyRecord
                 {
                     IdempotencyKey = request.IdempotencyKey,
@@ -119,7 +119,7 @@ namespace GameSpace.Infrastructure.Repositories
 
                 await transaction.CommitAsync();
                 
-                _logger.LogInformation("Ã±¨ì¦¨¥\ UserId: {UserId}, Points: {Points}, Exp: {Exp}, ConsecutiveDays: {ConsecutiveDays}", 
+                _logger.LogInformation("ä½¿ç”¨è€…ç°½åˆ°æˆåŠŸ UserId: {UserId}, Points: {Points}, Exp: {Exp}, ConsecutiveDays: {ConsecutiveDays}", 
                     request.UserId, pointsGained, expGained, consecutiveDays);
                 
                 return response;
@@ -127,91 +127,91 @@ namespace GameSpace.Infrastructure.Repositories
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                _logger.LogError(ex, "Ã±¨ì³B²z¥¢±Ñ UserId: {UserId}, IdempotencyKey: {IdempotencyKey}", 
+                _logger.LogError(ex, "Ã±ï¿½ï¿½Bï¿½zï¿½ï¿½ï¿½ï¿½ UserId: {UserId}, IdempotencyKey: {IdempotencyKey}", 
                     request.UserId, request.IdempotencyKey);
                 
                 return new SignInResponse
                 {
                     Success = false,
-                    Message = "Ã±¨ì³B²z¥¢±Ñ¡A½Ğµy«á¦A¸Õ",
+                    Message = "Ã±ï¿½ï¿½Bï¿½zï¿½ï¿½ï¿½Ñ¡Aï¿½Ğµyï¿½ï¿½Aï¿½ï¿½",
                     IdempotencyKey = request.IdempotencyKey
                 };
             }
         }
 
         /// <summary>
-        /// ÀË¬d¾­µ¥©Ê±KÆ_¬O§_¤w¦s¦b
-        /// ¥Ø«e¨Ï¥Î¼ÒÀÀ¹ê²{
+        /// ï¿½Ë¬dï¿½ï¿½ï¿½ï¿½ï¿½Ê±Kï¿½_ï¿½Oï¿½_ï¿½wï¿½sï¿½b
+        /// ï¿½Ø«eï¿½Ï¥Î¼ï¿½ï¿½ï¿½ï¿½ï¿½{
         /// </summary>
         public async Task<SignInResponse?> CheckIdempotencyAsync(string idempotencyKey)
         {
-            // ¥Ø«eªğ¦^ null¡Aªí¥Ü¨S¦³§ä¨ì²{¦³°O¿ı
-            // ¹ê»Ú¹ê²{»İ­n¬d¸ß¾­µ¥©Ê°O¿ıªí
+            // ï¿½Ø«eï¿½ï¿½^ nullï¿½Aï¿½ï¿½ï¿½Ü¨Sï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½Oï¿½ï¿½
+            // ï¿½ï¿½Ú¹ï¿½{ï¿½İ­nï¿½dï¿½ß¾ï¿½ï¿½ï¿½ï¿½Ê°Oï¿½ï¿½ï¿½ï¿½
             await Task.Delay(1);
             return null;
         }
 
         /// <summary>
-        /// «O¦s¾­µ¥©Ê°O¿ı
-        /// ¥Ø«e¨Ï¥Î¼ÒÀÀ¹ê²{
+        /// ï¿½Oï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Ê°Oï¿½ï¿½
+        /// ï¿½Ø«eï¿½Ï¥Î¼ï¿½ï¿½ï¿½ï¿½ï¿½{
         /// </summary>
         public async Task SaveIdempotencyRecordAsync(IdempotencyRecord record)
         {
-            // ¥Ø«e¤£¹ê»Ú«O¦s¡Aµ¥«İ«áÄò¹ê²{
-            // ¹ê»Ú¹ê²{»İ­n«O¦s¨ì¾­µ¥©Ê°O¿ıªí
+            // ï¿½Ø«eï¿½ï¿½ï¿½ï¿½Ú«Oï¿½sï¿½Aï¿½ï¿½ï¿½İ«ï¿½ï¿½ï¿½ï¿½{
+            // ï¿½ï¿½Ú¹ï¿½{ï¿½İ­nï¿½Oï¿½sï¿½ì¾­ï¿½ï¿½ï¿½Ê°Oï¿½ï¿½ï¿½ï¿½
             await Task.Delay(1);
-            _logger.LogInformation("«O¦s¾­µ¥©Ê°O¿ı Key: {Key}, UserId: {UserId}", record.IdempotencyKey, record.UserId);
+            _logger.LogInformation("ï¿½Oï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Ê°Oï¿½ï¿½ Key: {Key}, UserId: {UserId}", record.IdempotencyKey, record.UserId);
         }
 
         /// <summary>
-        /// §ó·s¥Î¤á¿ú¥]¿n¤À¡]¥]§t¿ú¥]¾ú¥v°O¿ı¡^
-        /// ¥Ø«e¨Ï¥Î¼ÒÀÀ¹ê²{
+        /// ï¿½ï¿½sï¿½Î¤ï¿½ï¿½ï¿½]ï¿½nï¿½ï¿½ï¿½]ï¿½]ï¿½tï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½vï¿½Oï¿½ï¿½ï¿½^
+        /// ï¿½Ø«eï¿½Ï¥Î¼ï¿½ï¿½ï¿½ï¿½ï¿½{
         /// </summary>
         public async Task<int> UpdateUserPointsAsync(int userId, int pointsToAdd, string description, string? itemCode = null)
         {
-            // ¥Ø«eªğ¦^¼ÒÀÀµ²ªG
+            // ï¿½Ø«eï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½G
             await Task.Delay(1);
-            var newTotal = 1000 + pointsToAdd; // ¼ÒÀÀ·í«e¿n¤À + ·s¼W¿n¤À
+            var newTotal = 1000 + pointsToAdd; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½nï¿½ï¿½ + ï¿½sï¿½Wï¿½nï¿½ï¿½
             
-            _logger.LogInformation("§ó·s¥Î¤á¿n¤À UserId: {UserId}, Added: {PointsAdded}, NewTotal: {NewTotal}", 
+            _logger.LogInformation("ï¿½ï¿½sï¿½Î¤ï¿½nï¿½ï¿½ UserId: {UserId}, Added: {PointsAdded}, NewTotal: {NewTotal}", 
                 userId, pointsToAdd, newTotal);
             
             return newTotal;
         }
 
         /// <summary>
-        /// §ó·sÃdª«¸gÅç­È
-        /// ¥Ø«e¨Ï¥Î¼ÒÀÀ¹ê²{
+        /// ï¿½ï¿½sï¿½dï¿½ï¿½ï¿½gï¿½ï¿½ï¿½
+        /// ï¿½Ø«eï¿½Ï¥Î¼ï¿½ï¿½ï¿½ï¿½ï¿½{
         /// </summary>
         public async Task<bool> UpdatePetExpAsync(int userId, int expToAdd)
         {
-            // ¥Ø«eªğ¦^¼ÒÀÀµ²ªG
+            // ï¿½Ø«eï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½G
             await Task.Delay(1);
             
-            _logger.LogInformation("§ó·sÃdª«¸gÅç­È UserId: {UserId}, ExpAdded: {ExpAdded}", userId, expToAdd);
+            _logger.LogInformation("ï¿½ï¿½sï¿½dï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ UserId: {UserId}, ExpAdded: {ExpAdded}", userId, expToAdd);
             
-            // ¼ÒÀÀ¦³ 30% ¾÷²v¤É¯Å
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 30% ï¿½ï¿½ï¿½vï¿½É¯ï¿½
             var levelUp = Random.Shared.Next(1, 101) <= 30;
             if (levelUp)
             {
-                _logger.LogInformation("Ãdª«¤É¯Å¤F¡I UserId: {UserId}", userId);
+                _logger.LogInformation("ï¿½dï¿½ï¿½ï¿½É¯Å¤Fï¿½I UserId: {UserId}", userId);
             }
             
             return levelUp;
         }
 
         /// <summary>
-        /// ¥Í¦¨ÀH¾÷Àu´f¨é¡]¦pªG²Å¦X±ø¥ó¡^
+        /// ï¿½Í¦ï¿½ï¿½Hï¿½ï¿½ï¿½uï¿½fï¿½ï¿½]ï¿½pï¿½Gï¿½Å¦Xï¿½ï¿½ï¿½ï¿½^
         /// </summary>
         public async Task<string?> GenerateRandomCouponAsync(int userId, int consecutiveDays)
         {
             await Task.Delay(1);
             
-            // ³sÄòÃ±¨ì 7 ¤Ñ©Î¥H¤W¦³¾÷·|Àò±oÀu´f¨é
-            if (consecutiveDays >= 7 && Random.Shared.Next(1, 101) <= 20) // 20% ¾÷²v
+            // ï¿½sï¿½ï¿½Ã±ï¿½ï¿½ 7 ï¿½Ñ©Î¥Hï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½oï¿½uï¿½fï¿½ï¿½
+            if (consecutiveDays >= 7 && Random.Shared.Next(1, 101) <= 20) // 20% ï¿½ï¿½ï¿½v
             {
                 var couponCode = $"SIGNIN_{userId}_{DateTime.UtcNow:yyyyMMdd}_{Random.Shared.Next(1000, 9999)}";
-                _logger.LogInformation("¥Í¦¨Ã±¨ìÀu´f¨é UserId: {UserId}, CouponCode: {CouponCode}", userId, couponCode);
+                _logger.LogInformation("ï¿½Í¦ï¿½Ã±ï¿½ï¿½ï¿½uï¿½fï¿½ï¿½ UserId: {UserId}, CouponCode: {CouponCode}", userId, couponCode);
                 return couponCode;
             }
             
@@ -219,19 +219,19 @@ namespace GameSpace.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Àò¨ú©Î³Ğ«Ø¥Î¤áÃ±¨ì²Î­p
-        /// ¥Ø«e¨Ï¥Î¼ÒÀÀ¹ê²{
+        /// ï¿½ï¿½ï¿½ï¿½Î³Ğ«Ø¥Î¤ï¿½Ã±ï¿½ï¿½Î­p
+        /// ï¿½Ø«eï¿½Ï¥Î¼ï¿½ï¿½ï¿½ï¿½ï¿½{
         /// </summary>
         public async Task<SignInStats> GetOrCreateSignInStatsAsync(int userId)
         {
             await Task.Delay(1);
             
-            // ¼ÒÀÀªğ¦^Ã±¨ì²Î­p
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^Ã±ï¿½ï¿½Î­p
             return new SignInStats
             {
                 UserId = userId,
-                LastSignInDate = DateTime.UtcNow.AddDays(-1), // ¼ÒÀÀ¬Q¤Ñ³Ì«áÃ±¨ì
-                ConsecutiveDays = 3, // ¼ÒÀÀ¤w³sÄòÃ±¨ì 3 ¤Ñ
+                LastSignInDate = DateTime.UtcNow.AddDays(-1), // ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½Ñ³Ì«ï¿½Ã±ï¿½ï¿½
+                ConsecutiveDays = 3, // ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½sï¿½ï¿½Ã±ï¿½ï¿½ 3 ï¿½ï¿½
                 TotalSignIns = 10,
                 CreatedAt = DateTime.UtcNow.AddDays(-10),
                 UpdatedAt = DateTime.UtcNow.AddDays(-1)
@@ -239,20 +239,20 @@ namespace GameSpace.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// §ó·s¥Î¤áÃ±¨ì²Î­p
-        /// ¥Ø«e¨Ï¥Î¼ÒÀÀ¹ê²{
+        /// ï¿½ï¿½sï¿½Î¤ï¿½Ã±ï¿½ï¿½Î­p
+        /// ï¿½Ø«eï¿½Ï¥Î¼ï¿½ï¿½ï¿½ï¿½ï¿½{
         /// </summary>
         public async Task UpdateSignInStatsAsync(SignInStats stats)
         {
             await Task.Delay(1);
-            _logger.LogInformation("§ó·sÃ±¨ì²Î­p UserId: {UserId}, ConsecutiveDays: {ConsecutiveDays}, TotalSignIns: {TotalSignIns}", 
+            _logger.LogInformation("ï¿½ï¿½sÃ±ï¿½ï¿½Î­p UserId: {UserId}, ConsecutiveDays: {ConsecutiveDays}, TotalSignIns: {TotalSignIns}", 
                 stats.UserId, stats.ConsecutiveDays, stats.TotalSignIns);
         }
 
-        #region ¨p¦³»²§U¤èªk
+        #region ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½ï¿½k
 
         /// <summary>
-        /// ­pºâ³sÄòÃ±¨ì¤Ñ¼Æ
+        /// ï¿½pï¿½ï¿½sï¿½ï¿½Ã±ï¿½ï¿½Ñ¼ï¿½
         /// </summary>
         private static int CalculateConsecutiveDays(DateTime lastSignInDate, DateTime currentSignInDate)
         {
@@ -260,38 +260,38 @@ namespace GameSpace.Infrastructure.Repositories
             
             if (daysDiff == 1)
             {
-                // ³sÄòÃ±¨ì
-                return 1; // ³o¸ÌÀ³¸Ó±q²{¦³²Î­p¤¤¨ú±o¨Ã¥[ 1
+                // ï¿½sï¿½ï¿½Ã±ï¿½ï¿½
+                return 1; // ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½Ó±qï¿½{ï¿½ï¿½ï¿½Î­pï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Ã¥[ 1
             }
             else if (daysDiff > 1)
             {
-                // ¤¤Â_¤F³sÄòÃ±¨ì
+                // ï¿½ï¿½ï¿½_ï¿½Fï¿½sï¿½ï¿½Ã±ï¿½ï¿½
                 return 1;
             }
             else
             {
-                // ¦P¤@¤Ñ©Î¨ä¥L±¡ªp
+                // ï¿½Pï¿½@ï¿½Ñ©Î¨ï¿½Lï¿½ï¿½ï¿½p
                 return 1;
             }
         }
 
         /// <summary>
-        /// ­pºâÃ±¨ì¿n¤À¼úÀy
+        /// ï¿½pï¿½ï¿½Ã±ï¿½ï¿½nï¿½ï¿½ï¿½ï¿½ï¿½y
         /// </summary>
         private static int CalculateSignInPoints(int consecutiveDays)
         {
             var basePoints = 10;
-            var bonusPoints = Math.Min(consecutiveDays - 1, 20) * 2; // ¨C³sÄò¤@¤ÑÃB¥~ 2 ¤À¡A³Ì¦h 20 ¤Ñ
+            var bonusPoints = Math.Min(consecutiveDays - 1, 20) * 2; // ï¿½Cï¿½sï¿½ï¿½@ï¿½ï¿½ï¿½Bï¿½~ 2 ï¿½ï¿½ï¿½Aï¿½Ì¦h 20 ï¿½ï¿½
             return basePoints + bonusPoints;
         }
 
         /// <summary>
-        /// ­pºâÃ±¨ì¸gÅç­È¼úÀy
+        /// ï¿½pï¿½ï¿½Ã±ï¿½ï¿½gï¿½ï¿½È¼ï¿½ï¿½y
         /// </summary>
         private static int CalculateSignInExp(int consecutiveDays)
         {
             var baseExp = 5;
-            var bonusExp = Math.Min(consecutiveDays - 1, 10) * 1; // ¨C³sÄò¤@¤ÑÃB¥~ 1 ¸gÅç¡A³Ì¦h 10 ¤Ñ
+            var bonusExp = Math.Min(consecutiveDays - 1, 10) * 1; // ï¿½Cï¿½sï¿½ï¿½@ï¿½ï¿½ï¿½Bï¿½~ 1 ï¿½gï¿½ï¿½Aï¿½Ì¦h 10 ï¿½ï¿½
             return baseExp + bonusExp;
         }
 

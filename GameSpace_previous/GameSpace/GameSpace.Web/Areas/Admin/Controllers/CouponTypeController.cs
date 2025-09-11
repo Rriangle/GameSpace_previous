@@ -7,7 +7,7 @@ using GameSpace.Data;
 namespace GameSpace.Web.Areas.Admin.Controllers
 {
     /// <summary>
-    /// Àu´f¨éÃş«¬ºŞ²z±±¨î¾¹
+    /// ï¿½uï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ş²zï¿½ï¿½ï¿½î¾¹
     /// </summary>
     [Area("Admin")]
     public class CouponTypeController : Controller
@@ -20,7 +20,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// Àu´f¨éÃş«¬¦Cªí
+        /// ï¿½uï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½
         /// </summary>
         public async Task<IActionResult> Index()
         {
@@ -32,7 +32,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// Àu´f¨éÃş«¬¸Ô±¡
+        /// ï¿½uï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½
         /// </summary>
         public async Task<IActionResult> Details(int id)
         {
@@ -46,7 +46,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ³Ğ«ØÀu´f¨éÃş«¬­¶­±
+        /// ï¿½Ğ«ï¿½ï¿½uï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public IActionResult Create()
         {
@@ -54,7 +54,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ³Ğ«ØÀu´f¨éÃş«¬
+        /// ï¿½Ğ«ï¿½ï¿½uï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -68,7 +68,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
                 _context.CouponTypes.Add(couponType);
                 await _context.SaveChangesAsync();
                 
-                TempData["SuccessMessage"] = "Àu´f¨éÃş«¬³Ğ«Ø¦¨¥\¡I";
+                TempData["SuccessMessage"] = "å„ªæƒ åˆ¸é¡å‹å»ºç«‹æˆåŠŸï¼";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -76,7 +76,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ½s¿èÀu´f¨éÃş«¬­¶­±
+        /// ï¿½sï¿½ï¿½ï¿½uï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public async Task<IActionResult> Edit(int id)
         {
@@ -90,7 +90,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ½s¿èÀu´f¨éÃş«¬
+        /// ï¿½sï¿½ï¿½ï¿½uï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,7 +109,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
                     _context.Update(couponType);
                     await _context.SaveChangesAsync();
                     
-                    TempData["SuccessMessage"] = "Àu´f¨éÃş«¬§ó·s¦¨¥\¡I";
+                    TempData["SuccessMessage"] = "å„ªæƒ åˆ¸é¡å‹æ›´æ–°æˆåŠŸï¼";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -129,7 +129,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// §R°£Àu´f¨éÃş«¬­¶­±
+        /// ï¿½Rï¿½ï¿½ï¿½uï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public async Task<IActionResult> Delete(int id)
         {
@@ -143,7 +143,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// §R°£Àu´f¨éÃş«¬
+        /// ï¿½Rï¿½ï¿½ï¿½uï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -155,7 +155,7 @@ namespace GameSpace.Web.Areas.Admin.Controllers
                 _context.CouponTypes.Remove(couponType);
                 await _context.SaveChangesAsync();
                 
-                TempData["SuccessMessage"] = "Àu´f¨éÃş«¬§R°£¦¨¥\¡I";
+                TempData["SuccessMessage"] = "å„ªæƒ åˆ¸é¡å‹åˆªé™¤æˆåŠŸï¼";
             }
 
             return RedirectToAction(nameof(Index));

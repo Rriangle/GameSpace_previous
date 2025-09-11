@@ -112,7 +112,7 @@ namespace GameSpace.Infrastructure.Seeders
             var history = new List<WalletHistory>();
             var random = new Random();
             var changeTypes = new[] { "Point", "Coupon", "EVoucher" };
-            var descriptions = new[] { "¹CÀ¸¼úÀyÂI¼Æ", "­q³æ¦^õXÂI¼Æ", "¨C¤éÃ±¨ìÂI¼Æ", "¬¡°Ê¥[½XÂI¼Æ", "§I´«¦©ÂI", "Àò±oÀu´f¨é", "¬¡°ÊÃØ¨é", "­q³æ©è¥Î¨é", "ÂI¼Æ§I´«Â§¨é", "¬¡°Ê°eÂ§¨é", "Àò±oÂ§¨é" };
+            var descriptions = new[] { "ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½yï¿½Iï¿½ï¿½", "ï¿½qï¿½ï¿½^ï¿½Xï¿½Iï¿½ï¿½", "ï¿½Cï¿½ï¿½Ã±ï¿½ï¿½ï¿½Iï¿½ï¿½", "ï¿½ï¿½ï¿½Ê¥[ï¿½Xï¿½Iï¿½ï¿½", "ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½I", "ï¿½ï¿½oï¿½uï¿½fï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½ï¿½Ø¨ï¿½", "ï¿½qï¿½ï¿½ï¿½Î¨ï¿½", "ï¿½Iï¿½Æ§Iï¿½ï¿½Â§ï¿½ï¿½", "ï¿½ï¿½ï¿½Ê°eÂ§ï¿½ï¿½", "ï¿½ï¿½oÂ§ï¿½ï¿½" };
 
             for (int i = 1; i <= 2000; i++)
             {
@@ -187,9 +187,9 @@ namespace GameSpace.Infrastructure.Seeders
         {
             var types = new List<CouponType>
             {
-                new CouponType { TypeID = 1, TypeName = "§é¦©¨é", Description = "°Ó«~§é¦©Àu´f", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new CouponType { TypeID = 2, TypeName = "§K¹B¨é", Description = "§K¹B¶OÀu´f", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new CouponType { TypeID = 3, TypeName = "²{ª÷¨é", Description = "²{ª÷©è¦©Àu´f", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+                new CouponType { TypeID = 1, TypeName = "ï¿½é¦©ï¿½ï¿½", Description = "ï¿½Ó«~ï¿½é¦©ï¿½uï¿½f", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new CouponType { TypeID = 2, TypeName = "ï¿½Kï¿½Bï¿½ï¿½", Description = "ï¿½Kï¿½Bï¿½Oï¿½uï¿½f", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new CouponType { TypeID = 3, TypeName = "ï¿½{ï¿½ï¿½ï¿½ï¿½", Description = "ï¿½{ï¿½ï¿½ï¿½è¦©ï¿½uï¿½f", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
             };
 
             _context.CouponTypes.AddRange(types);
@@ -207,8 +207,8 @@ namespace GameSpace.Infrastructure.Seeders
                     CouponID = i,
                     TypeID = random.Next(1, 4),
                     CouponCode = $"CPN-{i:D6}",
-                    CouponName = $"Àu´f¨é{i}",
-                    Description = $"Àu´f¨é{i}´y­z",
+                    CouponName = $"ï¿½uï¿½fï¿½ï¿½{i}",
+                    Description = $"ï¿½uï¿½fï¿½ï¿½{i}ï¿½yï¿½z",
                     DiscountValue = random.Next(10, 100),
                     DiscountType = "Percentage",
                     ExpiresAt = DateTime.Now.AddDays(random.Next(1, 365)),
@@ -225,12 +225,12 @@ namespace GameSpace.Infrastructure.Seeders
         {
             var types = new List<EVoucherType>
             {
-                new EVoucherType { TypeID = 1, TypeName = "¹q¼v²¼", Description = "¹q¼v²¼¨é", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new EVoucherType { TypeID = 2, TypeName = "©@°Ø¨é", Description = "©@°Ø©±¨é", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new EVoucherType { TypeID = 3, TypeName = "¬ü­¹¨é", Description = "À\ÆU¨é", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new EVoucherType { TypeID = 4, TypeName = "²{ª÷¨é", Description = "²{ª÷¨é", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new EVoucherType { TypeID = 5, TypeName = "°Ó©±¨é", Description = "°Ó©±¨é", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new EVoucherType { TypeID = 6, TypeName = "¥[ªo¨é", Description = "¥[ªo¯¸¨é", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+                new EVoucherType { TypeID = 1, TypeName = "é›»å­å„ªæƒ åˆ¸", Description = "é›»å­å„ªæƒ åˆ¸é¡å‹", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new EVoucherType { TypeID = 2, TypeName = "æŠ˜æ‰£åˆ¸", Description = "æŠ˜æ‰£å„ªæƒ åˆ¸", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new EVoucherType { TypeID = 3, TypeName = "æ»¿é¡é€", Description = "æ»¿é¡è´ˆé€", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new EVoucherType { TypeID = 4, TypeName = "ç¾é‡‘åˆ¸", Description = "ç¾é‡‘æŠµç”¨åˆ¸", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new EVoucherType { TypeID = 5, TypeName = "ç‰¹åƒ¹åˆ¸", Description = "ç‰¹åƒ¹å„ªæƒ åˆ¸", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new EVoucherType { TypeID = 6, TypeName = "åŠ å€¼åˆ¸", Description = "åŠ å€¼å„ªæƒ åˆ¸", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
             };
 
             _context.EVoucherTypes.AddRange(types);
@@ -248,8 +248,8 @@ namespace GameSpace.Infrastructure.Seeders
                     VoucherID = i,
                     TypeID = random.Next(1, 7),
                     VoucherCode = $"EV-{i:D6}",
-                    VoucherName = $"Â§¨é{i}",
-                    Description = $"Â§¨é{i}´y­z",
+                    VoucherName = $"Â§ï¿½ï¿½{i}",
+                    Description = $"Â§ï¿½ï¿½{i}ï¿½yï¿½z",
                     Value = random.Next(50, 500),
                     ExpiresAt = DateTime.Now.AddDays(random.Next(1, 365)),
                     IsActive = random.Next(0, 10) < 8,
