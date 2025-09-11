@@ -1,0 +1,206 @@
+@{
+    ViewData["Title"] = "小遊戲大廳";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">@ViewData["Title"]</h2>
+        </div>
+    </div>
+
+    <!-- 個人遊戲統計 -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">今日遊戲</h5>
+                    <h3 class="text-primary">3</h3>
+                    <p class="card-text">次</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">今日獲得積分</h5>
+                    <h3 class="text-success">150</h3>
+                    <p class="card-text">分</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">最高分數</h5>
+                    <h3 class="text-warning">2,450</h3>
+                    <p class="card-text">分</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">遊戲等級</h5>
+                    <h3 class="text-info">12</h3>
+                    <p class="card-text">級</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 可用遊戲列表 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">可玩遊戲</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card game-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-crosshairs fa-3x text-danger mb-3"></i>
+                                    <h5 class="card-title">打怪獸</h5>
+                                    <p class="card-text">經典射擊遊戲，考驗反應速度與準確度</p>
+                                    <div class="mb-3">
+                                        <span class="badge bg-primary">積分獎勵: 50</span>
+                                        <span class="badge bg-secondary">難度: ★★★☆☆</span>
+                                    </div>
+                                    <a asp-action="Play" asp-route-id="1" class="btn btn-primary">
+                                        <i class="fas fa-play me-2"></i>開始遊戲
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <div class="card game-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-map fa-3x text-success mb-3"></i>
+                                    <h5 class="card-title">寵物冒險</h5>
+                                    <p class="card-text">策略冒險遊戲，與寵物一起探索未知世界</p>
+                                    <div class="mb-3">
+                                        <span class="badge bg-primary">積分獎勵: 75</span>
+                                        <span class="badge bg-secondary">難度: ★★★★☆</span>
+                                    </div>
+                                    <a asp-action="Play" asp-route-id="2" class="btn btn-success">
+                                        <i class="fas fa-play me-2"></i>開始遊戲
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <div class="card game-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-brain fa-3x text-warning mb-3"></i>
+                                    <h5 class="card-title">記憶挑戰</h5>
+                                    <p class="card-text">記憶力訓練遊戲，提升專注力與記憶能力</p>
+                                    <div class="mb-3">
+                                        <span class="badge bg-primary">積分獎勵: 30</span>
+                                        <span class="badge bg-secondary">難度: ★★☆☆☆</span>
+                                    </div>
+                                    <a asp-action="Play" asp-route-id="3" class="btn btn-warning">
+                                        <i class="fas fa-play me-2"></i>開始遊戲
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 最近遊戲記錄 -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">最近遊戲記錄</h5>
+                    <a asp-action="History" class="btn btn-sm btn-outline-secondary">查看全部</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>遊戲</th>
+                                    <th>分數</th>
+                                    <th>等級</th>
+                                    <th>獲得積分</th>
+                                    <th>遊戲時間</th>
+                                    <th>日期</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><i class="fas fa-crosshairs text-danger me-2"></i>打怪獸</td>
+                                    <td>1,250</td>
+                                    <td>5</td>
+                                    <td class="text-success">+50</td>
+                                    <td>3:45</td>
+                                    <td>2024/09/11</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-brain text-warning me-2"></i>記憶挑戰</td>
+                                    <td>800</td>
+                                    <td>3</td>
+                                    <td class="text-success">+30</td>
+                                    <td>2:30</td>
+                                    <td>2024/09/11</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-map text-success me-2"></i>寵物冒險</td>
+                                    <td>2,100</td>
+                                    <td>8</td>
+                                    <td class="text-success">+75</td>
+                                    <td>8:20</td>
+                                    <td>2024/09/10</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.game-card {
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.game-card:hover {
+    border-color: #0d6efd;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.game-card .fas {
+    transition: transform 0.3s ease;
+}
+
+.game-card:hover .fas {
+    transform: scale(1.1);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 載入遊戲列表的邏輯將在後續階段實作
+    console.log('遊戲大廳已載入');
+    
+    // 為遊戲卡片添加點擊效果
+    const gameCards = document.querySelectorAll('.game-card');
+    gameCards.forEach(card => {
+        card.addEventListener('click', function() {
+            // 遊戲選擇邏輯將在後續階段實作
+        });
+    });
+});
+</script>
