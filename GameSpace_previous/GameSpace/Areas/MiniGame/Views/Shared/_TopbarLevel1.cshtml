@@ -1,37 +1,89 @@
-﻿<nav class="navbar navbar-expand-lg navbar-dark shadow-sm custom-bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm custom-bg-dark" role="navigation" aria-label="主要導航">
     <div class="container-fluid p-0 d-flex">
 
-        <!-- 左側 GameSpace / 背景區，固定寬度 -->
+        <!-- 左側 GameSpace 品牌區 -->
         <div class="d-flex justify-content-center align-items-center flex-shrink-0" style="width:250px; height:100%;">
-            <a class="navbar-brand mb-0 text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                GameSpace
+            <a class="navbar-brand mb-0 text-white" asp-area="" asp-controller="Home" asp-action="Index" aria-label="回到 GameSpace 首頁">
+                <i class="fas fa-gamepad me-2" aria-hidden="true"></i>
+                <span>GameSpace</span>
             </a>
         </div>
 
-        <!-- 中間導航 -->
+        <!-- 行動版導航切換按鈕 -->
+        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav1" 
+                aria-controls="navbarNav1" aria-expanded="false" aria-label="切換導航選單">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- 中間導航選單 -->
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav1">
             <ul class="navbar-nav">
                 <li class="nav-item mx-2">
-                    <a class="nav-link text-white" asp-area="MiniGame" asp-controller="Home" asp-action="Index">
-                        小遊戲主頁
+                    <a class="nav-link text-white" asp-area="MiniGame" asp-controller="Home" asp-action="Index" aria-current="page">
+                        <i class="fas fa-home me-1" aria-hidden="true"></i>
+                        <span>小遊戲主頁</span>
                     </a>
+                </li>
+                <li class="nav-item dropdown mx-2">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="miniGameMenuDropdown" role="button" 
+                       data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+                        <i class="fas fa-th-large me-1" aria-hidden="true"></i>
+                        <span>功能選單</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="miniGameMenuDropdown">
+                        <li>
+                            <a class="dropdown-item" asp-area="MiniGame" asp-controller="UserWallet" asp-action="Index">
+                                <i class="fas fa-wallet me-2 text-success" aria-hidden="true"></i>我的錢包
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" asp-area="MiniGame" asp-controller="UserSignInStats" asp-action="Index">
+                                <i class="fas fa-calendar-check me-2 text-primary" aria-hidden="true"></i>每日簽到
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" asp-area="MiniGame" asp-controller="Pet" asp-action="Index">
+                                <i class="fas fa-paw me-2 text-warning" aria-hidden="true"></i>我的寵物
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" asp-area="MiniGame" asp-controller="Game" asp-action="Index">
+                                <i class="fas fa-gamepad me-2 text-info" aria-hidden="true"></i>遊戲大廳
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
-
 
         <!-- 右側使用者選單 -->
         <div class="d-flex align-items-center me-3">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="userDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="d-none d-lg-inline me-2">測試文字</span>
-                        <img class="img-profile rounded-circle" src="~/lib/image/undraw_profile.svg" style="width:30px; height:30px; object-fit:cover;">
+                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" 
+                       id="userDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"
+                       aria-label="使用者選單">
+                        <span class="d-none d-lg-inline me-2">測試使用者</span>
+                        <img class="img-profile rounded-circle" src="~/lib/image/undraw_profile.svg" 
+                             style="width:30px; height:30px; object-fit:cover;" alt="使用者頭像" loading="lazy">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown1">
-                        <li><a class="dropdown-item" href="#">測試</a></li>
-                        <li><a class="dropdown-item" href="#">設定</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">登出</a></li>
+                        <li>
+                            <a class="dropdown-item" href="#" aria-label="個人資料設定">
+                                <i class="fas fa-user me-2" aria-hidden="true"></i>個人資料
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" aria-label="帳戶設定">
+                                <i class="fas fa-cog me-2" aria-hidden="true"></i>帳戶設定
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider" role="separator"></li>
+                        <li>
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal" aria-label="登出系統">
+                                <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i>登出
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -39,3 +91,38 @@
 
     </div>
 </nav>
+
+<!-- 快捷鍵提示（隱藏但支援螢幕閱讀器） -->
+<div class="sr-only" aria-live="polite" id="shortcutHelp">
+    <p>鍵盤快捷鍵：Alt+M 開啟功能選單，Alt+W 錢包，Alt+S 簽到，Alt+P 寵物，Alt+G 遊戲</p>
+</div>
+
+<script>
+// 鍵盤快捷鍵支援
+document.addEventListener('keydown', function(e) {
+    if (e.altKey) {
+        switch(e.key.toLowerCase()) {
+            case 'm':
+                document.getElementById('miniGameMenuDropdown')?.click();
+                e.preventDefault();
+                break;
+            case 'w':
+                window.location.href = '@Url.Action("Index", "UserWallet", new { area = "MiniGame" })';
+                e.preventDefault();
+                break;
+            case 's':
+                window.location.href = '@Url.Action("Index", "UserSignInStats", new { area = "MiniGame" })';
+                e.preventDefault();
+                break;
+            case 'p':
+                window.location.href = '@Url.Action("Index", "Pet", new { area = "MiniGame" })';
+                e.preventDefault();
+                break;
+            case 'g':
+                window.location.href = '@Url.Action("Index", "Game", new { area = "MiniGame" })';
+                e.preventDefault();
+                break;
+        }
+    }
+});
+</script>
