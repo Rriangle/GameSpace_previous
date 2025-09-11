@@ -1,0 +1,121 @@
+@{
+    ViewData["Title"] = "我的錢包";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">@ViewData["Title"]</h2>
+        </div>
+    </div>
+
+    <!-- 錢包概覽卡片 -->
+    <div class="row">
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">目前積分</h5>
+                    <h3 class="text-primary">1,250</h3>
+                    <p class="card-text">可用於兌換獎品</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">可用優惠券</h5>
+                    <h3 class="text-success">5</h3>
+                    <p class="card-text">尚未使用的優惠券</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">電子禮券</h5>
+                    <h3 class="text-warning">2</h3>
+                    <p class="card-text">可兌換的電子禮券</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">本月消費</h5>
+                    <h3 class="text-info">320</h3>
+                    <p class="card-text">積分消費統計</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速操作按鈕 -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">快速操作</h5>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group" role="group">
+                        <a asp-action="Points" class="btn btn-outline-primary">積分明細</a>
+                        <a asp-action="Coupons" class="btn btn-outline-success">我的優惠券</a>
+                        <a asp-action="EVouchers" class="btn btn-outline-warning">電子禮券</a>
+                        <a asp-action="History" class="btn btn-outline-info">交易記錄</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 最近交易紀錄 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">最近交易</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>類型</th>
+                                    <th>積分變動</th>
+                                    <th>說明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2024/09/11</td>
+                                    <td><span class="badge bg-success">獲得</span></td>
+                                    <td class="text-success">+10</td>
+                                    <td>每日簽到</td>
+                                </tr>
+                                <tr>
+                                    <td>2024/09/11</td>
+                                    <td><span class="badge bg-info">獲得</span></td>
+                                    <td class="text-success">+50</td>
+                                    <td>完成小遊戲</td>
+                                </tr>
+                                <tr>
+                                    <td>2024/09/10</td>
+                                    <td><span class="badge bg-warning">消費</span></td>
+                                    <td class="text-danger">-30</td>
+                                    <td>兌換優惠券</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center">
+                        <a asp-action="History" class="btn btn-sm btn-outline-secondary">查看全部記錄</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

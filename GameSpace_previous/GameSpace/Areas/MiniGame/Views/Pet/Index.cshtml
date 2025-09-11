@@ -1,0 +1,172 @@
+@{
+    ViewData["Title"] = "我的寵物";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">@ViewData["Title"]</h2>
+        </div>
+    </div>
+
+    <!-- 寵物資訊卡片 -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="pet-avatar mb-3">
+                        <img src="~/lib/image/pet-placeholder.svg" alt="寵物頭像" class="img-fluid" style="max-width: 200px;">
+                    </div>
+                    <h4 class="card-title">小火龍</h4>
+                    <p class="text-muted">等級 5 火屬性寵物</p>
+                    
+                    <div class="row text-center mt-3">
+                        <div class="col-6">
+                            <small class="text-muted">經驗值</small>
+                            <div class="progress mb-2">
+                                <div class="progress-bar" role="progressbar" style="width: 65%"></div>
+                            </div>
+                            <small>320 / 500</small>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">健康值</small>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 95%"></div>
+                            </div>
+                            <small>95 / 100</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">寵物狀態</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label">飢餓度</label>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 80%"></div>
+                            </div>
+                            <small class="text-muted">80 / 100</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">心情</label>
+                            <div class="progress">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 75%"></div>
+                            </div>
+                            <small class="text-muted">75 / 100</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">體力</label>
+                            <div class="progress">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 60%"></div>
+                            </div>
+                            <small class="text-muted">60 / 100</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">清潔度</label>
+                            <div class="progress">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 90%"></div>
+                            </div>
+                            <small class="text-muted">90 / 100</small>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <button class="btn btn-warning w-100" id="feedBtn">
+                                <i class="fas fa-utensils me-2"></i>餵食
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-info w-100" id="playBtn">
+                                <i class="fas fa-gamepad me-2"></i>陪玩
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 寵物操作區域 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">寵物管理</h5>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group" role="group">
+                        <a asp-action="Details" asp-route-id="1" class="btn btn-outline-primary">
+                            <i class="fas fa-info-circle me-2"></i>詳細資訊
+                        </a>
+                        <a asp-action="Customize" asp-route-id="1" class="btn btn-outline-success">
+                            <i class="fas fa-palette me-2"></i>外觀設定
+                        </a>
+                        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#petHistoryModal">
+                            <i class="fas fa-history me-2"></i>成長記錄
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 最近活動 -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">最近活動</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <span><i class="fas fa-utensils text-warning me-2"></i>餵食了美味的寵物糧食</span>
+                                <small class="text-muted">2 小時前</small>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <span><i class="fas fa-gamepad text-info me-2"></i>完成了一場愉快的遊戲</span>
+                                <small class="text-muted">5 小時前</small>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <span><i class="fas fa-level-up-alt text-success me-2"></i>等級提升到 Lv.5</span>
+                                <small class="text-muted">1 天前</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const feedBtn = document.getElementById('feedBtn');
+    const playBtn = document.getElementById('playBtn');
+    
+    feedBtn.addEventListener('click', function() {
+        // 餵食邏輯將在後續階段實作
+        alert('餵食成功！寵物飢餓度 +20');
+    });
+    
+    playBtn.addEventListener('click', function() {
+        // 陪玩邏輯將在後續階段實作
+        alert('陪玩成功！寵物心情 +15');
+    });
+});
+</script>
