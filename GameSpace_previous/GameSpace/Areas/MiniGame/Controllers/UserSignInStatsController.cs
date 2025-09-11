@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using GameSpace.Areas.MiniGame.Models;
 
 namespace GameSpace.Areas.MiniGame.Controllers
 {
@@ -15,7 +16,33 @@ namespace GameSpace.Areas.MiniGame.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "每日簽到";
-            return View();
+            
+            // 模擬資料 - 對應 database.sql UserSignInStats 架構，實際邏輯將在 Stage 4 實作
+            var viewModel = new SignInStatsDisplayViewModel
+            {
+                UserId = 1,
+                HasSignedToday = false,
+                ConsecutiveDays = 7,
+                MonthlySignInDays = 23,
+                TotalSignInDays = 156,
+                TodayPointsReward = 10,
+                TodayExpReward = 5,
+                MonthlyPointsEarned = 230,
+                MonthlyExpEarned = 115,
+                RecentSignInStats = new List<UserSignInStatsViewModel>
+                {
+                    new UserSignInStatsViewModel { LogID = 1, SignTime = DateTime.Now.AddDays(-1), PointsGained = 10, ExpGained = 5, CouponGained = "" },
+                    new UserSignInStatsViewModel { LogID = 2, SignTime = DateTime.Now.AddDays(-2), PointsGained = 10, ExpGained = 5, CouponGained = "" },
+                    new UserSignInStatsViewModel { LogID = 3, SignTime = DateTime.Now.AddDays(-3), PointsGained = 15, ExpGained = 5, CouponGained = "BONUS7" }
+                },
+                MonthlyCalendar = new Dictionary<int, bool>
+                {
+                    { 1, false }, { 2, true }, { 3, true }, { 4, true }, { 5, true }, { 6, true }, { 7, true },
+                    { 8, true }, { 9, true }, { 10, true }, { 11, false }, { 12, false }, { 13, false }, { 14, false }
+                }
+            };
+            
+            return View(viewModel);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using GameSpace.Areas.MiniGame.Models;
 
 namespace GameSpace.Areas.MiniGame.Controllers
 {
@@ -15,7 +16,49 @@ namespace GameSpace.Areas.MiniGame.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "我的寵物";
-            return View();
+            
+            // 模擬資料 - 對應 database.sql Pet 架構，實際邏輯將在 Stage 4 實作
+            var viewModel = new PetStatusDisplayViewModel
+            {
+                Pet = new PetViewModel
+                {
+                    PetID = 1,
+                    UserID = 1,
+                    PetName = "小火龍",
+                    Level = 5,
+                    LevelUpTime = DateTime.Now.AddDays(-5),
+                    Experience = 320,
+                    Hunger = 80,
+                    Mood = 75,
+                    Stamina = 60,
+                    Cleanliness = 90,
+                    Health = 95,
+                    SkinColor = "#FF6B35",
+                    BackgroundColor = "#FFE5B4",
+                    SkinColorChangedTime = DateTime.Now.AddDays(-10),
+                    BackgroundColorChangedTime = DateTime.Now.AddDays(-15)
+                },
+                NextLevelExpRequired = 500,
+                ExpProgressPercentage = 64.0, // 320/500 = 0.64
+                HungerStatus = "飽足",
+                MoodStatus = "愉快",
+                OverallHealthScore = 80,
+                NeedsCare = false,
+                SuggestedCareActions = new List<string> { "建議陪玩增加心情", "補充體力" },
+                RecentActivities = new List<PetActivityLogViewModel>
+                {
+                    new PetActivityLogViewModel { ActivityType = "餵食", Description = "餵食了美味的寵物糧食", ActivityTime = DateTime.Now.AddHours(-2), IconClass = "fas fa-utensils text-warning" },
+                    new PetActivityLogViewModel { ActivityType = "陪玩", Description = "完成了一場愉快的遊戲", ActivityTime = DateTime.Now.AddHours(-5), IconClass = "fas fa-gamepad text-info" },
+                    new PetActivityLogViewModel { ActivityType = "升級", Description = "等級提升到 Lv.5", ActivityTime = DateTime.Now.AddDays(-1), IconClass = "fas fa-level-up-alt text-success" }
+                },
+                LevelUpHistory = new List<PetLevelUpHistoryViewModel>
+                {
+                    new PetLevelUpHistoryViewModel { Level = 5, LevelUpTime = DateTime.Now.AddDays(-1), PointsReward = 25 },
+                    new PetLevelUpHistoryViewModel { Level = 4, LevelUpTime = DateTime.Now.AddDays(-8), PointsReward = 20 }
+                }
+            };
+            
+            return View(viewModel);
         }
 
         /// <summary>
