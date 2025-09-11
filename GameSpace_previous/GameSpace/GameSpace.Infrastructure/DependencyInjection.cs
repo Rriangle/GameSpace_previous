@@ -1,4 +1,6 @@
+using GameSpace.Core.Repositories;
 using GameSpace.Core.Services;
+using GameSpace.Core.Services.Seeding;
 using GameSpace.Data;
 using GameSpace.Infrastructure.Repositories;
 using GameSpace.Infrastructure.Seeders;
@@ -9,29 +11,29 @@ using Microsoft.Extensions.Configuration;
 namespace GameSpace.Infrastructure
 {
     /// <summary>
-    /// ¨Ì¿àª`¤J°t¸mÂX®i
+    /// ï¿½Ì¿ï¿½`ï¿½Jï¿½tï¿½mï¿½Xï¿½i
     /// </summary>
     public static class DependencyInjection
     {
         /// <summary>
-        /// ²K¥[°òÂ¦³]¬IªA°È
+        /// ï¿½Kï¿½[ï¿½ï¿½Â¦ï¿½]ï¿½Iï¿½Aï¿½ï¿½
         /// </summary>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            // ²K¥[¸ê®Æ®w¤W¤U¤å
+            // ï¿½Kï¿½[ï¿½ï¿½Æ®wï¿½Wï¿½Uï¿½ï¿½
             services.AddDbContext<GameSpaceDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            // ²K¥[°O¾ÐÅé§Ö¨ú
+            // ï¿½Kï¿½[ï¿½Oï¿½ï¿½ï¿½ï¿½Ö¨ï¿½
             services.AddMemoryCache();
 
-            // ²K¥[®Ö¤ßªA°È
+            // ï¿½Kï¿½[ï¿½Ö¤ßªAï¿½ï¿½
             services.AddScoped<ICacheService, MemoryCacheService>();
             services.AddScoped<IRateLimitService, RateLimitService>();
             services.AddScoped<IRetryPolicyService, RetryPolicyService>();
             services.AddScoped<IRBACService, RBACService>();
 
-            // ²K¥[¦sÀx®w
+            // ï¿½Kï¿½[ï¿½sï¿½xï¿½w
             services.AddScoped<IUserReadOnlyRepository, UserReadOnlyRepository>();
             services.AddScoped<IUserWriteRepository, UserWriteRepository>();
             services.AddScoped<ISignInWriteRepository, SignInWriteRepository>();
@@ -41,8 +43,8 @@ namespace GameSpace.Infrastructure
             services.AddScoped<ILeaderboardReadOnlyRepository, LeaderboardReadOnlyRepository>();
             services.AddScoped<IWalletReadOnlyRepository, WalletReadOnlyRepository>();
 
-            // ²K¥[ºØ¤l¼Æ¾ÚªA°È
-            services.AddScoped<ISeedDataRunner, SeedDataRunner>();
+            // ï¿½Kï¿½[ï¿½Ø¤lï¿½Æ¾ÚªAï¿½ï¿½ - ï¿½É®É²ï¿½ï¿½Ü¨ï¿½ï¿½Ñ«ï¿½yï¿½Dï¿½Dï¿½ï¿½
+            // services.AddScoped<ISeedDataRunner, SeedDataRunner>();
 
             return services;
         }
