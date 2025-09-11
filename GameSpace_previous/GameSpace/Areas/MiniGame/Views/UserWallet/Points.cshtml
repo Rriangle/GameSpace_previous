@@ -1,0 +1,200 @@
+@model GameSpace.Areas.MiniGame.Models.WalletOverviewDisplayViewModel
+@{
+    ViewData["Title"] = "積分明細";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">@ViewData["Title"]</h2>
+            
+            <!-- 返回按鈕 -->
+            <div class="mb-3">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>返回錢包
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 積分概覽 -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-coins fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">目前積分</h5>
+                    <h3 class="text-primary">@Model.CurrentPoints.ToString("N0")</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-arrow-up fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">本月收入</h5>
+                    <h3 class="text-success">+@Model.MonthlyPointsEarned.ToString("N0")</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-arrow-down fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title">本月支出</h5>
+                    <h3 class="text-danger">-@Model.MonthlyPointsSpent.ToString("N0")</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 積分變動趨勢圖區域 -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">本月積分變動趨勢</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="text-muted">第一週</div>
+                            <h4 class="text-success">+85</h4>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="text-muted">第二週</div>
+                            <h4 class="text-success">+120</h4>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="text-muted">第三週</div>
+                            <h4 class="text-success">+95</h4>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="text-muted">第四週</div>
+                            <h4 class="text-primary">+@((Model.MonthlyPointsEarned - 300))</h4>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">平均每日獲得積分：@((Model.MonthlyPointsEarned / Math.Max(Model.MonthlySignInDays, 1)).ToString("F1"))</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 積分來源分析 -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">積分來源分析</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>每日簽到</span>
+                            <span class="text-success">+@(Model.MonthlySignInDays * 10)</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-success" style="width: 40%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>完成遊戲</span>
+                            <span class="text-info">+@(Model.MonthlyPointsEarned - (Model.MonthlySignInDays * 10))</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-info" style="width: 35%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>寵物互動</span>
+                            <span class="text-warning">+50</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-warning" style="width: 15%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>其他獎勵</span>
+                            <span class="text-primary">+30</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-primary" style="width: 10%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">積分使用分析</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>兌換優惠券</span>
+                            <span class="text-danger">-@((int)(Model.MonthlyPointsSpent * 0.6))</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-danger" style="width: 60%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>電子禮券</span>
+                            <span class="text-warning">-@((int)(Model.MonthlyPointsSpent * 0.3))</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-warning" style="width: 30%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>寵物用品</span>
+                            <span class="text-info">-@((int)(Model.MonthlyPointsSpent * 0.1))</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-info" style="width: 10%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 操作區域 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">積分操作</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <a asp-action="Coupons" class="btn btn-success w-100">
+                                <i class="fas fa-ticket-alt me-2"></i>兌換優惠券
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a asp-action="EVouchers" class="btn btn-warning w-100">
+                                <i class="fas fa-gift me-2"></i>兌換電子禮券
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a asp-action="History" class="btn btn-info w-100">
+                                <i class="fas fa-history me-2"></i>完整交易記錄
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

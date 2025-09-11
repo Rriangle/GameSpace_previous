@@ -1,0 +1,202 @@
+@model GameSpace.Areas.MiniGame.Models.WalletOverviewDisplayViewModel
+@{
+    ViewData["Title"] = "我的優惠券";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">@ViewData["Title"]</h2>
+            
+            <!-- 返回按鈕 -->
+            <div class="mb-3">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>返回錢包
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 優惠券統計 -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-ticket-alt fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">可用優惠券</h5>
+                    <h3 class="text-success">@Model.AvailableCouponsCount</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-check-circle fa-3x text-secondary mb-3"></i>
+                    <h5 class="card-title">已使用</h5>
+                    <h3 class="text-secondary">@Model.UsedCouponsCount</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-coins fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">總價值</h5>
+                    <h3 class="text-info">@((Model.AvailableCouponsCount * 50 + Model.UsedCouponsCount * 50).ToString("N0"))</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 可用優惠券列表 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">可用優惠券</h5>
+                    <span class="badge bg-primary">@Model.AvailableCouponsCount 張可用</span>
+                </div>
+                <div class="card-body">
+                    @if (Model.AvailableCoupons.Any())
+                    {
+                        <div class="row">
+                            @foreach (var coupon in Model.AvailableCoupons)
+                            {
+                                <div class="col-md-6 col-lg-4 mb-3">
+                                    <div class="card coupon-card border-success">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <h6 class="card-title">@coupon.CouponCode</h6>
+                                                <span class="badge bg-success">可用</span>
+                                            </div>
+                                            <p class="card-text small text-muted">
+                                                獲得時間：@coupon.AcquiredTime.ToString("yyyy/MM/dd")
+                                            </p>
+                                            <div class="text-center">
+                                                <button class="btn btn-success btn-sm" onclick="useCoupon(@coupon.CouponID)">
+                                                    <i class="fas fa-check me-1"></i>使用優惠券
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        
+                        <!-- 顯示更多按鈕 -->
+                        @if (Model.AvailableCouponsCount > Model.AvailableCoupons.Count)
+                        {
+                            <div class="text-center">
+                                <button class="btn btn-outline-primary" id="loadMoreCoupons">
+                                    載入更多優惠券 (@(Model.AvailableCouponsCount - Model.AvailableCoupons.Count) 張)
+                                </button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-ticket-alt fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted">目前沒有可用的優惠券</h5>
+                            <p class="text-muted">完成遊戲或簽到來獲得優惠券</p>
+                            <a asp-area="MiniGame" asp-controller="Game" asp-action="Index" class="btn btn-primary">
+                                <i class="fas fa-gamepad me-2"></i>前往遊戲大廳
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 優惠券兌換區域 -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">兌換新優惠券</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-primary">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">購物折扣券</h6>
+                                    <p class="card-text">9折購物優惠</p>
+                                    <p class="text-primary"><strong>需要 100 積分</strong></p>
+                                    <button class="btn btn-primary btn-sm" onclick="exchangeCoupon('SHOP10')">
+                                        兌換
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-warning">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">遊戲獎勵券</h6>
+                                    <p class="card-text">雙倍遊戲積分</p>
+                                    <p class="text-warning"><strong>需要 150 積分</strong></p>
+                                    <button class="btn btn-warning btn-sm" onclick="exchangeCoupon('GAME2X')">
+                                        兌換
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-info">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">特殊活動券</h6>
+                                    <p class="card-text">限時特殊獎勵</p>
+                                    <p class="text-info"><strong>需要 200 積分</strong></p>
+                                    <button class="btn btn-info btn-sm" onclick="exchangeCoupon('SPECIAL')">
+                                        兌換
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.coupon-card {
+    transition: all 0.3s ease;
+    border-width: 2px !important;
+}
+
+.coupon-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+</style>
+
+<script>
+function useCoupon(couponId) {
+    if (confirm('確定要使用這張優惠券嗎？使用後將無法復原。')) {
+        // 使用優惠券的邏輯將在 Stage 4 實作
+        alert(`優惠券 ${couponId} 使用成功！`);
+        location.reload();
+    }
+}
+
+function exchangeCoupon(couponType) {
+    if (confirm(`確定要兌換 ${couponType} 優惠券嗎？`)) {
+        // 兌換優惠券的邏輯將在 Stage 4 實作
+        alert(`${couponType} 優惠券兌換成功！`);
+        location.reload();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const loadMoreBtn = document.getElementById('loadMoreCoupons');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function() {
+            // 載入更多優惠券的邏輯將在 Stage 4 實作
+            alert('載入更多優惠券功能將在後續版本實作');
+        });
+    }
+});
+</script>

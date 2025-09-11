@@ -1,0 +1,238 @@
+@model GameSpace.Areas.MiniGame.Models.WalletOverviewDisplayViewModel
+@{
+    ViewData["Title"] = "交易紀錄";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">@ViewData["Title"]</h2>
+            
+            <!-- 返回按鈕 -->
+            <div class="mb-3">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>返回錢包
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 篩選條件 -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">篩選條件</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">交易類型</label>
+                            <select class="form-select" id="transactionTypeFilter">
+                                <option value="">全部類型</option>
+                                <option value="獲得">積分獲得</option>
+                                <option value="消費">積分消費</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">日期範圍</label>
+                            <select class="form-select" id="dateRangeFilter">
+                                <option value="7">最近7天</option>
+                                <option value="30" selected>最近30天</option>
+                                <option value="90">最近90天</option>
+                                <option value="0">全部</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">積分範圍</label>
+                            <select class="form-select" id="pointsRangeFilter">
+                                <option value="">全部金額</option>
+                                <option value="1-50">1-50 積分</option>
+                                <option value="51-100">51-100 積分</option>
+                                <option value="101+">100+ 積分</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">&nbsp;</label>
+                            <div>
+                                <button class="btn btn-primary w-100" id="applyFilters">
+                                    <i class="fas fa-search me-2"></i>套用篩選
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 交易歷史表格 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">完整交易記錄</h5>
+                    <div>
+                        <span class="text-muted me-3">顯示最近 @Model.RecentTransactions.Count 筆記錄</span>
+                        <button class="btn btn-sm btn-outline-primary" id="exportBtn">
+                            <i class="fas fa-download me-1"></i>匯出
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>交易編號</th>
+                                    <th>日期時間</th>
+                                    <th>交易類型</th>
+                                    <th>積分變動</th>
+                                    <th>項目代碼</th>
+                                    <th>交易說明</th>
+                                    <th>剩餘積分</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionTableBody">
+                                @if (Model.RecentTransactions.Any())
+                                {
+                                    @foreach (var (transaction, index) in Model.RecentTransactions.Select((t, i) => (t, i)))
+                                    {
+                                        var remainingPoints = Model.CurrentPoints - Model.RecentTransactions.Take(index).Sum(t => t.PointsChanged);
+                                        <tr>
+                                            <td>
+                                                <small class="text-muted">TXN</small>
+                                                <strong>@transaction.LogID.ToString("000000")</strong>
+                                            </td>
+                                            <td>@transaction.ChangeTime.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                                            <td>
+                                                @if (transaction.PointsChanged > 0)
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-plus me-1"></i>@transaction.ChangeType
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning">
+                                                        <i class="fas fa-minus me-1"></i>@transaction.ChangeType
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <strong class="@(transaction.PointsChanged > 0 ? "text-success" : "text-danger")">
+                                                    @(transaction.PointsChanged > 0 ? "+" : "")@transaction.PointsChanged.ToString("N0")
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(transaction.ItemCode))
+                                                {
+                                                    <code>@transaction.ItemCode</code>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>@transaction.Description</td>
+                                            <td>
+                                                <span class="text-info">@remainingPoints.ToString("N0")</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7" class="text-center py-5">
+                                            <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                                            <h5 class="text-muted">目前沒有交易記錄</h5>
+                                            <p class="text-muted">開始使用積分功能來查看交易歷史</p>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 分頁控制 -->
+                    @if (Model.RecentTransactions.Any())
+                    {
+                        <nav aria-label="交易記錄分頁">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" aria-label="上一頁">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="下一頁">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.coupon-card {
+    transition: all 0.3s ease;
+    border-width: 2px !important;
+}
+
+.coupon-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,123,255,0.05);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const applyFiltersBtn = document.getElementById('applyFilters');
+    const exportBtn = document.getElementById('exportBtn');
+    
+    applyFiltersBtn.addEventListener('click', function() {
+        // 篩選邏輯將在 Stage 4 實作
+        alert('篩選功能將在後續版本實作');
+    });
+    
+    exportBtn.addEventListener('click', function() {
+        // 匯出邏輯將在 Stage 4 實作
+        alert('交易記錄匯出功能將在後續版本實作');
+    });
+});
+
+function useCoupon(couponId) {
+    if (confirm('確定要使用這張優惠券嗎？使用後將無法復原。')) {
+        // 使用優惠券的邏輯將在 Stage 4 實作
+        alert(`優惠券 ${couponId} 使用成功！`);
+        location.reload();
+    }
+}
+
+function exchangeCoupon(couponType) {
+    if (confirm(`確定要兌換 ${couponType} 優惠券嗎？`)) {
+        // 兌換優惠券的邏輯將在 Stage 4 實作
+        alert(`${couponType} 優惠券兌換成功！`);
+        location.reload();
+    }
+}
+</script>
