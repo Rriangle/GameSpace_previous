@@ -1,4 +1,4 @@
-﻿const chatContainer = document.getElementById("chatContainer");
+const chatContainer = document.getElementById("chatContainer");
 const chatHeader = document.getElementById("chatHeader");
 const chatArea = document.getElementById("chatArea");
 const messagesDiv = document.getElementById("messages");
@@ -18,20 +18,20 @@ connection.on("ReceiveMessage", (user, message, time) => {
 });
 connection.start().catch(err => console.error(err));
 
-// 登入
+// Login
 document.getElementById("loginBtn").addEventListener("click", () => {
     const name = document.getElementById("userNameInput").value.trim();
     if (!name) return;
 
     userName = name;
-    userDisplay.textContent = `(${userName})`; // 顯示名稱
+    userDisplay.textContent = `(${userName})`; // Display name
     connection.invoke("RegisterUser", userName).catch(err => console.error(err));
 
     loginArea.style.display = "none";
     chatArea.style.display = "flex";
 });
 
-// 發送訊息
+// Send message
 document.getElementById("chatForm").addEventListener("submit", e => {
     e.preventDefault();
     const msg = document.getElementById("messageInput").value.trim();
@@ -40,7 +40,7 @@ document.getElementById("chatForm").addEventListener("submit", e => {
     document.getElementById("messageInput").value = "";
 });
 
-// 拖曳
+// Drag
 let isDragging = false, offsetX, offsetY;
 chatHeader.addEventListener("mousedown", e => {
     isDragging = true;
@@ -60,7 +60,7 @@ document.addEventListener("mouseup", () => {
     document.body.style.userSelect = "auto";
 });
 
-// 控制列
+// Controls
 document.querySelector(".minimize").addEventListener("click", () => {
     chatContainer.style.height = "40px";
     chatArea.style.display = "none";
@@ -89,7 +89,7 @@ chatHeader.addEventListener("dblclick", () => {
     chatArea.style.display = "flex";
 });
 
-// 右下角拖拉
+// Bottom right drag
 const resizeHandle = document.querySelector(".resize-handle");
 let isResizing = false, startX, startY, startWidth, startHeight;
 

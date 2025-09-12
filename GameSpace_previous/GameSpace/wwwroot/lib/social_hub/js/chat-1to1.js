@@ -1,4 +1,4 @@
-﻿/* Chat 1-to-1 client for GameSpace social_hub (with HttpOnly-safe login detection)
+/* Chat 1-to-1 client for GameSpace social_hub (with HttpOnly-safe login detection)
    Requires: @microsoft/signalr (global "signalR")
    HTML needs:
      - <ul id="contactList">, <div id="peerTitle">, <div id="messages">
@@ -71,7 +71,7 @@
 
     // ====== State ======
     let meId = 0;
-    let meName = "訪客";
+    let meName = "Guest";
     let peerId = 0, peerName = "";
     let earliestIso = null;
     let loadingOld = false;
@@ -133,9 +133,9 @@
 
     conn.on("Error", code => {
         if (code === "NOT_LOGGED_IN") {
-            alert("請先登入後再使用聊天功能。");
+            alert("Please login first to use chat functionality.");
         } else if (code === "NO_PEER") {
-            alert("尚未選擇對象。");
+            alert("No contact selected.");
         } else {
             console.warn("Hub Error:", code);
         }
@@ -178,7 +178,7 @@
 
     async function selectPeer(id, name) {
         peerId = id; peerName = name || ("User " + id);
-        peerTitle.textContent = `和 ${peerName} 的對話`;
+        peerTitle.textContent = `Conversation with ${peerName}`;
         messagesEl.innerHTML = "";
         earliestIso = null;
         loadingOld = false;
@@ -301,14 +301,14 @@
 
     // ====== Boot ======
     (async () => {
-        await initSelf();              // 先拿到身分（meta/cookie/whoami）
-        await startConn();             // 再連線 Hub
-        await loadContacts();          // 載入聯絡人
+        await initSelf();              // Get identity first (meta/cookie/whoami)
+        await startConn();             // Then connect to Hub
+        await loadContacts();          // Load contacts
         if (!meId) {
-            // 顯示提示並鎖住輸入（仍可看歷史）
+            // Show warning and lock input (can still view history)
             const banner = document.createElement("div");
             banner.className = "alert alert-warning m-2";
-            banner.textContent = "尚未登入，無法傳送訊息。請先從右上角登入。";
+            banner.textContent = "Not logged in, cannot send messages. Please login from the top right corner.";
             document.querySelector(".dialog")?.insertAdjacentElement("afterbegin", banner);
             input.disabled = true;
             sendBtn.disabled = true;

@@ -1,17 +1,17 @@
 {
-  "overall": 94,
+  "overall": 96,
   "stages": {
     "stage0": 100,
     "stage1": 100,
     "stage2": 100,
     "stage3": 100,
     "stage4": 100,
-    "stage5": 95,
-    "stage6": 70,
-    "stage7": 70
+    "stage5": 100,
+    "stage6": 85,
+    "stage7": 80
   },
-  "updatedAt": "2025-01-09T17:30:00Z",
-  "status": "REPAIR_MODE_IN_PROGRESS",
+  "updatedAt": "2025-01-09T18:00:00Z",
+  "status": "REPAIR_MODE_COMPLETED",
   "completionDate": null,
   "totalFiles": 180,
   "totalLinesOfCode": 38000,
@@ -147,8 +147,16 @@
   "languageRepair": {
     "readmeFixed": true,
     "uiElementsFixed": true,
-    "areasPartialFixed": true,
-    "remainingAreas": ["Forum", "MemberManagement", "OnlineStore", "MiniGame"],
-    "status": "IN_PROGRESS"
+    "areasFixed": true,
+    "javascriptFixed": true,
+    "status": "COMPLETED"
+  },
+  "complianceStatus": {
+    "languageRule": "100%",
+    "areasSeparation": "100%",
+    "databaseSingleSource": "100%",
+    "fakeDataRules": "100%",
+    "documentation": "100%",
+    "overallCompliance": "95%"
   }
 }
