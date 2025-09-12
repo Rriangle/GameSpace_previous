@@ -35,9 +35,9 @@
                 <div class="glass-card p-5 text-center">
                     <i class="fas fa-paw fa-4x text-muted mb-4"></i>
                     <h3 class="mb-3">You don't have a pet yet</h3>
-                    <p class="text-muted mb-4">快來創建您的第一隻寵物吧！</p>
+                    <p class="text-muted mb-4">Create your first pet!</p>
                     <a href="@Url.Action("Create")" class="btn btn-primary btn-lg glass-button">
-                        <i class="fas fa-plus me-2"></i>創建寵物
+                        <i class="fas fa-plus me-2"></i>Create Pet
                     </a>
                 </div>
             </div>
@@ -58,15 +58,15 @@
                     
                     <div class="pet-info">
                         <div class="info-item">
-                            <span class="label">等級：</span>
+                            <span class="label">Level:</span>
                             <span class="value">Lv.@Model.Level</span>
                         </div>
                         <div class="info-item">
-                            <span class="label">經驗值：</span>
+                            <span class="label">Experience:</span>
                             <span class="value">@Model.Experience</span>
                         </div>
                         <div class="info-item">
-                            <span class="label">背景：</span>
+                            <span class="label">Background:</span>
                             <span class="value">@Model.BackgroundColor</span>
                         </div>
                     </div>
@@ -76,11 +76,11 @@
             <!-- 寵物屬性 -->
             <div class="col-md-6">
                 <div class="glass-card p-4 mb-4">
-                    <h4 class="mb-3">寵物屬性</h4>
+                    <h4 class="mb-3">Pet Attributes</h4>
                     
                     <div class="attribute-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>飢餓度</span>
+                            <span>Hunger</span>
                             <span>@Model.Hunger%</span>
                         </div>
                         <div class="progress">
@@ -90,7 +90,7 @@
                     
                     <div class="attribute-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>心情</span>
+                            <span>Mood</span>
                             <span>@Model.Mood%</span>
                         </div>
                         <div class="progress">
@@ -100,7 +100,7 @@
                     
                     <div class="attribute-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>體力</span>
+                            <span>Stamina</span>
                             <span>@Model.Stamina%</span>
                         </div>
                         <div class="progress">
@@ -110,7 +110,7 @@
                     
                     <div class="attribute-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>清潔度</span>
+                            <span>Cleanliness</span>
                             <span>@Model.Cleanliness%</span>
                         </div>
                         <div class="progress">
@@ -120,7 +120,7 @@
                     
                     <div class="attribute-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>健康度</span>
+                            <span>Health</span>
                             <span>@Model.Health%</span>
                         </div>
                         <div class="progress">
@@ -135,13 +135,13 @@
         <div class="row">
             <div class="col-12">
                 <div class="glass-card p-4 mb-4">
-                    <h4 class="mb-3">寵物照顧</h4>
+                    <h4 class="mb-3">Pet Care</h4>
                     <div class="row">
                         <div class="col-md-3 mb-2">
                             <form asp-action="CareAction" method="post" class="d-inline">
                                 <input type="hidden" name="actionType" value="feed">
                                 <button type="submit" class="btn btn-warning w-100">
-                                    <i class="fas fa-utensils me-2"></i>餵食
+                                    <i class="fas fa-utensils me-2"></i>Feed
                                 </button>
                             </form>
                         </div>
@@ -149,7 +149,7 @@
                             <form asp-action="CareAction" method="post" class="d-inline">
                                 <input type="hidden" name="actionType" value="bath">
                                 <button type="submit" class="btn btn-info w-100">
-                                    <i class="fas fa-shower me-2"></i>洗澡
+                                    <i class="fas fa-shower me-2"></i>Bath
                                 </button>
                             </form>
                         </div>
@@ -157,7 +157,7 @@
                             <form asp-action="CareAction" method="post" class="d-inline">
                                 <input type="hidden" name="actionType" value="play">
                                 <button type="submit" class="btn btn-success w-100">
-                                    <i class="fas fa-gamepad me-2"></i>玩耍
+                                    <i class="fas fa-gamepad me-2"></i>Play
                                 </button>
                             </form>
                         </div>
@@ -165,7 +165,7 @@
                             <form asp-action="CareAction" method="post" class="d-inline">
                                 <input type="hidden" name="actionType" value="rest">
                                 <button type="submit" class="btn btn-secondary w-100">
-                                    <i class="fas fa-bed me-2"></i>休息
+                                    <i class="fas fa-bed me-2"></i>Rest
                                 </button>
                             </form>
                         </div>
@@ -178,7 +178,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="glass-card p-4 mb-4">
-                    <h4 class="mb-3">膚色設定</h4>
+                    <h4 class="mb-3">Skin Color Settings</h4>
                     <div class="color-palette">
                         <button class="color-btn" style="background-color: #f6d84a;" data-color="#f6d84a"></button>
                         <button class="color-btn" style="background-color: #ff6b6b;" data-color="#ff6b6b"></button>
@@ -189,25 +189,25 @@
                     </div>
                     <form id="skinColorForm" asp-action="ChangeSkinColor" method="post" class="mt-3">
                         <input type="hidden" name="newColorHex" id="selectedSkinColor">
-                        <button type="submit" class="btn btn-outline-primary w-100">更換膚色 (2000 點)</button>
+                        <button type="submit" class="btn btn-outline-primary w-100">Change Skin Color (2000 points)</button>
                     </form>
                 </div>
             </div>
             
             <div class="col-md-6">
                 <div class="glass-card p-4 mb-4">
-                    <h4 class="mb-3">背景設定</h4>
+                    <h4 class="mb-3">Background Settings</h4>
                     <div class="background-options">
-                        <button class="bg-btn" data-bg="Default">預設</button>
-                        <button class="bg-btn" data-bg="Forest">森林</button>
-                        <button class="bg-btn" data-bg="Ocean">海洋</button>
-                        <button class="bg-btn" data-bg="Space">太空</button>
-                        <button class="bg-btn" data-bg="Garden">花園</button>
-                        <button class="bg-btn" data-bg="City">城市</button>
+                        <button class="bg-btn" data-bg="Default">Default</button>
+                        <button class="bg-btn" data-bg="Forest">Forest</button>
+                        <button class="bg-btn" data-bg="Ocean">Ocean</button>
+                        <button class="bg-btn" data-bg="Space">Space</button>
+                        <button class="bg-btn" data-bg="Garden">Garden</button>
+                        <button class="bg-btn" data-bg="City">City</button>
                     </div>
                     <form id="bgColorForm" asp-action="ChangeBackgroundColor" method="post" class="mt-3">
                         <input type="hidden" name="newBackgroundName" id="selectedBackground">
-                        <button type="submit" class="btn btn-outline-primary w-100">更換背景 (免費)</button>
+                        <button type="submit" class="btn btn-outline-primary w-100">Change Background (Free)</button>
                     </form>
                 </div>
             </div>
@@ -306,7 +306,7 @@ body {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 膚色選擇
+    // Skin color selection
     const colorBtns = document.querySelectorAll('.color-btn');
     const selectedSkinColor = document.getElementById('selectedSkinColor');
     
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // 背景選擇
+    // Background selection
     const bgBtns = document.querySelectorAll('.bg-btn');
     const selectedBackground = document.getElementById('selectedBackground');
     

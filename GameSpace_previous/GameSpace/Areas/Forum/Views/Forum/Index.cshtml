@@ -8,9 +8,9 @@
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>論壇</h2>
+                <h2>Forum</h2>
                 <a href="@Url.Action("Create")" class="btn btn-primary glass-button">
-                    <i class="fas fa-plus me-2"></i>創建論壇
+                    <i class="fas fa-plus me-2"></i>Create Forum
                 </a>
             </div>
             
@@ -38,11 +38,11 @@
             <div class="glass-card p-4">
                 <form asp-action="Search" method="get" class="row g-3">
                     <div class="col-md-8">
-                        <input type="text" name="keyword" class="form-control glass-input" placeholder="搜尋討論串或文章..." value="@ViewBag.Keyword">
+                        <input type="text" name="keyword" class="form-control glass-input" placeholder="Search threads or articles..." value="@ViewBag.Keyword">
                     </div>
                     <div class="col-md-4">
                         <button type="submit" class="btn btn-outline-primary w-100">
-                            <i class="fas fa-search me-2"></i>搜尋
+                            <i class="fas fa-search me-2"></i>Search
                         </button>
                     </div>
                 </form>
@@ -65,8 +65,8 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="@Url.Action("Edit", new { id = forum.ForumId })">編輯</a></li>
-                                            <li><a class="dropdown-item text-danger" href="@Url.Action("Delete", new { id = forum.ForumId })" onclick="return confirm('確定要刪除這個論壇嗎？')">刪除</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("Edit", new { id = forum.ForumId })">Edit</a></li>
+                                            <li><a class="dropdown-item text-danger" href="@Url.Action("Delete", new { id = forum.ForumId })" onclick="return confirm('Are you sure you want to delete this forum?')">Delete</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -83,10 +83,10 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted">
                                         <i class="fas fa-comments me-1"></i>
-                                        @forum.Threads.Count 個討論串
+                                        @forum.Threads.Count threads
                                     </small>
                                     <a href="@Url.Action("Details", new { id = forum.ForumId })" class="btn btn-sm btn-outline-primary">
-                                        進入論壇
+                                        Enter Forum
                                     </a>
                                 </div>
                             </div>
@@ -98,10 +98,10 @@
             {
                 <div class="text-center py-5">
                     <i class="fas fa-comments fa-4x text-muted mb-4"></i>
-                    <h3 class="text-muted">還沒有論壇</h3>
-                    <p class="text-muted">快來創建第一個論壇吧！</p>
+                    <h3 class="text-muted">No Forums Yet</h3>
+                    <p class="text-muted">Create the first forum!</p>
                     <a href="@Url.Action("Create")" class="btn btn-primary glass-button">
-                        <i class="fas fa-plus me-2"></i>創建論壇
+                        <i class="fas fa-plus me-2"></i>Create Forum
                     </a>
                 </div>
             }

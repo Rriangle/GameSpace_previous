@@ -62,7 +62,7 @@ namespace GameSpace.Areas.MemberManagement.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to add points for user {UserId}", userId);
-                TempData["ErrorMessage"] = "點數添加失敗，請稍後再試。";
+                TempData["ErrorMessage"] = "Failed to add points. Please try again later.";
             }
 
             return RedirectToAction("Index");
@@ -79,7 +79,7 @@ namespace GameSpace.Areas.MemberManagement.Controllers
                 var result = await _walletService.RedeemCouponAsync(userId, couponTypeId);
                 if (result.Success)
                 {
-                    TempData["SuccessMessage"] = $"優惠券兌換成功！券號：{result.CouponCode}";
+                    TempData["SuccessMessage"] = $"Coupon redeemed successfully! Code: {result.CouponCode}";
                 }
                 else
                 {
