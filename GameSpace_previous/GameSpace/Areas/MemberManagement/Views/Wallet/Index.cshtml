@@ -1,0 +1,169 @@
+@model GameSpace.Areas.MemberManagement.Controllers.WalletViewModel
+@{
+    ViewData["Title"] = "我的錢包";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">我的錢包</h2>
+            
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 錢包總覽 -->
+        <div class="col-md-4">
+            <div class="glass-card p-4 mb-4">
+                <h4 class="text-center mb-3">錢包總覽</h4>
+                <div class="text-center">
+                    <h2 class="text-primary">@(Model.Wallet?.UserPoint ?? 0)</h2>
+                    <p class="text-muted">會員積分</p>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addPointsModal">
+                        添加點數
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 優惠券 -->
+        <div class="col-md-4">
+            <div class="glass-card p-4 mb-4">
+                <h4 class="text-center mb-3">我的優惠券</h4>
+                <div class="text-center">
+                    <h2 class="text-success">@Model.Coupons.Count()</h2>
+                    <p class="text-muted">可用優惠券</p>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <a href="#" class="btn btn-outline-success">查看優惠券</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 電子禮券 -->
+        <div class="col-md-4">
+            <div class="glass-card p-4 mb-4">
+                <h4 class="text-center mb-3">我的電子禮券</h4>
+                <div class="text-center">
+                    <h2 class="text-warning">@Model.Evouchers.Count()</h2>
+                    <p class="text-muted">可用電子禮券</p>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <a href="#" class="btn btn-outline-warning">查看電子禮券</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 交易記錄 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="glass-card p-4">
+                <h4 class="mb-3">最近交易記錄</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>時間</th>
+                                <th>類型</th>
+                                <th>變動金額</th>
+                                <th>說明</th>
+                                <th>商品代碼</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model.History)
+                            {
+                                <tr>
+                                    <td>@record.ChangeTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>@record.ChangeType</td>
+                                    <td class="@(record.PointsChanged > 0 ? "text-success" : "text-danger")">
+                                        @(record.PointsChanged > 0 ? "+" : "")@record.PointsChanged
+                                    </td>
+                                    <td>@record.Description</td>
+                                    <td>@(record.ItemCode ?? "-")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="@Url.Action("History")" class="btn btn-outline-primary">查看完整記錄</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加點數模態框 -->
+<div class="modal fade" id="addPointsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加點數</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="AddPoints" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">點數金額</label>
+                        <input type="number" class="form-control" id="amount" name="amount" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">說明</label>
+                        <input type="text" class="form-control" id="description" name="description" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">確認添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.table {
+    color: white;
+}
+
+.table th {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.table td {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+</style>

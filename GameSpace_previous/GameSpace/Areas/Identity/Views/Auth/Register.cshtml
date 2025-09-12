@@ -1,0 +1,187 @@
+@model GameSpace.Areas.Identity.Controllers.RegisterViewModel
+@{
+    ViewData["Title"] = "註冊";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="glass-card p-4 mt-5">
+                <h2 class="text-center mb-4">註冊 GameSpace</h2>
+                
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+                
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <form asp-action="Register" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Account" class="form-label">帳號</label>
+                                <input asp-for="Account" class="form-control glass-input" required>
+                                <span asp-validation-for="Account" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="NickName" class="form-label">暱稱</label>
+                                <input asp-for="NickName" class="form-control glass-input" required>
+                                <span asp-validation-for="NickName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Password" class="form-label">密碼</label>
+                                <input asp-for="Password" type="password" class="form-control glass-input" required>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="ConfirmPassword" class="form-label">確認密碼</label>
+                                <input asp-for="ConfirmPassword" type="password" class="form-control glass-input" required>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Email" class="form-label">電子郵件</label>
+                                <input asp-for="Email" type="email" class="form-control glass-input" required>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Cellphone" class="form-label">手機號碼</label>
+                                <input asp-for="Cellphone" class="form-control glass-input" required>
+                                <span asp-validation-for="Cellphone" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Gender" class="form-label">性別</label>
+                                <select asp-for="Gender" class="form-select glass-input" required>
+                                    <option value="">請選擇</option>
+                                    <option value="男">男</option>
+                                    <option value="女">女</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="DateOfBirth" class="form-label">出生日期</label>
+                                <input asp-for="DateOfBirth" type="date" class="form-control glass-input" required>
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="IdNumber" class="form-label">身分證字號</label>
+                        <input asp-for="IdNumber" class="form-control glass-input" required>
+                        <span asp-validation-for="IdNumber" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label">地址</label>
+                        <input asp-for="Address" class="form-control glass-input" required>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Introduction" class="form-label">自我介紹</label>
+                        <textarea asp-for="Introduction" class="form-control glass-input" rows="3"></textarea>
+                        <span asp-validation-for="Introduction" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                        <label class="form-check-label" for="agreeTerms">
+                            我同意 <a href="#" class="text-decoration-none">服務條款</a> 和 <a href="#" class="text-decoration-none">隱私政策</a>
+                        </label>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary glass-button">註冊</button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <span>已有帳號？</span>
+                    <a href="@Url.Action("Login")" class="text-decoration-none">立即登入</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.glass-input, .glass-select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: white;
+}
+
+.glass-input:focus, .glass-select:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+.glass-input::placeholder, .glass-select::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.glass-button {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+</style>

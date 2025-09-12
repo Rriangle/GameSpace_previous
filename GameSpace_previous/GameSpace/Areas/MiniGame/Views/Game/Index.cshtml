@@ -1,0 +1,484 @@
+@{
+    ViewData["Title"] = "小遊戲";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">小遊戲</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 遊戲選擇 -->
+        <div class="col-md-4">
+            <div class="glass-card p-4 mb-4">
+                <h4 class="mb-3">選擇遊戲難度</h4>
+                <div class="difficulty-options">
+                    <button class="difficulty-btn" data-level="1">
+                        <h5>簡單</h5>
+                        <p class="text-muted">5 隻怪物</p>
+                        <p class="text-muted">速度：1.0x</p>
+                    </button>
+                    <button class="difficulty-btn" data-level="2">
+                        <h5>普通</h5>
+                        <p class="text-muted">10 隻怪物</p>
+                        <p class="text-muted">速度：1.1x</p>
+                    </button>
+                    <button class="difficulty-btn" data-level="3">
+                        <h5>困難</h5>
+                        <p class="text-muted">15 隻怪物</p>
+                        <p class="text-muted">速度：1.2x</p>
+                    </button>
+                </div>
+                
+                <div class="mt-3">
+                    <button id="startGameBtn" class="btn btn-primary w-100 glass-button" disabled>
+                        <i class="fas fa-play me-2"></i>開始遊戲
+                    </button>
+                </div>
+                
+                <div class="mt-3">
+                    <div class="daily-info">
+                        <p class="text-muted">今日遊戲次數：<span id="dailyCount">0</span>/3</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 遊戲區域 -->
+        <div class="col-md-8">
+            <div class="glass-card p-4 mb-4">
+                <div id="gameArea" class="game-area">
+                    <div class="game-start-screen text-center">
+                        <i class="fas fa-gamepad fa-4x text-muted mb-4"></i>
+                        <h3>選擇難度開始遊戲</h3>
+                        <p class="text-muted">擊敗所有怪物即可獲勝！</p>
+                    </div>
+                    
+                    <div id="gameScreen" class="game-screen" style="display: none;">
+                        <div class="game-header">
+                            <div class="game-stats">
+                                <span>怪物數量：<span id="monsterCount">0</span></span>
+                                <span>速度：<span id="speedMultiplier">1.0</span>x</span>
+                                <span>時間：<span id="gameTime">0</span>s</span>
+                            </div>
+                            <div class="game-controls">
+                                <button id="pauseBtn" class="btn btn-warning btn-sm">暫停</button>
+                                <button id="abortBtn" class="btn btn-danger btn-sm">放棄</button>
+                            </div>
+                        </div>
+                        
+                        <div id="gameCanvas" class="game-canvas">
+                            <!-- 遊戲內容將在這裡動態生成 -->
+                        </div>
+                        
+                        <div class="game-footer">
+                            <div class="game-instructions">
+                                <p>使用滑鼠點擊怪物來擊敗它們！</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 遊戲結果模態框 -->
+    <div class="modal fade" id="gameResultModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">遊戲結果</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="resultIcon" class="mb-3">
+                        <!-- 結果圖示將在這裡顯示 -->
+                    </div>
+                    <h4 id="resultTitle"></h4>
+                    <p id="resultMessage"></p>
+                    <div id="resultRewards" class="mt-3">
+                        <!-- 獎勵資訊將在這裡顯示 -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.glass-button {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.difficulty-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.difficulty-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.difficulty-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.difficulty-btn.selected {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.game-area {
+    min-height: 400px;
+    position: relative;
+}
+
+.game-start-screen {
+    padding: 60px 20px;
+    color: white;
+}
+
+.game-screen {
+    color: white;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.game-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.game-canvas {
+    height: 300px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.game-instructions {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.monster {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: #ff6b6b;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.monster:hover {
+    transform: scale(1.1);
+}
+
+.monster.clicked {
+    background: #4ecdc4;
+    transform: scale(0.8);
+    opacity: 0.7;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+</style>
+
+<script>
+let currentGame = null;
+let gameTimer = null;
+let gameStartTime = null;
+let selectedLevel = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadDailyCount();
+    
+    // 難度選擇
+    const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+    const startGameBtn = document.getElementById('startGameBtn');
+    
+    difficultyBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            difficultyBtns.forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedLevel = parseInt(this.dataset.level);
+            startGameBtn.disabled = false;
+        });
+    });
+    
+    // 開始遊戲
+    startGameBtn.addEventListener('click', startGame);
+    
+    // 遊戲控制
+    document.getElementById('pauseBtn').addEventListener('click', pauseGame);
+    document.getElementById('abortBtn').addEventListener('click', abortGame);
+});
+
+async function loadDailyCount() {
+    try {
+        const response = await fetch('/MiniGame/Game/DailyCount');
+        const data = await response.json();
+        document.getElementById('dailyCount').textContent = data.dailyCount;
+    } catch (error) {
+        console.error('Failed to load daily count:', error);
+    }
+}
+
+async function startGame() {
+    if (!selectedLevel) return;
+    
+    try {
+        const response = await fetch('/MiniGame/Game/StartGame', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                petId: 1, // TODO: Get actual pet ID
+                level: selectedLevel
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            currentGame = data.gameId;
+            showGameScreen();
+            startGameTimer();
+            generateMonsters();
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Failed to start game:', error);
+        alert('遊戲開始失敗，請稍後再試。');
+    }
+}
+
+function showGameScreen() {
+    document.querySelector('.game-start-screen').style.display = 'none';
+    document.getElementById('gameScreen').style.display = 'block';
+}
+
+function startGameTimer() {
+    gameStartTime = Date.now();
+    gameTimer = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+        document.getElementById('gameTime').textContent = elapsed;
+    }, 1000);
+}
+
+function generateMonsters() {
+    const canvas = document.getElementById('gameCanvas');
+    const monsterCount = selectedLevel * 5;
+    const speedMultiplier = 1.0 + (selectedLevel * 0.1);
+    
+    document.getElementById('monsterCount').textContent = monsterCount;
+    document.getElementById('speedMultiplier').textContent = speedMultiplier.toFixed(1);
+    
+    // 清空畫布
+    canvas.innerHTML = '';
+    
+    // 生成怪物
+    for (let i = 0; i < monsterCount; i++) {
+        const monster = document.createElement('div');
+        monster.className = 'monster';
+        monster.textContent = i + 1;
+        monster.style.left = Math.random() * (canvas.offsetWidth - 40) + 'px';
+        monster.style.top = Math.random() * (canvas.offsetHeight - 40) + 'px';
+        
+        monster.addEventListener('click', function() {
+            if (!this.classList.contains('clicked')) {
+                this.classList.add('clicked');
+                checkGameWin();
+            }
+        });
+        
+        canvas.appendChild(monster);
+    }
+}
+
+function checkGameWin() {
+    const remainingMonsters = document.querySelectorAll('.monster:not(.clicked)').length;
+    
+    if (remainingMonsters === 0) {
+        endGame('Win');
+    }
+}
+
+function pauseGame() {
+    if (gameTimer) {
+        clearInterval(gameTimer);
+        gameTimer = null;
+        document.getElementById('pauseBtn').textContent = '繼續';
+        document.getElementById('pauseBtn').onclick = resumeGame;
+    }
+}
+
+function resumeGame() {
+    startGameTimer();
+    document.getElementById('pauseBtn').textContent = '暫停';
+    document.getElementById('pauseBtn').onclick = pauseGame;
+}
+
+function abortGame() {
+    if (confirm('確定要放棄遊戲嗎？')) {
+        endGame('Abort');
+    }
+}
+
+async function endGame(result) {
+    if (gameTimer) {
+        clearInterval(gameTimer);
+        gameTimer = null;
+    }
+    
+    const canvas = document.getElementById('gameCanvas');
+    const monsterCount = canvas.querySelectorAll('.monster').length;
+    const clickedCount = canvas.querySelectorAll('.monster.clicked').length;
+    const speedMultiplier = 1.0 + (selectedLevel * 0.1);
+    
+    // 計算寵物屬性變化
+    const hungerDelta = result === 'Win' ? -10 : 5;
+    const moodDelta = result === 'Win' ? 15 : -5;
+    const staminaDelta = result === 'Win' ? -15 : 0;
+    const cleanlinessDelta = result === 'Win' ? 5 : 0;
+    
+    try {
+        const response = await fetch('/MiniGame/Game/EndGame', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                playId: currentGame,
+                result: result,
+                monsterCount: monsterCount,
+                speedMultiplier: speedMultiplier,
+                hungerDelta: hungerDelta,
+                moodDelta: moodDelta,
+                staminaDelta: staminaDelta,
+                cleanlinessDelta: cleanlinessDelta
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showGameResult(result, data.message, data.gameRecord);
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Failed to end game:', error);
+        alert('遊戲結算失敗，請稍後再試。');
+    }
+    
+    // 重置遊戲狀態
+    currentGame = null;
+    selectedLevel = null;
+    document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('selected'));
+    document.getElementById('startGameBtn').disabled = true;
+    loadDailyCount();
+}
+
+function showGameResult(result, message, gameRecord) {
+    const modal = new bootstrap.Modal(document.getElementById('gameResultModal'));
+    const resultIcon = document.getElementById('resultIcon');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultMessage = document.getElementById('resultMessage');
+    const resultRewards = document.getElementById('resultRewards');
+    
+    if (result === 'Win') {
+        resultIcon.innerHTML = '<i class="fas fa-trophy fa-4x text-warning"></i>';
+        resultTitle.textContent = '恭喜獲勝！';
+        resultTitle.className = 'text-success';
+    } else if (result === 'Lose') {
+        resultIcon.innerHTML = '<i class="fas fa-times-circle fa-4x text-danger"></i>';
+        resultTitle.textContent = '挑戰失敗';
+        resultTitle.className = 'text-danger';
+    } else {
+        resultIcon.innerHTML = '<i class="fas fa-pause-circle fa-4x text-warning"></i>';
+        resultTitle.textContent = '遊戲放棄';
+        resultTitle.className = 'text-warning';
+    }
+    
+    resultMessage.textContent = message;
+    
+    if (gameRecord) {
+        resultRewards.innerHTML = `
+            <div class="row">
+                <div class="col-6">
+                    <p>獲得積分：<span class="text-success">+${gameRecord.pointsGained || 0}</span></p>
+                </div>
+                <div class="col-6">
+                    <p>寵物經驗：<span class="text-info">+${gameRecord.expGained || 0}</span></p>
+                </div>
+            </div>
+            ${gameRecord.couponGained && gameRecord.couponGained !== '0' ? 
+                `<p>獲得優惠券：<span class="text-warning">${gameRecord.couponGained}</span></p>` : ''}
+        `;
+    }
+    
+    modal.show();
+    
+    // 重置遊戲畫面
+    setTimeout(() => {
+        document.querySelector('.game-start-screen').style.display = 'block';
+        document.getElementById('gameScreen').style.display = 'none';
+    }, 1000);
+}
+</script>

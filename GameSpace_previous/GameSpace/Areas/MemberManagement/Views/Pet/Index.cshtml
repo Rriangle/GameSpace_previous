@@ -1,0 +1,333 @@
+@model GameSpace.Models.Pet?
+@{
+    ViewData["Title"] = "我的寵物";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">我的寵物</h2>
+            
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (Model == null)
+    {
+        <!-- 沒有寵物時顯示創建按鈕 -->
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="glass-card p-5 text-center">
+                    <i class="fas fa-paw fa-4x text-muted mb-4"></i>
+                    <h3 class="mb-3">您還沒有寵物</h3>
+                    <p class="text-muted mb-4">快來創建您的第一隻寵物吧！</p>
+                    <a href="@Url.Action("Create")" class="btn btn-primary btn-lg glass-button">
+                        <i class="fas fa-plus me-2"></i>創建寵物
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <!-- 寵物資訊 -->
+            <div class="col-md-6">
+                <div class="glass-card p-4 mb-4">
+                    <h4 class="text-center mb-3">@Model.PetName</h4>
+                    <div class="text-center mb-4">
+                        <div class="pet-avatar" style="background-color: @Model.SkinColor;">
+                            <i class="fas fa-paw fa-3x"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="pet-info">
+                        <div class="info-item">
+                            <span class="label">等級：</span>
+                            <span class="value">Lv.@Model.Level</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">經驗值：</span>
+                            <span class="value">@Model.Experience</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">背景：</span>
+                            <span class="value">@Model.BackgroundColor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 寵物屬性 -->
+            <div class="col-md-6">
+                <div class="glass-card p-4 mb-4">
+                    <h4 class="mb-3">寵物屬性</h4>
+                    
+                    <div class="attribute-item mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>飢餓度</span>
+                            <span>@Model.Hunger%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" style="width: @Model.Hunger%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>心情</span>
+                            <span>@Model.Mood%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" style="width: @Model.Mood%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>體力</span>
+                            <span>@Model.Stamina%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" style="width: @Model.Stamina%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>清潔度</span>
+                            <span>@Model.Cleanliness%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" style="width: @Model.Cleanliness%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>健康度</span>
+                            <span>@Model.Health%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" style="width: @Model.Health%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 寵物照顧按鈕 -->
+        <div class="row">
+            <div class="col-12">
+                <div class="glass-card p-4 mb-4">
+                    <h4 class="mb-3">寵物照顧</h4>
+                    <div class="row">
+                        <div class="col-md-3 mb-2">
+                            <form asp-action="CareAction" method="post" class="d-inline">
+                                <input type="hidden" name="actionType" value="feed">
+                                <button type="submit" class="btn btn-warning w-100">
+                                    <i class="fas fa-utensils me-2"></i>餵食
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <form asp-action="CareAction" method="post" class="d-inline">
+                                <input type="hidden" name="actionType" value="bath">
+                                <button type="submit" class="btn btn-info w-100">
+                                    <i class="fas fa-shower me-2"></i>洗澡
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <form asp-action="CareAction" method="post" class="d-inline">
+                                <input type="hidden" name="actionType" value="play">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-gamepad me-2"></i>玩耍
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <form asp-action="CareAction" method="post" class="d-inline">
+                                <input type="hidden" name="actionType" value="rest">
+                                <button type="submit" class="btn btn-secondary w-100">
+                                    <i class="fas fa-bed me-2"></i>休息
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 寵物外觀設定 -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="glass-card p-4 mb-4">
+                    <h4 class="mb-3">膚色設定</h4>
+                    <div class="color-palette">
+                        <button class="color-btn" style="background-color: #f6d84a;" data-color="#f6d84a"></button>
+                        <button class="color-btn" style="background-color: #ff6b6b;" data-color="#ff6b6b"></button>
+                        <button class="color-btn" style="background-color: #4ecdc4;" data-color="#4ecdc4"></button>
+                        <button class="color-btn" style="background-color: #45b7d1;" data-color="#45b7d1"></button>
+                        <button class="color-btn" style="background-color: #96ceb4;" data-color="#96ceb4"></button>
+                        <button class="color-btn" style="background-color: #feca57;" data-color="#feca57"></button>
+                    </div>
+                    <form id="skinColorForm" asp-action="ChangeSkinColor" method="post" class="mt-3">
+                        <input type="hidden" name="newColorHex" id="selectedSkinColor">
+                        <button type="submit" class="btn btn-outline-primary w-100">更換膚色 (2000 點)</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="glass-card p-4 mb-4">
+                    <h4 class="mb-3">背景設定</h4>
+                    <div class="background-options">
+                        <button class="bg-btn" data-bg="Default">預設</button>
+                        <button class="bg-btn" data-bg="Forest">森林</button>
+                        <button class="bg-btn" data-bg="Ocean">海洋</button>
+                        <button class="bg-btn" data-bg="Space">太空</button>
+                        <button class="bg-btn" data-bg="Garden">花園</button>
+                        <button class="bg-btn" data-bg="City">城市</button>
+                    </div>
+                    <form id="bgColorForm" asp-action="ChangeBackgroundColor" method="post" class="mt-3">
+                        <input type="hidden" name="newBackgroundName" id="selectedBackground">
+                        <button type="submit" class="btn btn-outline-primary w-100">更換背景 (免費)</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.glass-button {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.pet-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.pet-info {
+    color: white;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.label {
+    font-weight: 600;
+}
+
+.attribute-item {
+    color: white;
+}
+
+.color-palette, .background-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.color-btn, .bg-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bg-btn {
+    width: auto;
+    height: auto;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.color-btn:hover, .bg-btn:hover {
+    transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 膚色選擇
+    const colorBtns = document.querySelectorAll('.color-btn');
+    const selectedSkinColor = document.getElementById('selectedSkinColor');
+    
+    colorBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            colorBtns.forEach(b => b.style.borderColor = 'rgba(255, 255, 255, 0.3)');
+            this.style.borderColor = 'rgba(255, 255, 255, 0.8)';
+            selectedSkinColor.value = this.dataset.color;
+        });
+    });
+    
+    // 背景選擇
+    const bgBtns = document.querySelectorAll('.bg-btn');
+    const selectedBackground = document.getElementById('selectedBackground');
+    
+    bgBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            bgBtns.forEach(b => b.style.backgroundColor = 'rgba(255, 255, 255, 0.1)');
+            this.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+            selectedBackground.value = this.dataset.bg;
+        });
+    });
+});
+</script>

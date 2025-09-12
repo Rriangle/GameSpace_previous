@@ -17,6 +17,13 @@ builder.Host.UseSerilog();
 // Add services using Infrastructure project
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Add custom services
+builder.Services.AddScoped<GameSpace.Services.Authentication.IAuthService, GameSpace.Services.Authentication.AuthService>();
+builder.Services.AddScoped<GameSpace.Services.Wallet.IWalletService, GameSpace.Services.Wallet.WalletService>();
+builder.Services.AddScoped<GameSpace.Services.SignIn.ISignInService, GameSpace.Services.SignIn.SignInService>();
+builder.Services.AddScoped<GameSpace.Services.Pet.IPetService, GameSpace.Services.Pet.PetService>();
+builder.Services.AddScoped<GameSpace.Services.MiniGame.IMiniGameService, GameSpace.Services.MiniGame.MiniGameService>();
+
 // Add controllers and views
 builder.Services.AddControllersWithViews();
 

@@ -1,0 +1,211 @@
+@model GameSpace.Areas.MemberManagement.Controllers.SignInViewModel
+@{
+    ViewData["Title"] = "每日簽到";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">每日簽到</h2>
+            
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 簽到狀態 -->
+        <div class="col-md-6">
+            <div class="glass-card p-4 mb-4">
+                <h4 class="text-center mb-3">今日簽到狀態</h4>
+                <div class="text-center">
+                    @if (Model.HasSignedInToday)
+                    {
+                        <div class="sign-in-success">
+                            <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                            <h3 class="text-success">已簽到</h3>
+                            <p class="text-muted">恭喜！您今天已經簽到了</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="sign-in-pending">
+                            <i class="fas fa-calendar-check fa-3x text-warning mb-3"></i>
+                            <h3 class="text-warning">尚未簽到</h3>
+                            <p class="text-muted">快來簽到獲得獎勵吧！</p>
+                            <form asp-action="PerformSignIn" method="post" class="mt-3">
+                                <button type="submit" class="btn btn-primary btn-lg glass-button">
+                                    <i class="fas fa-gift me-2"></i>立即簽到
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- 連續簽到天數 -->
+        <div class="col-md-6">
+            <div class="glass-card p-4 mb-4">
+                <h4 class="text-center mb-3">連續簽到天數</h4>
+                <div class="text-center">
+                    <h1 class="text-primary">@Model.ConsecutiveDays</h1>
+                    <p class="text-muted">天</p>
+                    @if (Model.ConsecutiveDays >= 7)
+                    {
+                        <div class="alert alert-success">
+                            <i class="fas fa-trophy me-2"></i>
+                            恭喜！您已連續簽到 @Model.ConsecutiveDays 天，獲得額外獎勵！
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">再簽到 @(7 - Model.ConsecutiveDays) 天即可獲得額外獎勵</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 簽到獎勵說明 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="glass-card p-4 mb-4">
+                <h4 class="mb-3">簽到獎勵說明</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="reward-item text-center">
+                            <i class="fas fa-coins fa-2x text-warning mb-2"></i>
+                            <h5>每日獎勵</h5>
+                            <p class="text-muted">20 點積分 + 10 寵物經驗</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="reward-item text-center">
+                            <i class="fas fa-gift fa-2x text-success mb-2"></i>
+                            <h5>連續獎勵</h5>
+                            <p class="text-muted">連續 7 天額外獲得 100 點積分 + 85折優惠券</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="reward-item text-center">
+                            <i class="fas fa-star fa-2x text-primary mb-2"></i>
+                            <h5>特殊獎勵</h5>
+                            <p class="text-muted">特定日期可能有特殊獎勵</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 簽到記錄 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="glass-card p-4">
+                <h4 class="mb-3">最近簽到記錄</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>簽到時間</th>
+                                <th>獲得積分</th>
+                                <th>獲得經驗</th>
+                                <th>獲得優惠券</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model.SignInHistory)
+                            {
+                                <tr>
+                                    <td>@record.SignTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td class="text-success">+@record.PointsGained</td>
+                                    <td class="text-info">+@record.ExpGained</td>
+                                    <td>
+                                        @if (record.CouponGained != "0")
+                                        {
+                                            <span class="badge bg-success">@record.CouponGained</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">無</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="@Url.Action("History")" class="btn btn-outline-primary">查看完整記錄</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.glass-button {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.sign-in-success, .sign-in-pending {
+    padding: 20px;
+}
+
+.reward-item {
+    padding: 20px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 15px;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.table {
+    color: white;
+}
+
+.table th {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.table td {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+</style>
