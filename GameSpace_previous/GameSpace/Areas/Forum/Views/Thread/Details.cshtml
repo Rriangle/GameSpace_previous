@@ -1,0 +1,345 @@
+@model GameSpace.Areas.Forum.Controllers.ThreadDetailsViewModel
+@{
+    ViewData["Title"] = Model.Thread.Title;
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Forum")">論壇</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Details", "Forum", new { id = Model.Thread.ForumId })">@Model.Thread.Forum?.Name</a></li>
+                    <li class="breadcrumb-item active">@Model.Thread.Title</li>
+                </ol>
+            </nav>
+            
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 討論串標題 -->
+        <div class="col-12 mb-4">
+            <div class="glass-card p-4">
+                <h2 class="mb-3">@Model.Thread.Title</h2>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-muted">
+                            <i class="fas fa-user me-1"></i>
+                            作者：@Model.Thread.User?.UserName
+                        </small>
+                        <small class="text-muted ms-3">
+                            <i class="fas fa-clock me-1"></i>
+                            發布時間：@Model.Thread.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                        </small>
+                    </div>
+                    <div>
+                        <a href="@Url.Action("Reply", new { threadId = Model.Thread.ThreadId })" class="btn btn-primary glass-button">
+                            <i class="fas fa-reply me-2"></i>回覆
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 文章列表 -->
+        <div class="col-12">
+            @foreach (var post in Model.Posts)
+            {
+                <div class="glass-card p-4 mb-3" data-post-id="@post.PostId">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar me-3">
+                                <i class="fas fa-user-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">@post.User?.UserName</h6>
+                                <small class="text-muted">@post.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="@Url.Action("Reply", new { threadId = Model.Thread.ThreadId, parentPostId = post.PostId })">回覆</a></li>
+                                <li><a class="dropdown-item" href="#">舉報</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="post-content mb-3">
+                        @Html.Raw(post.Content.Replace("\n", "<br>"))
+                    </div>
+                    
+                    <div class="post-actions">
+                        <div class="reaction-buttons">
+                            <button class="btn btn-sm btn-outline-primary reaction-btn" data-post-id="@post.PostId" data-reaction-type="like">
+                                <i class="fas fa-thumbs-up me-1"></i>
+                                <span class="reaction-count" data-reaction-type="like">0</span>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger reaction-btn" data-post-id="@post.PostId" data-reaction-type="dislike">
+                                <i class="fas fa-thumbs-down me-1"></i>
+                                <span class="reaction-count" data-reaction-type="dislike">0</span>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning reaction-btn" data-post-id="@post.PostId" data-reaction-type="love">
+                                <i class="fas fa-heart me-1"></i>
+                                <span class="reaction-count" data-reaction-type="love">0</span>
+                            </button>
+                            <button class="btn btn-sm btn-outline-info reaction-btn" data-post-id="@post.PostId" data-reaction-type="laugh">
+                                <i class="fas fa-laugh me-1"></i>
+                                <span class="reaction-count" data-reaction-type="laugh">0</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- 回覆模態框 -->
+<div class="modal fade" id="replyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">回覆文章</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="replyForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="replyContent" class="form-label">回覆內容</label>
+                        <textarea class="form-control" id="replyContent" rows="5" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">發布回覆</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.glass-button {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.user-avatar {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.post-content {
+    color: white;
+    line-height: 1.6;
+}
+
+.reaction-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.reaction-btn {
+    transition: all 0.3s ease;
+}
+
+.reaction-btn:hover {
+    transform: translateY(-2px);
+}
+
+.reaction-btn.active {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.breadcrumb {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+.breadcrumb-item a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    color: white;
+}
+
+.breadcrumb-item.active {
+    color: white;
+}
+
+.dropdown-menu {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 載入文章反應
+    loadPostReactions();
+    
+    // 反應按鈕事件
+    document.querySelectorAll('.reaction-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const postId = this.dataset.postId;
+            const reactionType = this.dataset.reactionType;
+            
+            if (this.classList.contains('active')) {
+                // 移除反應
+                removeReaction(postId, reactionType);
+            } else {
+                // 添加反應
+                addReaction(postId, reactionType);
+            }
+        });
+    });
+});
+
+async function loadPostReactions() {
+    const posts = document.querySelectorAll('[data-post-id]');
+    
+    for (const post of posts) {
+        const postId = post.dataset.postId;
+        try {
+            const response = await fetch(`/Forum/Thread/GetReactions?postId=${postId}`);
+            const data = await response.json();
+            
+            // 更新反應計數
+            updateReactionCounts(postId, data.reactions);
+        } catch (error) {
+            console.error('Failed to load reactions for post:', postId, error);
+        }
+    }
+}
+
+function updateReactionCounts(postId, reactions) {
+    const postElement = document.querySelector(`[data-post-id="${postId}"]`);
+    
+    // 重置計數
+    postElement.querySelectorAll('.reaction-count').forEach(count => {
+        count.textContent = '0';
+    });
+    
+    // 更新計數
+    reactions.forEach(reaction => {
+        const countElement = postElement.querySelector(`[data-reaction-type="${reaction.reactionType}"] .reaction-count`);
+        if (countElement) {
+            countElement.textContent = reaction.count || '0';
+        }
+    });
+}
+
+async function addReaction(postId, reactionType) {
+    try {
+        const response = await fetch('/Forum/Thread/AddReaction', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                postId: parseInt(postId),
+                reactionType: reactionType
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // 更新 UI
+            const btn = document.querySelector(`[data-post-id="${postId}"][data-reaction-type="${reactionType}"]`);
+            btn.classList.add('active');
+            
+            // 重新載入反應
+            loadPostReactions();
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Failed to add reaction:', error);
+        alert('反應添加失敗，請稍後再試。');
+    }
+}
+
+async function removeReaction(postId, reactionType) {
+    try {
+        const response = await fetch('/Forum/Thread/RemoveReaction', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                postId: parseInt(postId),
+                reactionType: reactionType
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // 更新 UI
+            const btn = document.querySelector(`[data-post-id="${postId}"][data-reaction-type="${reactionType}"]`);
+            btn.classList.remove('active');
+            
+            // 重新載入反應
+            loadPostReactions();
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Failed to remove reaction:', error);
+        alert('反應移除失敗，請稍後再試。');
+    }
+}
+</script>

@@ -23,6 +23,10 @@ builder.Services.AddScoped<GameSpace.Services.Wallet.IWalletService, GameSpace.S
 builder.Services.AddScoped<GameSpace.Services.SignIn.ISignInService, GameSpace.Services.SignIn.SignInService>();
 builder.Services.AddScoped<GameSpace.Services.Pet.IPetService, GameSpace.Services.Pet.PetService>();
 builder.Services.AddScoped<GameSpace.Services.MiniGame.IMiniGameService, GameSpace.Services.MiniGame.MiniGameService>();
+builder.Services.AddScoped<GameSpace.Services.Forum.IForumService, GameSpace.Services.Forum.ForumService>();
+builder.Services.AddScoped<GameSpace.Services.Social.ISocialService, GameSpace.Services.Social.SocialService>();
+builder.Services.AddScoped<GameSpace.Services.Store.IStoreService, GameSpace.Services.Store.StoreService>();
+builder.Services.AddScoped<GameSpace.Services.Admin.IAdminService, GameSpace.Services.Admin.AdminService>();
 
 // Add controllers and views
 builder.Services.AddControllersWithViews();

@@ -1,0 +1,573 @@
+@model GameSpace.Areas.OnlineStore.Controllers.StoreIndexViewModel
+@{
+    ViewData["Title"] = "官方商城";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">官方商城</h2>
+            
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 側邊欄 -->
+        <div class="col-md-3 mb-4">
+            <div class="glass-card p-4">
+                <h5 class="mb-3">商品分類</h5>
+                <div class="category-list">
+                    <a href="@Url.Action("Index")" class="category-item @(string.IsNullOrEmpty(Model.CurrentCategory) ? "active" : "")">
+                        <i class="fas fa-th-large me-2"></i>全部商品
+                    </a>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <a href="@Url.Action("Index", new { category = category })" class="category-item @(Model.CurrentCategory == category ? "active" : "")">
+                            <i class="fas fa-tag me-2"></i>@category
+                        </a>
+                    }
+                </div>
+                
+                <hr class="my-4">
+                
+                <h5 class="mb-3">價格篩選</h5>
+                <div class="price-filter">
+                    <div class="mb-3">
+                        <label for="minPrice" class="form-label">最低價格</label>
+                        <input type="number" class="form-control glass-input" id="minPrice" placeholder="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="maxPrice" class="form-label">最高價格</label>
+                        <input type="number" class="form-control glass-input" id="maxPrice" placeholder="1000">
+                    </div>
+                    <button class="btn btn-outline-primary w-100" onclick="searchByPrice()">
+                        <i class="fas fa-search me-2"></i>搜尋
+                    </button>
+                </div>
+                
+                <hr class="my-4">
+                
+                <h5 class="mb-3">快速搜尋</h5>
+                <div class="search-box">
+                    <input type="text" class="form-control glass-input" id="searchKeyword" placeholder="搜尋商品...">
+                    <button class="btn btn-outline-primary w-100 mt-2" onclick="searchProducts()">
+                        <i class="fas fa-search me-2"></i>搜尋
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 商品列表 -->
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>
+                    @if (string.IsNullOrEmpty(Model.CurrentCategory))
+                    {
+                        <span>全部商品</span>
+                    }
+                    else
+                    {
+                        <span>@Model.CurrentCategory</span>
+                    }
+                </h4>
+                <div class="sort-options">
+                    <select class="form-select glass-input" id="sortSelect">
+                        <option value="newest">最新上架</option>
+                        <option value="price-low">價格由低到高</option>
+                        <option value="price-high">價格由高到低</option>
+                        <option value="name">商品名稱</option>
+                    </select>
+                </div>
+            </div>
+
+            @if (Model.Products.Any())
+            {
+                <div class="row" id="productsContainer">
+                    @foreach (var product in Model.Products)
+                    {
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="glass-card p-3 h-100 product-card">
+                                <div class="product-image mb-3">
+                                    <div class="placeholder-image">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="product-title">@product.ProductName</h6>
+                                <p class="text-muted product-type">@product.ProductType</p>
+                                
+                                <div class="product-price mb-3">
+                                    <span class="price">@product.Price.ToString("C")</span>
+                                    <span class="currency">@product.CurrencyCode</span>
+                                </div>
+                                
+                                @if (product.ShipmentQuantity.HasValue)
+                                {
+                                    <div class="product-stock mb-3">
+                                        <small class="text-muted">
+                                            <i class="fas fa-box me-1"></i>
+                                            庫存：@product.ShipmentQuantity 件
+                                        </small>
+                                    </div>
+                                }
+                                
+                                <div class="product-actions">
+                                    <a href="@Url.Action("Details", new { id = product.ProductId })" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                        <i class="fas fa-eye me-1"></i>查看詳情
+                                    </a>
+                                    <button class="btn btn-primary btn-sm w-100 glass-button" onclick="addToCart(@product.ProductId)">
+                                        <i class="fas fa-shopping-cart me-1"></i>加入購物車
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- 分頁 -->
+                <nav aria-label="商品分頁" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("Index", new { category = Model.CurrentCategory, page = Model.CurrentPage - 1 })">上一頁</a>
+                            </li>
+                        }
+                        
+                        <li class="page-item active">
+                            <span class="page-link">@Model.CurrentPage</span>
+                        </li>
+                        
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { category = Model.CurrentCategory, page = Model.CurrentPage + 1 })">下一頁</a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-shopping-bag fa-4x text-muted mb-4"></i>
+                    <h3 class="text-muted">暫無商品</h3>
+                    <p class="text-muted">該分類下暫時沒有商品，請選擇其他分類</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- 購物車側邊欄 -->
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h5>購物車</h5>
+        <button class="btn-close" onclick="closeCart()"></button>
+    </div>
+    <div class="cart-content" id="cartContent">
+        <!-- 購物車內容將在這裡動態載入 -->
+    </div>
+    <div class="cart-footer">
+        <div class="cart-total mb-3">
+            <strong>總計：<span id="cartTotal">$0</span></strong>
+        </div>
+        <a href="@Url.Action("Cart")" class="btn btn-primary w-100 glass-button">
+            <i class="fas fa-shopping-cart me-2"></i>查看購物車
+        </a>
+    </div>
+</div>
+
+<style>
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.glass-button {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.glass-input, .form-select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: white;
+}
+
+.glass-input:focus, .form-select:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+}
+
+.category-item {
+    display: block;
+    padding: 10px 15px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.category-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.category-item.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.product-card {
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+}
+
+.product-image {
+    text-align: center;
+}
+
+.placeholder-image {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.product-title {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.product-type {
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    color: #4ecdc4;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+.product-stock {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-sidebar.open {
+    right: 0;
+}
+
+.cart-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.cart-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cart-total {
+    color: white;
+    font-size: 1.2em;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.pagination .page-link {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.pagination .page-item.active .page-link {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.pagination .page-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+</style>
+
+<script>
+let cartItems = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadCart();
+});
+
+async function addToCart(productId) {
+    try {
+        const response = await fetch('/OnlineStore/Store/AddToCart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                productId: productId,
+                quantity: 1
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // 添加到本地購物車
+            const existingItem = cartItems.find(item => item.productId === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cartItems.push({
+                    productId: productId,
+                    quantity: 1
+                });
+            }
+            
+            updateCartDisplay();
+            showCart();
+            alert(data.message);
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Failed to add to cart:', error);
+        alert('加入購物車失敗，請稍後再試。');
+    }
+}
+
+function loadCart() {
+    // 從 localStorage 載入購物車
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+        cartItems = JSON.parse(savedCart);
+        updateCartDisplay();
+    }
+}
+
+function saveCart() {
+    // 保存購物車到 localStorage
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+}
+
+function updateCartDisplay() {
+    const cartContent = document.getElementById('cartContent');
+    const cartTotal = document.getElementById('cartTotal');
+    
+    if (cartItems.length === 0) {
+        cartContent.innerHTML = '<p class="text-muted text-center">購物車是空的</p>';
+        cartTotal.textContent = '$0';
+    } else {
+        let total = 0;
+        let html = '';
+        
+        cartItems.forEach(item => {
+            html += `
+                <div class="cart-item d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <small>商品 ID: ${item.productId}</small>
+                        <br>
+                        <small>數量: ${item.quantity}</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger" onclick="removeFromCart(${item.productId})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            total += item.quantity * 100; // 假設每個商品 100 元
+        });
+        
+        cartContent.innerHTML = html;
+        cartTotal.textContent = `$${total}`;
+    }
+    
+    saveCart();
+}
+
+function removeFromCart(productId) {
+    cartItems = cartItems.filter(item => item.productId !== productId);
+    updateCartDisplay();
+}
+
+function showCart() {
+    document.getElementById('cartSidebar').classList.add('open');
+}
+
+function closeCart() {
+    document.getElementById('cartSidebar').classList.remove('open');
+}
+
+async function searchProducts() {
+    const keyword = document.getElementById('searchKeyword').value;
+    if (!keyword.trim()) return;
+    
+    try {
+        const response = await fetch('/OnlineStore/Store/SearchProducts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                keyword: keyword,
+                page: 1
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            updateProductsDisplay(data.products);
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Failed to search products:', error);
+        alert('搜尋失敗，請稍後再試。');
+    }
+}
+
+async function searchByPrice() {
+    const minPrice = document.getElementById('minPrice').value;
+    const maxPrice = document.getElementById('maxPrice').value;
+    
+    if (!minPrice || !maxPrice) {
+        alert('請輸入價格範圍');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/OnlineStore/Store/SearchByPriceRange', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                minPrice: parseFloat(minPrice),
+                maxPrice: parseFloat(maxPrice),
+                page: 1
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            updateProductsDisplay(data.products);
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Failed to search by price:', error);
+        alert('搜尋失敗，請稍後再試。');
+    }
+}
+
+function updateProductsDisplay(products) {
+    const container = document.getElementById('productsContainer');
+    
+    if (products.length === 0) {
+        container.innerHTML = '<div class="col-12 text-center py-5"><i class="fas fa-search fa-4x text-muted mb-4"></i><h3 class="text-muted">沒有找到商品</h3></div>';
+        return;
+    }
+    
+    let html = '';
+    products.forEach(product => {
+        html += `
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="glass-card p-3 h-100 product-card">
+                    <div class="product-image mb-3">
+                        <div class="placeholder-image">
+                            <i class="fas fa-image fa-3x text-muted"></i>
+                        </div>
+                    </div>
+                    <h6 class="product-title">${product.productName}</h6>
+                    <p class="text-muted product-type">${product.productType}</p>
+                    <div class="product-price mb-3">
+                        <span class="price">$${product.price}</span>
+                        <span class="currency">${product.currencyCode}</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-sm w-100 glass-button" onclick="addToCart(${product.productId})">
+                            <i class="fas fa-shopping-cart me-1"></i>加入購物車
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+</script>

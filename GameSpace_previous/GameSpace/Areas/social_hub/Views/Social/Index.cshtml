@@ -1,0 +1,345 @@
+@model GameSpace.Areas.social_hub.Controllers.SocialIndexViewModel
+@{
+    ViewData["Title"] = "社群互動中心";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">社群互動中心</h2>
+            
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 我的群組 -->
+        <div class="col-md-6 mb-4">
+            <div class="glass-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>我的群組</h4>
+                    <a href="@Url.Action("CreateGroup")" class="btn btn-primary btn-sm glass-button">
+                        <i class="fas fa-plus me-1"></i>創建群組
+                    </a>
+                </div>
+                
+                @if (Model.UserGroups.Any())
+                {
+                    <div class="group-list">
+                        @foreach (var group in Model.UserGroups)
+                        {
+                            <div class="group-item mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@group.GroupName</h6>
+                                        <p class="text-muted mb-0">@group.Description</p>
+                                        <small class="text-muted">
+                                            <i class="fas fa-users me-1"></i>
+                                            @group.GroupMembers.Count 位成員
+                                        </small>
+                                    </div>
+                                    <a href="@Url.Action("GroupDetails", new { id = group.GroupId })" class="btn btn-outline-primary btn-sm">
+                                        進入群組
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-users fa-2x text-muted mb-2"></i>
+                        <p class="text-muted">您還沒有加入任何群組</p>
+                        <a href="@Url.Action("Groups")" class="btn btn-outline-primary btn-sm">瀏覽群組</a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- 好友列表 -->
+        <div class="col-md-6 mb-4">
+            <div class="glass-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>我的好友</h4>
+                    <a href="@Url.Action("Friends")" class="btn btn-outline-primary btn-sm">管理好友</a>
+                </div>
+                
+                @if (Model.Friends.Any())
+                {
+                    <div class="friends-list">
+                        @foreach (var friend in Model.Friends.Take(5))
+                        {
+                            <div class="friend-item mb-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="user-avatar me-3">
+                                        <i class="fas fa-user-circle fa-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">@friend.Friend?.UserName</h6>
+                                        <small class="text-muted">好友</small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if (Model.Friends.Count > 5)
+                        {
+                            <div class="text-center mt-3">
+                                <a href="@Url.Action("Friends")" class="btn btn-outline-primary btn-sm">
+                                    查看全部 @Model.Friends.Count 位好友
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-user-friends fa-2x text-muted mb-2"></i>
+                        <p class="text-muted">您還沒有好友</p>
+                        <a href="@Url.Action("Search")" class="btn btn-outline-primary btn-sm">尋找好友</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 好友請求 -->
+        @if (Model.FriendRequests.Any())
+        {
+            <div class="col-md-6 mb-4">
+                <div class="glass-card p-4">
+                    <h4 class="mb-3">好友請求</h4>
+                    <div class="friend-requests">
+                        @foreach (var request in Model.FriendRequests)
+                        {
+                            <div class="friend-request-item mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="user-avatar me-3">
+                                        <i class="fas fa-user-circle fa-lg"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-0">@request.User?.UserName</h6>
+                                        <small class="text-muted">想要加您為好友</small>
+                                    </div>
+                                    <div class="btn-group">
+                                        <button class="btn btn-success btn-sm" onclick="acceptFriendRequest(@request.RelationId)">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="rejectFriendRequest(@request.RelationId)">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- 推薦群組 -->
+        <div class="col-md-6 mb-4">
+            <div class="glass-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>推薦群組</h4>
+                    <a href="@Url.Action("Groups")" class="btn btn-outline-primary btn-sm">瀏覽全部</a>
+                </div>
+                
+                @if (Model.PublicGroups.Any())
+                {
+                    <div class="recommended-groups">
+                        @foreach (var group in Model.PublicGroups.Take(3))
+                        {
+                            <div class="group-item mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@group.GroupName</h6>
+                                        <p class="text-muted mb-0">@group.Description</p>
+                                        <small class="text-muted">
+                                            <i class="fas fa-users me-1"></i>
+                                            @group.GroupMembers.Count 位成員
+                                        </small>
+                                    </div>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="joinGroup(@group.GroupId)">
+                                        加入群組
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-users fa-2x text-muted mb-2"></i>
+                        <p class="text-muted">暫無推薦群組</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速操作 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="glass-card p-4">
+                <h4 class="mb-3">快速操作</h4>
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("CreateGroup")" class="btn btn-primary w-100 glass-button">
+                            <i class="fas fa-plus me-2"></i>創建群組
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("Groups")" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-users me-2"></i>瀏覽群組
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("Search")" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-search me-2"></i>尋找好友
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("Friends")" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-user-friends me-2"></i>管理好友
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.glass-button {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.group-item, .friend-item, .friend-request-item {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-avatar {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.btn-group .btn {
+    margin: 0 2px;
+}
+</style>
+
+<script>
+async function acceptFriendRequest(relationId) {
+    try {
+        const response = await fetch('/social_hub/Social/AcceptFriendRequest', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ relationId: relationId })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            location.reload();
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Failed to accept friend request:', error);
+        alert('接受好友請求失敗，請稍後再試。');
+    }
+}
+
+async function rejectFriendRequest(relationId) {
+    try {
+        const response = await fetch('/social_hub/Social/RejectFriendRequest', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ relationId: relationId })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            location.reload();
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Failed to reject friend request:', error);
+        alert('拒絕好友請求失敗，請稍後再試。');
+    }
+}
+
+async function joinGroup(groupId) {
+    try {
+        const response = await fetch('/social_hub/Social/JoinGroup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ groupId: groupId })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Failed to join group:', error);
+        alert('加入群組失敗，請稍後再試。');
+    }
+}
+</script>

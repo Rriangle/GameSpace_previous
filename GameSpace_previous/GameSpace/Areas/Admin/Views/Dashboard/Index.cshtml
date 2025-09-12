@@ -1,0 +1,286 @@
+@model GameSpace.Areas.Admin.Controllers.DashboardViewModel
+@{
+    ViewData["Title"] = "管理後台儀表板";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h3 mb-4">管理後台儀表板</h1>
+        </div>
+    </div>
+
+    <!-- 統計卡片 -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">總用戶數</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.SystemStats.TotalUsers</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">活躍用戶</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.SystemStats.ActiveUsers</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">總文章數</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.SystemStats.TotalPosts</div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-comments fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">總收入</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.SystemStats.TotalRevenue.ToString("C")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 新用戶 -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">最近註冊用戶</h6>
+                    <a href="@Url.Action("Users")" class="btn btn-sm btn-primary">查看全部</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.NewUsers.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>用戶名</th>
+                                        <th>註冊時間</th>
+                                        <th>狀態</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var user in Model.NewUsers.Take(10))
+                                    {
+                                        <tr>
+                                            <td>@user.UserName</td>
+                                            <td>@user.UserIntroduce?.CreateAccount.ToString("yyyy-MM-dd")</td>
+                                            <td>
+                                                @if (user.UserRight?.UserStatus == true)
+                                                {
+                                                    <span class="badge badge-success">活躍</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge badge-danger">停用</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">暫無新用戶</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近訂單 -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">最近訂單</h6>
+                    <a href="#" class="btn btn-sm btn-primary">查看全部</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentOrders.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>訂單ID</th>
+                                        <th>金額</th>
+                                        <th>狀態</th>
+                                        <th>日期</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.RecentOrders.Take(10))
+                                    {
+                                        <tr>
+                                            <td>@order.OrderId</td>
+                                            <td>@order.TotalAmount.ToString("C")</td>
+                                            <td>
+                                                <span class="badge badge-@(order.Status == "Completed" ? "success" : "warning")">
+                                                    @order.Status
+                                                </span>
+                                            </td>
+                                            <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">暫無訂單</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 最近文章 -->
+        <div class="col-lg-12 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">最近文章</h6>
+                    <a href="@Url.Action("Content")" class="btn btn-sm btn-primary">管理內容</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentPosts.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>文章ID</th>
+                                        <th>標題</th>
+                                        <th>作者</th>
+                                        <th>發布時間</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var post in Model.RecentPosts.Take(10))
+                                    {
+                                        <tr>
+                                            <td>@post.PostId</td>
+                                            <td>@(post.Content.Length > 50 ? post.Content.Substring(0, 50) + "..." : post.Content)</td>
+                                            <td>@post.User?.UserName</td>
+                                            <td>@post.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-danger" onclick="deletePost(@post.PostId)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">暫無文章</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速操作 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">快速操作</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Users")" class="btn btn-primary w-100">
+                                <i class="fas fa-users me-2"></i>用戶管理
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Content")" class="btn btn-info w-100">
+                                <i class="fas fa-comments me-2"></i>內容管理
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Settings")" class="btn btn-warning w-100">
+                                <i class="fas fa-cog me-2"></i>系統設定
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Logs")" class="btn btn-secondary w-100">
+                                <i class="fas fa-file-alt me-2"></i>系統日誌
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function deletePost(postId) {
+    if (confirm('確定要刪除這篇文章嗎？')) {
+        try {
+            const response = await fetch('/Admin/Dashboard/DeletePost', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ postId: postId })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error('Failed to delete post:', error);
+            alert('刪除文章失敗，請稍後再試。');
+        }
+    }
+}
+</script>
