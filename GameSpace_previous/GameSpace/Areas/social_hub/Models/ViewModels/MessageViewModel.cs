@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace GameSpace.Areas.social_hub.Models.ViewModels
 {
@@ -10,6 +10,6 @@ namespace GameSpace.Areas.social_hub.Models.ViewModels
 		public string Content { get; set; } = "";
 		public DateTime Time { get; set; }
 		public bool IsMine { get; set; }
-		public bool IsRead { get; set; }  // 我發出的訊息：代表對方是否已讀
+		public bool IsRead { get; set; }  // For messages I sent: represents whether the recipient has read it
 	}
 }

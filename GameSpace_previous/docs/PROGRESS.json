@@ -1,17 +1,17 @@
 {
-  "overall": 92,
+  "overall": 94,
   "stages": {
     "stage0": 100,
     "stage1": 100,
     "stage2": 100,
     "stage3": 100,
     "stage4": 100,
-    "stage5": 90,
+    "stage5": 95,
     "stage6": 70,
     "stage7": 70
   },
-  "updatedAt": "2025-01-09T17:00:00Z",
-  "status": "REPAIR_MODE_COMPLETED",
+  "updatedAt": "2025-01-09T17:30:00Z",
+  "status": "REPAIR_MODE_IN_PROGRESS",
   "completionDate": null,
   "totalFiles": 180,
   "totalLinesOfCode": 38000,
@@ -143,5 +143,12 @@
       "vendorLibrariesOnly": true,
       "status": "COMPLETED"
     }
+  },
+  "languageRepair": {
+    "readmeFixed": true,
+    "uiElementsFixed": true,
+    "areasPartialFixed": true,
+    "remainingAreas": ["Forum", "MemberManagement", "OnlineStore", "MiniGame"],
+    "status": "IN_PROGRESS"
   }
 }

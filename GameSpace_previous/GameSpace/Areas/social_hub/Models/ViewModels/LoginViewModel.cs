@@ -1,16 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace GameSpace.Areas.social_hub.Models
 {
 	public class LoginViewModel
 	{
-		[Required, Display(Name = "帳號")]
+		[Required, Display(Name = "Account")]
 		public string Account { get; set; } = string.Empty;
 
-		[Required, DataType(DataType.Password), Display(Name = "密碼")]
+		[Required, DataType(DataType.Password), Display(Name = "Password")]
 		public string Password { get; set; } = string.Empty;
 
-		[Display(Name = "記住我")]
+		[Display(Name = "Remember Me")]
 		public bool RememberMe { get; set; }
 
 		public string? ReturnUrl { get; set; }

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -14,7 +14,7 @@
 </head>
 <body id="top" class="d-flex flex-column vh-100">
 
-    <!-- 第一層 Topbar -->
+    <!-- First Level Topbar -->
     @Html.Partial("_TopbarLevel1")
 
     <div class="d-flex flex-grow-1 position-relative">
@@ -28,7 +28,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="flex-grow-1 d-flex flex-column overflow-hidden ms-0">
-            <!-- 第二層 Topbar -->
+            <!-- Second Level Topbar -->
             @Html.Partial("_TopbarLevel2")
 
             <!-- Main Content -->
@@ -43,12 +43,12 @@
 
     </div>
 
-    <!-- Toggle Button 左下固定 -->
+    <!-- Toggle Button Bottom Left Fixed -->
     <button id="sidebarToggle" class="btn btn-primary position-fixed bottom-0 start-0 m-3">
         <i class="fas fa-bars"></i>
     </button>
 
-    <!-- Scroll to Top Button 右下固定 -->
+    <!-- Scroll to Top Button Bottom Right Fixed -->
     <a class="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-3" href="#top"
        style="width:45px;height:45px;">
         <i class="fas fa-angle-up"></i>

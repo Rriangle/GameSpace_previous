@@ -1,6 +1,6 @@
-﻿@model GameSpace.Areas.social_hub.Models.LoginViewModel
+@model GameSpace.Areas.social_hub.Models.LoginViewModel
 @{
-    ViewData["Title"] = "登入（使用者）";
+    ViewData["Title"] = "Login (User)";
 }
 
 <h3 class="mb-3">@ViewData["Title"]</h3>
@@ -12,7 +12,7 @@
         <label asp-for="Account" class="form-label"></label>
         <input asp-for="Account" class="form-control" autocomplete="username" />
         <span asp-validation-for="Account" class="text-danger"></span>
-        <div class="form-text">輸入 UserAccount / UserName</div>
+        <div class="form-text">Enter UserAccount / UserName</div>
     </div>
 
     <div class="mb-3">
@@ -27,7 +27,7 @@
     </div>
 
     <input type="hidden" asp-for="ReturnUrl" />
-    <button type="submit" class="btn btn-primary w-100">登入</button>
+    <button type="submit" class="btn btn-primary w-100">Login</button>
 </form>
 
 @section Scripts {
