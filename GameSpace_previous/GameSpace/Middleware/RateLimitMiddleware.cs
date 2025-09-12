@@ -1,128 +1,112 @@
-using GameSpace.Core.Services;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace GameSpace.Middleware
 {
-    /// <summary>
-    /// Rate limiting middleware
-    /// </summary>
     public class RateLimitMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IRateLimitService _rateLimitService;
         private readonly ILogger<RateLimitMiddleware> _logger;
+        private readonly ConcurrentDictionary<string, RateLimitInfo> _rateLimitStore = new();
         private readonly int _maxRequests;
         private readonly TimeSpan _window;
 
-        public RateLimitMiddleware(RequestDelegate next, IRateLimitService rateLimitService, 
-            ILogger<RateLimitMiddleware> logger, int maxRequests = 100, TimeSpan? window = null)
+        public RateLimitMiddleware(RequestDelegate next, ILogger<RateLimitMiddleware> logger, int maxRequests = 100, int windowMinutes = 1)
         {
             _next = next;
-            _rateLimitService = rateLimitService;
             _logger = logger;
             _maxRequests = maxRequests;
-            _window = window ?? TimeSpan.FromMinutes(1);
+            _window = TimeSpan.FromMinutes(windowMinutes);
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            // Generate rate limit key (based on IP address)
-            var clientIp = GetClientIpAddress(context);
-            var rateLimitKey = $"rate_limit:{clientIp}";
-
             try
             {
-                // Check rate limit
-                var isAllowed = await _rateLimitService.IsAllowedAsync(rateLimitKey, _maxRequests, _window);
-                
-                if (!isAllowed)
+                var clientId = GetClientIdentifier(context);
+                var now = DateTime.UtcNow;
+
+                // 清理過期的記錄
+                CleanupExpiredEntries(now);
+
+                // 檢查速率限制
+                if (IsRateLimited(clientId, now))
                 {
-                    var remaining = await _rateLimitService.GetRemainingRequestsAsync(rateLimitKey, _maxRequests, _window);
-                    
-                    _logger.LogWarning("Rate limit triggered: IP {ClientIp}, Path {Path}, Remaining requests {Remaining}", 
-                        clientIp, context.Request.Path, remaining);
-
-                    context.Response.StatusCode = 429; // Too Many Requests
-                    context.Response.ContentType = "application/json";
-                    
-                    // Add rate limit headers
-                    context.Response.Headers.Add("X-RateLimit-Limit", _maxRequests.ToString());
-                    context.Response.Headers.Add("X-RateLimit-Remaining", remaining.ToString());
-                    context.Response.Headers.Add("X-RateLimit-Reset", DateTime.UtcNow.Add(_window).ToString("R"));
-
-                    var errorResponse = new
-                    {
-                        Type = "https://tools.ietf.org/html/rfc6585#section-4",
-                        Title = "Too Many Requests",
-                        Status = 429,
-                        Detail = $"Maximum {_maxRequests} requests allowed in {_window.TotalMinutes} minutes",
-                        Instance = context.Request.Path,
-                        TraceId = context.TraceIdentifier,
-                        Timestamp = DateTime.UtcNow,
-                        RetryAfter = _window.TotalSeconds
-                    };
-
-                    var json = System.Text.Json.JsonSerializer.Serialize(errorResponse, new System.Text.Json.JsonSerializerOptions
-                    {
-                        PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
-                        WriteIndented = true
-                    });
-
-                    await context.Response.WriteAsync(json);
+                    _logger.LogWarning("Rate limit exceeded for client: {ClientId}", clientId);
+                    context.Response.StatusCode = 429;
+                    context.Response.Headers.Add("Retry-After", _window.TotalSeconds.ToString());
+                    await context.Response.WriteAsync("Rate limit exceeded. Please try again later.");
                     return;
                 }
 
-                // Add rate limit headers to successful response
-                var remainingRequests = await _rateLimitService.GetRemainingRequestsAsync(rateLimitKey, _maxRequests, _window);
-                context.Response.Headers.Add("X-RateLimit-Limit", _maxRequests.ToString());
-                context.Response.Headers.Add("X-RateLimit-Remaining", remainingRequests.ToString());
-                context.Response.Headers.Add("X-RateLimit-Reset", DateTime.UtcNow.Add(_window).ToString("R"));
+                // 記錄請求
+                RecordRequest(clientId, now);
 
                 await _next(context);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Rate limiting middleware error: IP {ClientIp}", clientIp);
-                await _next(context);
+                _logger.LogError(ex, "Rate limit middleware error");
+                throw;
             }
         }
 
-        private static string GetClientIpAddress(HttpContext context)
+        private string GetClientIdentifier(HttpContext context)
         {
-            // Check X-Forwarded-For header (for clients behind proxies)
-            var forwardedFor = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-            if (!string.IsNullOrEmpty(forwardedFor))
+            // 優先使用真實 IP，然後是連接 ID
+            var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            var userAgent = context.Request.Headers["User-Agent"].ToString();
+            return $"{ip}:{userAgent.GetHashCode()}";
+        }
+
+        private bool IsRateLimited(string clientId, DateTime now)
+        {
+            if (!_rateLimitStore.TryGetValue(clientId, out var info))
             {
-                return forwardedFor.Split(',')[0].Trim();
+                return false;
             }
 
-            // Check X-Real-IP header
-            var realIp = context.Request.Headers["X-Real-IP"].FirstOrDefault();
-            if (!string.IsNullOrEmpty(realIp))
+            // 檢查是否在時間窗口內
+            if (now - info.WindowStart > _window)
             {
-                return realIp;
+                return false;
             }
 
-            // Use connection remote IP address
-            return context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            return info.RequestCount >= _maxRequests;
+        }
+
+        private void RecordRequest(string clientId, DateTime now)
+        {
+            _rateLimitStore.AddOrUpdate(clientId, 
+                new RateLimitInfo { RequestCount = 1, WindowStart = now },
+                (key, existing) =>
+                {
+                    if (now - existing.WindowStart > _window)
+                    {
+                        return new RateLimitInfo { RequestCount = 1, WindowStart = now };
+                    }
+                    return new RateLimitInfo { RequestCount = existing.RequestCount + 1, WindowStart = existing.WindowStart };
+                });
+        }
+
+        private void CleanupExpiredEntries(DateTime now)
+        {
+            var expiredKeys = _rateLimitStore
+                .Where(kvp => now - kvp.Value.WindowStart > _window)
+                .Select(kvp => kvp.Key)
+                .ToList();
+
+            foreach (var key in expiredKeys)
+            {
+                _rateLimitStore.TryRemove(key, out _);
+            }
         }
     }
 
-    /// <summary>
-    /// Rate limiting middleware extension methods
-    /// </summary>
-    public static class RateLimitMiddlewareExtensions
+    public class RateLimitInfo
     {
-        /// <summary>
-        /// Add rate limiting middleware
-        /// </summary>
-        /// <param name="app">Application builder</param>
-        /// <param name="maxRequests">Maximum requests</param>
-        /// <param name="window">Time window</param>
-        /// <returns>Application builder</returns>
-        public static IApplicationBuilder UseRateLimit(this IApplicationBuilder app, 
-            int maxRequests = 100, TimeSpan? window = null)
-        {
-            return app.UseMiddleware<RateLimitMiddleware>(maxRequests, window);
-        }
+        public int RequestCount { get; set; }
+        public DateTime WindowStart { get; set; }
     }
 }
