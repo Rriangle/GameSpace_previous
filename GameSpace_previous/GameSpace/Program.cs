@@ -17,8 +17,16 @@ builder.Host.UseSerilog();
 // Add services using Infrastructure project
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Add controllers
-builder.Services.AddControllers();
+// Add controllers and views
+builder.Services.AddControllersWithViews();
+
+// Add session support for shopping cart
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 // Add API Explorer
 builder.Services.AddEndpointsApiExplorer();
@@ -61,7 +69,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseSession();
+app.UseRouting();
 app.UseAuthorization();
+
+// Map controller routes
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllers();
 

@@ -1,3 +1,21 @@
-﻿@{
-    Layout = "_Layout";
+@{
+    // Check if this is a public area or admin area
+    var area = ViewContext.RouteData.Values["area"]?.ToString();
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var isAdmin = User.IsInRole("Admin");
+    
+    // Use public layout for main site, admin layout for admin areas
+    if (string.IsNullOrEmpty(area) && controller == "Home" && action == "Index" && !isAdmin)
+    {
+        Layout = "_PublicLayout";
+    }
+    else if (isAdmin || !string.IsNullOrEmpty(area))
+    {
+        Layout = "_AdminLayout";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
 }

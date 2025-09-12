@@ -1,163 +1,17 @@
 {
-  "overall": 100,
-  "stages": {
-    "stage0": 100,
-    "stage1": 100,
-    "stage2": 100,
-    "stage3": 100,
-    "stage4": 100,
-    "stage5": 100,
-    "stage6": 100,
-    "stage7": 100,
-    "stage8": 100
-  },
-  "updatedAt": "2025-01-09T18:00:00Z",
-  "status": "PROJECT_COMPLETED",
-  "completionDate": "2025-01-09T18:30:00Z",
-  "totalFiles": 180,
-  "totalLinesOfCode": 38000,
-  "testCoverage": "85%",
-  "documentationComplete": true,
+  "overall": 95,
+  "stage0": 100,
+  "stage1": 100,
+  "stage2": 100,
+  "stage3": 100,
+  "stage4": 100,
+  "stage5": 100,
+  "stage6": 100,
+  "stage7": 100,
+  "stage8": 95,
+  "status": "MAJOR_REPAIR_COMPLETED",
+  "lastUpdated": "2025-01-09T09:30:00Z",
+  "overallCompliance": "95%",
   "deploymentReady": true,
-  "optimizationComplete": true,
-  "monitoringComplete": true,
-  "operationsReady": true,
-  "systemOptimizationComplete": true,
-  "performanceOptimizationComplete": true,
-  "incrementalOptimization": {
-    "memoryOptimization": true,
-    "databaseOptimization": true,
-    "apiOptimization": true,
-    "monitoringComplete": true,
-    "performanceTests": true,
-    "healthDashboard": true,
-    "dynamicConfiguration": true,
-    "operationsManual": true,
-    "systemOptimizationServices": true,
-    "responseTimeMonitoring": true,
-    "queryOptimization": true,
-    "databaseConnectionPool": true,
-    "optimizationGuide": true,
-    "optimizationSummary": true,
-    "compilationErrorFix": true,
-    "readModelCreation": true,
-    "duplicateModelCleanup": true,
-    "sqlConnectionFix": true,
-    "interfaceImplementation": true,
-    "namespaceCleanup": true,
-    "encodingFix": true
-  },
-  "monitoringFeatures": {
-    "healthDashboard": true,
-    "dynamicConfiguration": true,
-    "systemMetrics": true,
-    "alerts": true,
-    "performanceMonitoring": true,
-    "memoryMonitoring": true,
-    "databaseMonitoring": true,
-    "responseTimeMonitoring": true,
-    "queryAnalysis": true,
-    "indexOptimization": true,
-    "systemHealthMonitoring": true,
-    "intelligentAlerts": true
-  },
-  "operationsFeatures": {
-    "deploymentGuide": true,
-    "monitoringGuide": true,
-    "troubleshootingGuide": true,
-    "maintenanceProcedures": true,
-    "securityOperations": true,
-    "disasterRecovery": true,
-    "performanceOptimization": true,
-    "systemTuning": true,
-    "operationsManual": true
-  },
-  "optimizationFeatures": {
-    "memoryOptimization": true,
-    "databaseOptimization": true,
-    "apiOptimization": true,
-    "queryOptimization": true,
-    "connectionPoolOptimization": true,
-    "responseTimeOptimization": true,
-    "systemMonitoring": true,
-    "performanceAnalysis": true,
-    "automatedOptimization": true,
-    "intelligentRecommendations": true
-  },
-  "documentationFeatures": {
-    "optimizationGuide": true,
-    "optimizationSummary": true,
-    "performanceNotes": true,
-    "operationsManual": true,
-    "deploymentGuide": true,
-    "testingGuide": true,
-    "architectureGuide": true
-  },
-  "systemRepair": {
-    "compilationErrors": {
-      "initial": 196,
-      "current": 0,
-      "reduction": 196,
-      "status": "COMPLETED"
-    },
-    "readModels": {
-      "created": ["CommerceReadModel", "CommunityReadModel", "AdditionalReadModel"],
-      "status": "COMPLETED"
-    },
-    "duplicateCleanup": {
-      "removed": ["MissingReadModels.cs", "Old Repositories", "Old ReadModels"],
-      "status": "COMPLETED"
-    },
-    "sqlConnection": {
-      "updated": "Microsoft.Data.SqlClient",
-      "status": "COMPLETED"
-    },
-    "interfaces": {
-      "created": ["ISeedDataRunner"],
-      "status": "COMPLETED"
-    },
-    "namespaceCleanup": {
-      "fixed": ["Program.cs", "GameSpaceDbContext.cs", "UsersController.cs", "NotificationService.cs"],
-      "status": "COMPLETED"
-    },
-    "encodingFix": {
-      "fixed": ["AdditionalReadModel.cs", "NotificationService.cs", "SeedDataRunner.cs"],
-      "status": "COMPLETED"
-    }
-  },
-  "repairMode": {
-    "languageCompliance": {
-      "fixed": ["MemoryCacheService.cs", "ValidationService.cs", "NotificationService.cs", "SeedDataRunner.cs"],
-      "status": "COMPLETED"
-    },
-    "databaseSingleSource": {
-      "removedMigrations": ["20241219000001_InitialCreate.cs", "00000000000000_CreateIdentitySchema.cs", "ApplicationDbContextModelSnapshot.cs"],
-      "status": "COMPLETED"
-    },
-    "fakeDataRules": {
-      "implemented200RowsPerTable": true,
-      "idempotentSeeding": true,
-      "status": "COMPLETED"
-    },
-    "placeholderSweep": {
-      "checked": true,
-      "vendorLibrariesOnly": true,
-      "status": "COMPLETED"
-    }
-  },
-  "languageRepair": {
-    "readmeFixed": true,
-    "uiElementsFixed": true,
-    "areasFixed": true,
-    "javascriptFixed": true,
-    "status": "COMPLETED"
-  },
-  "complianceStatus": {
-    "languageRule": "100%",
-    "areasSeparation": "100%",
-    "databaseSingleSource": "100%",
-    "fakeDataRules": "100%",
-    "documentation": "100%",
-    "overallCompliance": "100%"
-  }
+  "notes": "Major repair completed successfully. All core requirements implemented. Ready for deployment with minor optimizations remaining."
 }

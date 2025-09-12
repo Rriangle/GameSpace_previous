@@ -1,0 +1,314 @@
+@{
+    ViewData["Title"] = "GameSpace - 遊戲社群平台";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<!-- 看板 Tiles -->
+<section class="wrap tiles" aria-label="看板彩色小卡">
+    <div class="grid-tiles" id="tileGrid2">
+        <div class="tile" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="tile-icon">🎮</div>
+            <div class="tile-title">熱門遊戲</div>
+            <div class="tile-desc">探索最新最熱門的遊戲</div>
+        </div>
+        <div class="tile" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="tile-icon">🏆</div>
+            <div class="tile-title">排行榜</div>
+            <div class="tile-desc">查看遊戲排行榜</div>
+        </div>
+        <div class="tile" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="tile-icon">💬</div>
+            <div class="tile-title">社群討論</div>
+            <div class="tile-desc">與其他玩家交流</div>
+        </div>
+        <div class="tile" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <div class="tile-icon">🛒</div>
+            <div class="tile-title">遊戲商城</div>
+            <div class="tile-desc">購買遊戲和道具</div>
+        </div>
+        <div class="tile" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+            <div class="tile-icon">🎯</div>
+            <div class="tile-title">小遊戲</div>
+            <div class="tile-desc">享受迷你遊戲樂趣</div>
+        </div>
+        <div class="tile" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+            <div class="tile-icon">👥</div>
+            <div class="tile-title">好友系統</div>
+            <div class="tile-desc">與朋友一起遊戲</div>
+        </div>
+    </div>
+</section>
+
+<!-- Hot Threads -->
+<section class="wrap">
+    <article class="hot">
+        <div class="head" style="display: flex; align-items: center; margin-bottom: 1rem;">
+            <span class="kicker" style="background: var(--primary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; margin-right: 0.5rem;">Hot Threads</span>
+            <strong style="font-size: 1.2rem;">熱門精選</strong>
+        </div>
+        <div class="scroller" id="hotScroller2" style="display: flex; gap: 1rem; overflow-x: auto; padding: 1rem 0;">
+            <div class="glass-card" style="min-width: 300px; padding: 1rem;">
+                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">最新遊戲發布</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">探索最新的遊戲發布和更新內容</p>
+            </div>
+            <div class="glass-card" style="min-width: 300px; padding: 1rem;">
+                <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">遊戲攻略分享</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">分享你的遊戲心得和攻略技巧</p>
+            </div>
+            <div class="glass-card" style="min-width: 300px; padding: 1rem;">
+                <h4 style="color: var(--success); margin-bottom: 0.5rem;">社群活動</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">參與各種有趣的社群活動</p>
+            </div>
+        </div>
+    </article>
+</section>
+
+<!-- Main Layout -->
+<main class="wrap layout" id="forum">
+    <!-- 中欄：文章 Feed -->
+    <section class="panel">
+        <h2 style="color: var(--primary); margin-bottom: 1.5rem;">最新文章</h2>
+        
+        <!-- 置頂文章 -->
+        <div class="pinned-section" style="margin-bottom: 2rem;">
+            <h3 style="color: var(--warning); margin-bottom: 1rem; font-size: 1.1rem;">📌 置頂文章</h3>
+            <div class="glass-card" style="border-left: 4px solid var(--warning);">
+                <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">歡迎來到 GameSpace！</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">這是你的遊戲社群平台，在這裡你可以與其他玩家交流、分享遊戲心得、參與討論。</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">管理員 • 2 小時前</span>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <span style="color: var(--primary); font-size: 0.9rem;">👍 128</span>
+                        <span style="color: var(--secondary); font-size: 0.9rem;">💬 45</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最新文章列表 -->
+        <div class="articles-list">
+            <div class="glass-card" style="margin-bottom: 1rem;">
+                <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">《艾爾登法環》DLC 深度評測</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">深入分析最新 DLC 的遊戲機制和內容...</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">遊戲達人 • 4 小時前</span>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <span style="color: var(--primary); font-size: 0.9rem;">👍 89</span>
+                        <span style="color: var(--secondary); font-size: 0.9rem;">💬 23</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 1rem;">
+                <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">獨立遊戲推薦：隱藏寶石</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">分享一些你可能錯過的優秀獨立遊戲...</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">獨立遊戲愛好者 • 6 小時前</span>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <span style="color: var(--primary); font-size: 0.9rem;">👍 156</span>
+                        <span style="color: var(--secondary); font-size: 0.9rem;">💬 67</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 1rem;">
+                <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">電競賽事回顧：春季聯賽</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">回顧本季最精彩的電競比賽時刻...</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">電競記者 • 8 小時前</span>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <span style="color: var(--primary); font-size: 0.9rem;">👍 203</span>
+                        <span style="color: var(--secondary); font-size: 0.9rem;">💬 89</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 右欄 -->
+    <aside class="right">
+        <div class="stack">
+            <!-- 我的史萊姆卡片 -->
+            <aside class="gs-right-sticky">
+                <div class="gs-pet-card" id="gs-pet-card">
+                    <h3>🐾 我的史萊姆</h3>
+                    <div class="pet-stats">
+                        <div class="stat-item">
+                            <span>等級</span>
+                            <span>15</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>經驗</span>
+                            <span>2,450</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>飢餓度</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>心情</span>
+                            <span>😊</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>體力</span>
+                            <span>70%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>清潔度</span>
+                            <span>90%</span>
+                        </div>
+                    </div>
+                    <div class="pet-actions">
+                        <button class="btn btn-primary" onclick="animatePet()">餵食</button>
+                        <button class="btn btn-secondary" onclick="animatePet()">遊戲</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 公告跑馬燈 -->
+            <article class="panel ticker" aria-label="公告跑馬燈">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">📢 最新公告</h4>
+                <div style="background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold;">
+                    歡迎來到 GameSpace！新用戶註冊即送 100 點數，快來體驗吧！
+                </div>
+            </article>
+
+            <!-- 跨平台熱門 -->
+            <article class="panel pulse">
+                <div class="hd">
+                    <div class="title" style="color: var(--primary); margin-bottom: 1rem;">跨平台熱門（近 7 / 30 天）</div>
+                    <div class="ranking-list">
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: rgba(255, 255, 255, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>1. 艾爾登法環</span>
+                            <span style="color: var(--success);">🔥 熱門</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: rgba(255, 255, 255, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>2. 薩爾達傳說</span>
+                            <span style="color: var(--warning);">📈 上升</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: rgba(255, 255, 255, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>3. 原神</span>
+                            <span style="color: var(--secondary);">💎 穩定</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 熱門標籤 -->
+            <article class="panel">
+                <div class="hd">
+                    <div class="title" style="color: var(--primary); margin-bottom: 1rem;">熱門標籤</div>
+                    <div class="tags" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <span style="background: var(--primary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem;">#RPG</span>
+                        <span style="background: var(--secondary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem;">#動作</span>
+                        <span style="background: var(--success); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem;">#獨立遊戲</span>
+                        <span style="background: var(--warning); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem;">#策略</span>
+                        <span style="background: var(--danger); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem;">#競技</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 本日人氣作者 -->
+            <article class="panel">
+                <div class="hd">
+                    <div class="title" style="color: var(--primary); margin-bottom: 1rem;">本日人氣作者</div>
+                    <div class="authors">
+                        <div style="display: flex; align-items: center; padding: 0.5rem; background: rgba(255, 255, 255, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div style="width: 32px; height: 32px; background: var(--primary); border-radius: 50%; margin-right: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">A</div>
+                            <div>
+                                <div style="font-weight: bold;">遊戲達人</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">3 篇文章</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; padding: 0.5rem; background: rgba(255, 255, 255, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div style="width: 32px; height: 32px; background: var(--secondary); border-radius: 50%; margin-right: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">B</div>
+                            <div>
+                                <div style="font-weight: bold;">獨立遊戲愛好者</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">2 篇文章</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </aside>
+</main>
+
+<!-- 類別排行 -->
+<section class="wrap" id="ranks" style="margin-top: 2rem;">
+    <article class="panel">
+        <div class="hd">
+            <div class="title" style="color: var(--primary); margin-bottom: 1.5rem;">各類遊戲分區熱度排行</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div class="glass-card" style="text-align: center; padding: 1rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 0.5rem;">RPG 遊戲</h4>
+                    <div style="font-size: 2rem; color: var(--success);">🔥</div>
+                    <div style="color: var(--text-secondary);">熱度: 95%</div>
+                </div>
+                <div class="glass-card" style="text-align: center; padding: 1rem;">
+                    <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">動作遊戲</h4>
+                    <div style="font-size: 2rem; color: var(--warning);">⚡</div>
+                    <div style="color: var(--text-secondary);">熱度: 87%</div>
+                </div>
+                <div class="glass-card" style="text-align: center; padding: 1rem;">
+                    <h4 style="color: var(--success); margin-bottom: 0.5rem;">策略遊戲</h4>
+                    <div style="font-size: 2rem; color: var(--primary);">🧠</div>
+                    <div style="color: var(--text-secondary);">熱度: 78%</div>
+                </div>
+                <div class="glass-card" style="text-align: center; padding: 1rem;">
+                    <h4 style="color: var(--warning); margin-bottom: 0.5rem;">競技遊戲</h4>
+                    <div style="font-size: 2rem; color: var(--danger);">🏆</div>
+                    <div style="color: var(--text-secondary);">熱度: 92%</div>
+                </div>
+            </div>
+        </div>
+    </article>
+</section>
+
+<!-- 浮動發文按鈕（行動版） -->
+<button class="compose" id="fab2" style="position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; z-index: 1000;">＋</button>
+
+<script>
+    // 浮動按鈕點擊事件
+    document.getElementById('fab2').addEventListener('click', function() {
+        alert('發表主題功能開發中...');
+    });
+
+    // 史萊姆寵物動畫
+    function animatePet() {
+        const petCard = document.getElementById('gs-pet-card');
+        petCard.style.transform = 'scale(1.05)';
+        petCard.style.transition = 'transform 0.2s ease';
+        
+        setTimeout(() => {
+            petCard.style.transform = 'scale(1)';
+        }, 200);
+        
+        // 顯示互動效果
+        const stats = petCard.querySelectorAll('.stat-item');
+        stats.forEach((stat, index) => {
+            setTimeout(() => {
+                stat.style.background = 'rgba(117, 87, 255, 0.2)';
+                setTimeout(() => {
+                    stat.style.background = 'rgba(255, 255, 255, 0.1)';
+                }, 300);
+            }, index * 100);
+        });
+    }
+
+    // 頁面載入動畫
+    document.addEventListener('DOMContentLoaded', function() {
+        // 漸入動畫
+        const elements = document.querySelectorAll('.glass-card, .tile, .panel');
+        elements.forEach((element, index) => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                element.style.transition = 'all 0.6s ease';
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    });
+</script>
