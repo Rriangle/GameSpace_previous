@@ -1,17 +1,17 @@
-﻿{
-  "overall": 90,
+{
+  "overall": 92,
   "stages": {
     "stage0": 100,
     "stage1": 100,
     "stage2": 100,
     "stage3": 100,
     "stage4": 100,
-    "stage5": 85,
+    "stage5": 90,
     "stage6": 70,
     "stage7": 70
   },
-  "updatedAt": "2025-01-09T16:30:00Z",
-  "status": "STAGE5_IN_PROGRESS",
+  "updatedAt": "2025-01-09T17:00:00Z",
+  "status": "REPAIR_MODE_COMPLETED",
   "completionDate": null,
   "totalFiles": 180,
   "totalLinesOfCode": 38000,
@@ -121,6 +121,26 @@
     },
     "encodingFix": {
       "fixed": ["AdditionalReadModel.cs", "NotificationService.cs", "SeedDataRunner.cs"],
+      "status": "COMPLETED"
+    }
+  },
+  "repairMode": {
+    "languageCompliance": {
+      "fixed": ["MemoryCacheService.cs", "ValidationService.cs", "NotificationService.cs", "SeedDataRunner.cs"],
+      "status": "COMPLETED"
+    },
+    "databaseSingleSource": {
+      "removedMigrations": ["20241219000001_InitialCreate.cs", "00000000000000_CreateIdentitySchema.cs", "ApplicationDbContextModelSnapshot.cs"],
+      "status": "COMPLETED"
+    },
+    "fakeDataRules": {
+      "implemented200RowsPerTable": true,
+      "idempotentSeeding": true,
+      "status": "COMPLETED"
+    },
+    "placeholderSweep": {
+      "checked": true,
+      "vendorLibrariesOnly": true,
       "status": "COMPLETED"
     }
   }

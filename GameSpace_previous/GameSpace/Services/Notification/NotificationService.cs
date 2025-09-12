@@ -1,11 +1,11 @@
-﻿using GameSpace.Data;
+using GameSpace.Data;
 using GameSpace.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameSpace.Services.Notification
 {
     /// <summary>
-    /// 通知服務實現
+    /// Notification service implementation
     /// </summary>
     public class NotificationService : INotificationService
     {
@@ -29,13 +29,13 @@ namespace GameSpace.Services.Notification
                     .Take(pageSize)
                     .ToListAsync();
 
-                _logger.LogInformation("獲取用戶通知，用戶ID: {UserId}, 頁面: {Page}, 大小: {PageSize}, 結果: {Count} 筆", 
+                _logger.LogInformation("Retrieved user notifications, UserID: {UserId}, Page: {Page}, Size: {PageSize}, Result: {Count} items", 
                     userId, page, pageSize, notifications.Count);
                 return notifications;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "獲取用戶通知時發生錯誤，用戶ID: {UserId}", userId);
+                _logger.LogError(ex, "Error occurred while retrieving user notifications, UserID: {UserId}", userId);
                 throw;
             }
         }
@@ -47,13 +47,13 @@ namespace GameSpace.Services.Notification
                 var notification = await _context.Set<NotificationReadModel>()
                     .FirstOrDefaultAsync(n => n.NotificationID == notificationId);
 
-                _logger.LogInformation("獲取通知詳情，通知ID: {NotificationId}, 結果: {Found}", 
+                _logger.LogInformation("Retrieved notification details, NotificationID: {NotificationId}, Result: {Found}", 
                     notificationId, notification != null);
                 return notification;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "獲取通知詳情時發生錯誤，通知ID: {NotificationId}", notificationId);
+                _logger.LogError(ex, "Error occurred while retrieving notification details, NotificationID: {NotificationId}", notificationId);
                 throw;
             }
         }
@@ -74,12 +74,12 @@ namespace GameSpace.Services.Notification
                 notification.ReadAt = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation("標記通知為已讀，通知ID: {NotificationId}", notificationId);
+                _logger.LogInformation("Marked notification as read, NotificationID: {NotificationId}", notificationId);
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "標記通知為已讀時發生錯誤，通知ID: {NotificationId}", notificationId);
+                _logger.LogError(ex, "Error occurred while marking notification as read, NotificationID: {NotificationId}", notificationId);
                 throw;
             }
         }
@@ -100,13 +100,13 @@ namespace GameSpace.Services.Notification
 
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation("標記所有通知為已讀，用戶ID: {UserId}, 數量: {Count}", 
+                _logger.LogInformation("Marked all notifications as read, UserID: {UserId}, Count: {Count}", 
                     userId, notifications.Count);
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "標記所有通知為已讀時發生錯誤，用戶ID: {UserId}", userId);
+                _logger.LogError(ex, "Error occurred while marking all notifications as read, UserID: {UserId}", userId);
                 throw;
             }
         }
@@ -118,12 +118,12 @@ namespace GameSpace.Services.Notification
                 var count = await _context.Set<NotificationReadModel>()
                     .CountAsync(n => n.UserID == userId && !n.IsRead);
 
-                _logger.LogInformation("獲取未讀通知數量，用戶ID: {UserId}, 數量: {Count}", userId, count);
+                _logger.LogInformation("Retrieved unread notification count, UserID: {UserId}, Count: {Count}", userId, count);
                 return count;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "獲取未讀通知數量時發生錯誤，用戶ID: {UserId}", userId);
+                _logger.LogError(ex, "Error occurred while retrieving unread notification count, UserID: {UserId}", userId);
                 throw;
             }
         }
@@ -145,11 +145,11 @@ namespace GameSpace.Services.Notification
                 _context.Set<NotificationReadModel>().Add(notification);
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation("發送通知成功，用戶ID: {UserId}, 標題: {Title}", userId, title);
+                _logger.LogInformation("Notification sent successfully, UserID: {UserId}, Title: {Title}", userId, title);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "發送通知時發生錯誤，用戶ID: {UserId}", userId);
+                _logger.LogError(ex, "Error occurred while sending notification, UserID: {UserId}", userId);
                 throw;
             }
         }
@@ -158,13 +158,13 @@ namespace GameSpace.Services.Notification
         {
             try
             {
-                // 這裡可以實現系統通知邏輯，例如發送給所有用戶
-                _logger.LogInformation("發送系統通知，標題: {Title}", title);
+                // Here you can implement system notification logic, such as sending to all users
+                _logger.LogInformation("Sending system notification, Title: {Title}", title);
                 await Task.CompletedTask;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "發送系統通知時發生錯誤，標題: {Title}", title);
+                _logger.LogError(ex, "Error occurred while sending system notification, Title: {Title}", title);
                 throw;
             }
         }
@@ -183,11 +183,11 @@ namespace GameSpace.Services.Notification
                     await _context.SaveChangesAsync();
                 }
 
-                _logger.LogInformation("標記通知為已讀，通知ID: {NotificationId}, 用戶ID: {UserId}", notificationId, userId);
+                _logger.LogInformation("Marked notification as read, NotificationID: {NotificationId}, UserID: {UserId}", notificationId, userId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "標記通知為已讀時發生錯誤，通知ID: {NotificationId}, 用戶ID: {UserId}", notificationId, userId);
+                _logger.LogError(ex, "Error occurred while marking notification as read, NotificationID: {NotificationId}, UserID: {UserId}", notificationId, userId);
                 throw;
             }
         }
@@ -201,7 +201,7 @@ namespace GameSpace.Services.Notification
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "檢查是否需要種子數據時發生錯誤");
+                _logger.LogError(ex, "Error occurred while checking if seeding is needed");
                 return false;
             }
         }

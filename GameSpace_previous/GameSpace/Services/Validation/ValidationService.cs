@@ -1,10 +1,10 @@
-﻿using GameSpace.Data;
+using GameSpace.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameSpace.Services.Validation
 {
     /// <summary>
-    /// 驗證服務實現
+    /// Validation service implementation
     /// </summary>
     public class ValidationService : IValidationService
     {
@@ -24,14 +24,14 @@ namespace GameSpace.Services.Validation
                 var user = await _context.Users.FindAsync(userId);
                 if (user == null)
                 {
-                    _logger.LogWarning("用戶不存在: {UserId}", userId);
+                    _logger.LogWarning("User does not exist: {UserId}", userId);
                     return false;
                 }
 
                 var userRights = await _context.UserRights.FindAsync(userId);
                 if (userRights?.User_Status != true)
                 {
-                    _logger.LogWarning("用戶已停權: {UserId}", userId);
+                    _logger.LogWarning("User is suspended: {UserId}", userId);
                     return false;
                 }
 
@@ -39,7 +39,7 @@ namespace GameSpace.Services.Validation
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "驗證用戶失敗: {UserId}", userId);
+                _logger.LogError(ex, "User validation failed: {UserId}", userId);
                 return false;
             }
         }
@@ -51,14 +51,14 @@ namespace GameSpace.Services.Validation
                 var pet = await _context.Pet.FindAsync(petId);
                 if (pet == null)
                 {
-                    _logger.LogWarning("寵物不存在: {PetId}", petId);
+                    _logger.LogWarning("Pet does not exist: {PetId}", petId);
                     return false;
                 }
 
-                // 檢查寵物健康狀態
+                // Check pet health status
                 if (pet.Health <= 0)
                 {
-                    _logger.LogWarning("寵物健康度不足: {PetId}, Health: {Health}", petId, pet.Health);
+                    _logger.LogWarning("Pet health insufficient: {PetId}, Health: {Health}", petId, pet.Health);
                     return false;
                 }
 
@@ -66,7 +66,7 @@ namespace GameSpace.Services.Validation
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "驗證寵物失敗: {PetId}", petId);
+                _logger.LogError(ex, "Pet validation failed: {PetId}", petId);
                 return false;
             }
         }
@@ -78,13 +78,13 @@ namespace GameSpace.Services.Validation
                 var wallet = await _context.UserWallet.FindAsync(userId);
                 if (wallet == null)
                 {
-                    _logger.LogWarning("用戶錢包不存在: {UserId}", userId);
+                    _logger.LogWarning("User wallet does not exist: {UserId}", userId);
                     return false;
                 }
 
                 if (wallet.User_Point < points)
                 {
-                    _logger.LogWarning("用戶點數不足: {UserId}, 需要: {Points}, 現有: {Current}", 
+                    _logger.LogWarning("Insufficient user points: {UserId}, Required: {Points}, Current: {Current}", 
                         userId, points, wallet.User_Point);
                     return false;
                 }
@@ -93,7 +93,7 @@ namespace GameSpace.Services.Validation
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "驗證點數失敗: {UserId}, {Points}", userId, points);
+                _logger.LogError(ex, "Points validation failed: {UserId}, {Points}", userId, points);
                 return false;
             }
         }
@@ -107,23 +107,23 @@ namespace GameSpace.Services.Validation
                 
                 if (coupon == null)
                 {
-                    _logger.LogWarning("優惠券不存在: {CouponCode}", couponCode);
+                    _logger.LogWarning("Coupon does not exist: {CouponCode}", couponCode);
                     return false;
                 }
 
                 if (coupon.IsUsed)
                 {
-                    _logger.LogWarning("優惠券已使用: {CouponCode}", couponCode);
+                    _logger.LogWarning("Coupon already used: {CouponCode}", couponCode);
                     return false;
                 }
 
-                // 檢查有效期
+                // Check validity period
                 var couponType = await _context.CouponType
                     .FirstOrDefaultAsync(ct => ct.CouponTypeID == coupon.CouponTypeID);
                 
                 if (couponType != null && DateTime.UtcNow > couponType.ValidTo)
                 {
-                    _logger.LogWarning("優惠券已過期: {CouponCode}", couponCode);
+                    _logger.LogWarning("Coupon expired: {CouponCode}", couponCode);
                     return false;
                 }
 
@@ -131,7 +131,7 @@ namespace GameSpace.Services.Validation
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "驗證優惠券失敗: {CouponCode}", couponCode);
+                _logger.LogError(ex, "Coupon validation failed: {CouponCode}", couponCode);
                 return false;
             }
         }
@@ -140,7 +140,7 @@ namespace GameSpace.Services.Validation
         {
             try
             {
-                // 檢查用戶和寵物是否有效
+                // Check if user and pet are valid
                 var userValid = await ValidateUserAsync(userId);
                 var petValid = await ValidatePetAsync(petId);
                 
@@ -149,15 +149,15 @@ namespace GameSpace.Services.Validation
                     return false;
                 }
 
-                // 檢查寵物是否屬於該用戶
+                // Check if pet belongs to the user
                 var pet = await _context.Pet.FindAsync(petId);
                 if (pet?.UserID != userId)
                 {
-                    _logger.LogWarning("寵物不屬於該用戶: {UserId}, {PetId}", userId, petId);
+                    _logger.LogWarning("Pet does not belong to user: {UserId}, {PetId}", userId, petId);
                     return false;
                 }
 
-                // 檢查每日遊戲次數限制
+                // Check daily game count limit
                 var today = DateTime.UtcNow.Date;
                 var todayGames = await _context.MiniGame
                     .CountAsync(mg => mg.UserID == userId && 
@@ -166,7 +166,7 @@ namespace GameSpace.Services.Validation
 
                 if (todayGames >= 3)
                 {
-                    _logger.LogWarning("用戶已達每日遊戲次數限制: {UserId}", userId);
+                    _logger.LogWarning("User has reached daily game limit: {UserId}", userId);
                     return false;
                 }
 
@@ -174,7 +174,7 @@ namespace GameSpace.Services.Validation
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "驗證遊戲會話失敗: {UserId}, {PetId}", userId, petId);
+                _logger.LogError(ex, "Game session validation failed: {UserId}, {PetId}", userId, petId);
                 return false;
             }
         }
