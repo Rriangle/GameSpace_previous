@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  gamespace-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+      - "8081:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80;https://+:443
+      - ConnectionStrings__DefaultConnection=Server=gamespace-db;Database=GameSpace;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true;
+      - Serilog__MinimumLevel__Default=Information
+      - Serilog__MinimumLevel__Override__Microsoft=Warning
+    depends_on:
+      - gamespace-db
+      - gamespace-redis
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - gamespace-network
+
+  gamespace-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - gamespace-db-data:/var/opt/mssql
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+    restart: unless-stopped
+    networks:
+      - gamespace-network
+
+  gamespace-redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - gamespace-redis-data:/data
+    restart: unless-stopped
+    networks:
+      - gamespace-network
+
+  gamespace-nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - gamespace-app
+    restart: unless-stopped
+    networks:
+      - gamespace-network
+
+volumes:
+  gamespace-db-data:
+  gamespace-redis-data:
+
+networks:
+  gamespace-network:
+    driver: bridge

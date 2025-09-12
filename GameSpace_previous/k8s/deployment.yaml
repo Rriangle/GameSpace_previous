@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gamespace-app
+  namespace: gamespace
+  labels:
+    app: gamespace
+    component: app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gamespace
+      component: app
+  template:
+    metadata:
+      labels:
+        app: gamespace
+        component: app
+    spec:
+      containers:
+      - name: gamespace-app
+        image: gamespace:latest
+        ports:
+        - containerPort: 80
+          name: http
+        - containerPort: 443
+          name: https
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        - name: ASPNETCORE_URLS
+          value: "http://+:80;https://+:443"
+        - name: ConnectionStrings__DefaultConnection
+          valueFrom:
+            secretKeyRef:
+              name: gamespace-secrets
+              key: db-password
+        - name: JWT__SecretKey
+          valueFrom:
+            secretKeyRef:
+              name: gamespace-secrets
+              key: jwt-secret
+        - name: Redis__Password
+          valueFrom:
+            secretKeyRef:
+              name: gamespace-secrets
+              key: redis-password
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/appsettings.json
+          subPath: appsettings.json
+        - name: logs-volume
+          mountPath: /app/logs
+      volumes:
+      - name: config-volume
+        configMap:
+          name: gamespace-config
+      - name: logs-volume
+        emptyDir: {}
+      imagePullSecrets:
+      - name: gamespace-registry-secret

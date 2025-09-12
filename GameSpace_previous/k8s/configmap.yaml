@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gamespace-config
+  namespace: gamespace
+data:
+  appsettings.json: |
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft.AspNetCore": "Warning"
+        }
+      },
+      "AllowedHosts": "*",
+      "ConnectionStrings": {
+        "DefaultConnection": "Server=gamespace-db;Database=GameSpace;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true;"
+      },
+      "Serilog": {
+        "MinimumLevel": {
+          "Default": "Information",
+          "Override": {
+            "Microsoft": "Warning",
+            "System": "Warning"
+          }
+        },
+        "WriteTo": [
+          {
+            "Name": "Console"
+          },
+          {
+            "Name": "File",
+            "Args": {
+              "path": "/app/logs/gamespace-.txt",
+              "rollingInterval": "Day"
+            }
+          }
+        ]
+      },
+      "Cache": {
+        "DefaultExpiration": "00:30:00",
+        "MaxSize": 1000
+      },
+      "RateLimit": {
+        "MaxRequests": 100,
+        "Window": "00:01:00"
+      }
+    }

@@ -1,0 +1,35 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "gamespace_rules.yml"
+
+scrape_configs:
+  - job_name: 'gamespace-app'
+    static_configs:
+      - targets: ['gamespace-app:80']
+    metrics_path: /metrics
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+  - job_name: 'gamespace-db'
+    static_configs:
+      - targets: ['gamespace-db:1433']
+    scrape_interval: 30s
+
+  - job_name: 'gamespace-redis'
+    static_configs:
+      - targets: ['gamespace-redis:6379']
+    scrape_interval: 30s
+
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['gamespace-nginx:80']
+    scrape_interval: 30s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
