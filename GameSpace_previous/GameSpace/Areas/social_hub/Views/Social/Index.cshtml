@@ -34,7 +34,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4>My Groups</h4>
                     <a href="@Url.Action("CreateGroup")" class="btn btn-primary btn-sm glass-button">
-                        <i class="fas fa-plus me-1"></i>創建群組
+                        <i class="fas fa-plus me-1"></i>Create Group
                     </a>
                 </div>
                 
@@ -50,11 +50,11 @@
                                         <p class="text-muted mb-0">@group.Description</p>
                                         <small class="text-muted">
                                             <i class="fas fa-users me-1"></i>
-                                            @group.GroupMembers.Count 位成員
+                                            @group.GroupMembers.Count members
                                         </small>
                                     </div>
                                     <a href="@Url.Action("GroupDetails", new { id = group.GroupId })" class="btn btn-outline-primary btn-sm">
-                                        進入群組
+                                        Enter Group
                                     </a>
                                 </div>
                             </div>
@@ -65,19 +65,19 @@
                 {
                     <div class="text-center py-3">
                         <i class="fas fa-users fa-2x text-muted mb-2"></i>
-                        <p class="text-muted">您還沒有加入任何群組</p>
-                        <a href="@Url.Action("Groups")" class="btn btn-outline-primary btn-sm">瀏覽群組</a>
+                        <p class="text-muted">You haven't joined any groups yet</p>
+                        <a href="@Url.Action("Groups")" class="btn btn-outline-primary btn-sm">Browse Groups</a>
                     </div>
                 }
             </div>
         </div>
 
-        <!-- 好友列表 -->
+        <!-- Friends List -->
         <div class="col-md-6 mb-4">
             <div class="glass-card p-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4>我的好友</h4>
-                    <a href="@Url.Action("Friends")" class="btn btn-outline-primary btn-sm">管理好友</a>
+                    <h4>My Friends</h4>
+                    <a href="@Url.Action("Friends")" class="btn btn-outline-primary btn-sm">Manage Friends</a>
                 </div>
                 
                 @if (Model.Friends.Any())
@@ -92,7 +92,7 @@
                                     </div>
                                     <div>
                                         <h6 class="mb-0">@friend.Friend?.UserName</h6>
-                                        <small class="text-muted">好友</small>
+                                        <small class="text-muted">Friend</small>
                                     </div>
                                 </div>
                             </div>
@@ -101,7 +101,7 @@
                         {
                             <div class="text-center mt-3">
                                 <a href="@Url.Action("Friends")" class="btn btn-outline-primary btn-sm">
-                                    查看全部 @Model.Friends.Count 位好友
+                                    View All @Model.Friends.Count Friends
                                 </a>
                             </div>
                         }
@@ -111,8 +111,8 @@
                 {
                     <div class="text-center py-3">
                         <i class="fas fa-user-friends fa-2x text-muted mb-2"></i>
-                        <p class="text-muted">您還沒有好友</p>
-                        <a href="@Url.Action("Search")" class="btn btn-outline-primary btn-sm">尋找好友</a>
+                        <p class="text-muted">You don't have any friends yet</p>
+                        <a href="@Url.Action("Search")" class="btn btn-outline-primary btn-sm">Find Friends</a>
                     </div>
                 }
             </div>
@@ -120,12 +120,12 @@
     </div>
 
     <div class="row">
-        <!-- 好友請求 -->
+        <!-- Friend Requests -->
         @if (Model.FriendRequests.Any())
         {
             <div class="col-md-6 mb-4">
                 <div class="glass-card p-4">
-                    <h4 class="mb-3">好友請求</h4>
+                    <h4 class="mb-3">Friend Requests</h4>
                     <div class="friend-requests">
                         @foreach (var request in Model.FriendRequests)
                         {
@@ -136,7 +136,7 @@
                                     </div>
                                     <div class="flex-grow-1">
                                         <h6 class="mb-0">@request.User?.UserName</h6>
-                                        <small class="text-muted">想要加您為好友</small>
+                                        <small class="text-muted">wants to add you as a friend</small>
                                     </div>
                                     <div class="btn-group">
                                         <button class="btn btn-success btn-sm" onclick="acceptFriendRequest(@request.RelationId)">
@@ -154,12 +154,12 @@
             </div>
         }
 
-        <!-- 推薦群組 -->
+        <!-- Recommended Groups -->
         <div class="col-md-6 mb-4">
             <div class="glass-card p-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4>推薦群組</h4>
-                    <a href="@Url.Action("Groups")" class="btn btn-outline-primary btn-sm">瀏覽全部</a>
+                    <h4>Recommended Groups</h4>
+                    <a href="@Url.Action("Groups")" class="btn btn-outline-primary btn-sm">Browse All</a>
                 </div>
                 
                 @if (Model.PublicGroups.Any())
@@ -174,11 +174,11 @@
                                         <p class="text-muted mb-0">@group.Description</p>
                                         <small class="text-muted">
                                             <i class="fas fa-users me-1"></i>
-                                            @group.GroupMembers.Count 位成員
+                                            @group.GroupMembers.Count members
                                         </small>
                                     </div>
                                     <button class="btn btn-outline-primary btn-sm" onclick="joinGroup(@group.GroupId)">
-                                        加入群組
+                                        Join Group
                                     </button>
                                 </div>
                             </div>
@@ -189,37 +189,37 @@
                 {
                     <div class="text-center py-3">
                         <i class="fas fa-users fa-2x text-muted mb-2"></i>
-                        <p class="text-muted">暫無推薦群組</p>
+                        <p class="text-muted">No recommended groups</p>
                     </div>
                 }
             </div>
         </div>
     </div>
 
-    <!-- 快速操作 -->
+    <!-- Quick Actions -->
     <div class="row">
         <div class="col-12">
             <div class="glass-card p-4">
-                <h4 class="mb-3">快速操作</h4>
+                <h4 class="mb-3">Quick Actions</h4>
                 <div class="row">
                     <div class="col-md-3 mb-2">
                         <a href="@Url.Action("CreateGroup")" class="btn btn-primary w-100 glass-button">
-                            <i class="fas fa-plus me-2"></i>創建群組
+                            <i class="fas fa-plus me-2"></i>Create Group
                         </a>
                     </div>
                     <div class="col-md-3 mb-2">
                         <a href="@Url.Action("Groups")" class="btn btn-outline-primary w-100">
-                            <i class="fas fa-users me-2"></i>瀏覽群組
+                            <i class="fas fa-users me-2"></i>Browse Groups
                         </a>
                     </div>
                     <div class="col-md-3 mb-2">
                         <a href="@Url.Action("Search")" class="btn btn-outline-primary w-100">
-                            <i class="fas fa-search me-2"></i>尋找好友
+                            <i class="fas fa-search me-2"></i>Find Friends
                         </a>
                     </div>
                     <div class="col-md-3 mb-2">
                         <a href="@Url.Action("Friends")" class="btn btn-outline-primary w-100">
-                            <i class="fas fa-user-friends me-2"></i>管理好友
+                            <i class="fas fa-user-friends me-2"></i>Manage Friends
                         </a>
                     </div>
                 </div>
@@ -292,7 +292,7 @@ async function acceptFriendRequest(relationId) {
         }
     } catch (error) {
         console.error('Failed to accept friend request:', error);
-        alert('接受好友請求失敗，請稍後再試。');
+        alert('Failed to accept friend request. Please try again later.');
     }
 }
 
@@ -315,7 +315,7 @@ async function rejectFriendRequest(relationId) {
         }
     } catch (error) {
         console.error('Failed to reject friend request:', error);
-        alert('拒絕好友請求失敗，請稍後再試。');
+        alert('Failed to reject friend request. Please try again later.');
     }
 }
 
@@ -339,7 +339,7 @@ async function joinGroup(groupId) {
         }
     } catch (error) {
         console.error('Failed to join group:', error);
-        alert('加入群組失敗，請稍後再試。');
+        alert('Failed to join group. Please try again later.');
     }
 }
 </script>

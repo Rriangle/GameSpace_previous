@@ -1,6 +1,6 @@
 @model GameSpace.Areas.Identity.Controllers.RegisterViewModel
 @{
-    ViewData["Title"] = "註冊";
+    ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="glass-card p-4 mt-5">
-                <h2 class="text-center mb-4">註冊 GameSpace</h2>
+                <h2 class="text-center mb-4">Register for GameSpace</h2>
                 
                 @if (TempData["SuccessMessage"] != null)
                 {
@@ -30,14 +30,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label asp-for="Account" class="form-label">帳號</label>
+                                <label asp-for="Account" class="form-label">Account</label>
                                 <input asp-for="Account" class="form-control glass-input" required>
                                 <span asp-validation-for="Account" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label asp-for="NickName" class="form-label">暱稱</label>
+                                <label asp-for="NickName" class="form-label">Nickname</label>
                                 <input asp-for="NickName" class="form-control glass-input" required>
                                 <span asp-validation-for="NickName" class="text-danger"></span>
                             </div>
@@ -47,14 +47,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label asp-for="Password" class="form-label">密碼</label>
+                                <label asp-for="Password" class="form-label">Password</label>
                                 <input asp-for="Password" type="password" class="form-control glass-input" required>
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label asp-for="ConfirmPassword" class="form-label">確認密碼</label>
+                                <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
                                 <input asp-for="ConfirmPassword" type="password" class="form-control glass-input" required>
                                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                             </div>
@@ -64,14 +64,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label asp-for="Email" class="form-label">電子郵件</label>
+                                <label asp-for="Email" class="form-label">Email</label>
                                 <input asp-for="Email" type="email" class="form-control glass-input" required>
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label asp-for="Cellphone" class="form-label">手機號碼</label>
+                                <label asp-for="Cellphone" class="form-label">Phone Number</label>
                                 <input asp-for="Cellphone" class="form-control glass-input" required>
                                 <span asp-validation-for="Cellphone" class="text-danger"></span>
                             </div>
@@ -81,19 +81,19 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label asp-for="Gender" class="form-label">性別</label>
+                                <label asp-for="Gender" class="form-label">Gender</label>
                                 <select asp-for="Gender" class="form-select glass-input" required>
-                                    <option value="">請選擇</option>
-                                    <option value="男">男</option>
-                                    <option value="女">女</option>
-                                    <option value="其他">其他</option>
+                                    <option value="">Please select</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
                                 </select>
                                 <span asp-validation-for="Gender" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label asp-for="DateOfBirth" class="form-label">出生日期</label>
+                                <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
                                 <input asp-for="DateOfBirth" type="date" class="form-control glass-input" required>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                             </div>
@@ -101,19 +101,19 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label asp-for="IdNumber" class="form-label">身分證字號</label>
+                        <label asp-for="IdNumber" class="form-label">ID Number</label>
                         <input asp-for="IdNumber" class="form-control glass-input" required>
                         <span asp-validation-for="IdNumber" class="text-danger"></span>
                     </div>
                     
                     <div class="mb-3">
-                        <label asp-for="Address" class="form-label">地址</label>
+                        <label asp-for="Address" class="form-label">Address</label>
                         <input asp-for="Address" class="form-control glass-input" required>
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
                     
                     <div class="mb-3">
-                        <label asp-for="Introduction" class="form-label">自我介紹</label>
+                        <label asp-for="Introduction" class="form-label">Self Introduction</label>
                         <textarea asp-for="Introduction" class="form-control glass-input" rows="3"></textarea>
                         <span asp-validation-for="Introduction" class="text-danger"></span>
                     </div>
@@ -121,18 +121,18 @@
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="agreeTerms" required>
                         <label class="form-check-label" for="agreeTerms">
-                            我同意 <a href="#" class="text-decoration-none">服務條款</a> 和 <a href="#" class="text-decoration-none">隱私政策</a>
+                            I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>
                         </label>
                     </div>
                     
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary glass-button">註冊</button>
+                        <button type="submit" class="btn btn-primary glass-button">Register</button>
                     </div>
                 </form>
                 
                 <div class="text-center mt-3">
-                    <span>已有帳號？</span>
-                    <a href="@Url.Action("Login")" class="text-decoration-none">立即登入</a>
+                    <span>Already have an account?</span>
+                    <a href="@Url.Action("Login")" class="text-decoration-none">Login Now</a>
                 </div>
             </div>
         </div>

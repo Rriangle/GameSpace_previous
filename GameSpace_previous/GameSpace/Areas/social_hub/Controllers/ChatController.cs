@@ -1,4 +1,4 @@
-﻿using GameSpace.Areas.social_hub.Models.ViewModels;
+using GameSpace.Areas.social_hub.Models.ViewModels;
 using GameSpace.Areas.social_hub.Hubs;
 using GameSpace.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 
 		public IActionResult Index() => View();
 
-		// 聯絡人（先給前 50 名）
+		// Contacts (first 50)
 		[HttpGet]
 		public async Task<IActionResult> Contacts()
 		{
@@ -36,7 +36,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 			return Json(users);
 		}
 
-		// 1 對 1 歷史（雙向），支援 before 分頁
+		// 1-to-1 history (bidirectional), supports before pagination
 		// GET /social_hub/Chat/History?peerId=123&before=2025-09-05T03:00:00.000Z&take=20
 		[HttpGet]
 		public async Task<IActionResult> History(int peerId, string? before, int take = 20)
@@ -71,11 +71,11 @@ namespace GameSpace.Areas.social_hub.Controllers
 				})
 				.ToListAsync();
 
-			rows.Reverse(); // 舊->新
+			rows.Reverse(); // old->new
 			return Json(rows);
 		}
 
-		// 對方→我 的未讀訊息，設為已讀（並推播讀回條）
+		// Mark unread messages from peer→me as read (and push read receipt)
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> MarkRead(int peerId, string upToIso)
@@ -105,7 +105,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		{
 			var id = 0;
 			int.TryParse(Request.Cookies["sh_uid"], out id);
-			var name = Request.Cookies["sh_uname"] ?? "訪客";
+			var name = Request.Cookies["sh_uname"] ?? "Guest";
 			return Json(new { id, name });
 		}
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 			_notificationService = notificationService;
 		}
 
-		// 取得目前 Cookie 中的整數（sh_uid / sh_mid）
+		// Get current integer from Cookie (sh_uid / sh_mid)
 		private int? TryGetCookieInt(string key)
 		{
 			if (!Request.Cookies.TryGetValue(key, out var val)) return null;
@@ -35,7 +35,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 			var uid = TryGetCookieInt("sh_uid");
 			if (uid is null || uid <= 0) return false;
 
-			// 依你實際的管理員/角色模型調整（以下沿用你原本的查法）
+			// Adjust according to your actual admin/role model (following your original query method)
 			return await _context.ManagerData
 				.AsNoTracking()
 				.Where(m => m.ManagerId == uid)
@@ -47,7 +47,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		{
 			ViewBag.IsAdmin = await IsCurrentUserAdminAsync();
 
-			// 簡單列出主檔；若要顯示收件人/已讀，請改查 NotificationRecipients
+			// Simply list main records; if you need to show recipients/read status, query NotificationRecipients instead
 			var list = await _context.Notifications
 				.AsNoTracking()
 				.OrderByDescending(n => n.CreatedAt)
@@ -60,7 +60,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		public IActionResult Create() => View();
 
 		/// <summary>
-		/// 建立單一通知並指定多位收件人（收件人放在 NotificationRecipients，不在 Notification 本體）
+		/// Create a single notification and specify multiple recipients (recipients are in NotificationRecipients, not in Notification entity)
 		/// </summary>
 		[AdminOnly]
 		[HttpPost]
@@ -74,7 +74,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 			var senderUserId = TryGetCookieInt("sh_uid");
 			var senderManagerId = TryGetCookieInt("sh_mid");
 
-			// 用服務統一處理：Sender 欄位判斷、收件人去重與有效性過濾
+			// Use service to handle uniformly: Sender field determination, recipient deduplication and validity filtering
 			var added = await _notificationService.CreateAsync(
 				input,
 				recipientIds ?? Enumerable.Empty<int>(),
@@ -82,13 +82,13 @@ namespace GameSpace.Areas.social_hub.Controllers
 				senderManagerId
 			);
 
-			TempData["Toast"] = $"✅ 已建立通知 #{input.NotificationId}，成功寄給 {added} 位收件人。";
+			TempData["Toast"] = $"✅ Notification #{input.NotificationId} created successfully, sent to {added} recipients.";
 			return RedirectToAction(nameof(Index));
 		}
 
 		/// <summary>
-		/// 範例：依管理員角色群發（注意：若 ManagerId 不是 Users.UserId，將被服務層過濾掉）
-		/// 你可以依實際資料表關聯，將 Manager 映射到對應的 UserId 再傳入。
+		/// Example: Broadcast by admin role (Note: If ManagerId is not Users.UserId, it will be filtered out by service layer)
+		/// You can map Manager to corresponding UserId based on actual table relationships before passing in.
 		/// </summary>
 		[AdminOnly]
 		[HttpPost]
@@ -100,7 +100,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 			var senderUserId = TryGetCookieInt("sh_uid");
 			var senderManagerId = TryGetCookieInt("sh_mid");
 
-			// 目前先取 ManagerId 作為收件清單；如果這些 ID 不在 Users，就會在服務層被過濾掉（不會造成 FK 錯誤）
+			// Currently using ManagerId as recipient list; if these IDs are not in Users, they will be filtered out by service layer (won't cause FK error)
 			var receivers = await _context.ManagerData
 				.AsNoTracking()
 				.Where(m => m.ManagerRoles.Any(rp => rp.ManagerRoleId == roleId))
@@ -114,7 +114,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 				senderManagerId
 			);
 
-			TempData["Toast"] = $"📣 群發完成（有效收件人：{added} 位）。";
+			TempData["Toast"] = $"📣 Broadcast completed (valid recipients: {added}).";
 			return RedirectToAction(nameof(Index));
 		}
 	}

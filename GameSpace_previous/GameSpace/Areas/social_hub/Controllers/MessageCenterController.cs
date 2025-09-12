@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		}
 
 		// =========================
-		// 小工具：從 Cookie 取 int
+		// Utility: Get int from Cookie
 		// =========================
 		private int? TryGetCookieInt(string key)
 		{
@@ -32,12 +32,12 @@ namespace GameSpace.Areas.social_hub.Controllers
 		}
 
 		// =========================
-		// Admin 檢視所有通知（簡易總覽）
+		// Admin view all notifications (simple overview)
 		// GET: social_hub/MessageCenter
 		// =========================
 		public async Task<IActionResult> Index()
 		{
-			// 管理總覽：列出最近的通知（含來源/行為/發送者/收件人數）
+			// Management overview: List recent notifications (including source/action/sender/recipient count)
 			var list = await _context.Notifications
 				.AsNoTracking()
 				.OrderByDescending(n => n.NotificationId)
@@ -46,16 +46,16 @@ namespace GameSpace.Areas.social_hub.Controllers
 					NotificationId = n.NotificationId,
 					NotificationTitle = n.NotificationTitle,
 					NotificationMessage = n.NotificationMessage,
-					// ↓ 依你實際模型名稱調整（例如 Source.SourceName / Action.ActionName）
+					// ↓ Adjust according to your actual model names (e.g., Source.SourceName / Action.ActionName)
 					SourceName = n.Source != null ? n.Source.SourceName : null,
 					ActionName = n.Action != null ? n.Action.ActionName : null,
 					SenderName =
 						n.Sender != null
-							? (n.Sender.UserName ?? n.Sender.UserAccount)       // 如果沒有 UserName/UserAccount，請改為你的欄位
+							? (n.Sender.UserName ?? n.Sender.UserAccount)       // If no UserName/UserAccount, change to your field
 							: (n.SenderManager != null
-								? n.SenderManager.ManagerName                   // 若管理員名稱欄位不同，請調整
-								: "系統"),
-					CreatedAt = n.CreatedAt,                                   // 若是 Nullable，請加 ?? DateTime.UtcNow
+								? n.SenderManager.ManagerName                   // If admin name field is different, adjust accordingly
+								: "System"),
+					CreatedAt = n.CreatedAt,                                   // If Nullable, add ?? DateTime.UtcNow
 					RecipientCount = _context.NotificationRecipients.Count(r => r.NotificationId == n.NotificationId)
 				})
 				.Take(200)
@@ -65,14 +65,14 @@ namespace GameSpace.Areas.social_hub.Controllers
 		}
 
 		// =========================
-		// 使用者收件匣（依 Cookie 的 sh_uid）
+		// User inbox (based on Cookie sh_uid)
 		// GET: social_hub/MessageCenter/Inbox
 		// =========================
 		public async Task<IActionResult> Inbox()
 		{
 			var uid = TryGetCookieInt("sh_uid");
 			if (uid is null || uid.Value <= 0)
-				return Unauthorized(); // 或返回空列表 View，看你需求
+				return Unauthorized(); // Or return empty list View, depending on your needs
 
 			var list = await _context.NotificationRecipients
 				.AsNoTracking()
@@ -91,7 +91,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 							? (nr.Notification.Sender.UserName ?? nr.Notification.Sender.UserAccount)
 							: (nr.Notification.SenderManager != null
 								? nr.Notification.SenderManager.ManagerName
-								: "系統"),
+								: "System"),
 					CreatedAt = nr.Notification.CreatedAt,
 					IsRead = nr.IsRead
 				})
@@ -102,7 +102,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		}
 
 		// =========================
-		// 將單一收件明細標記為已讀
+		// Mark single recipient detail as read
 		// POST: social_hub/MessageCenter/MarkRead/5
 		// =========================
 		[HttpPost]
@@ -115,7 +115,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 			if (!rec.IsRead)
 			{
 				rec.IsRead = true;
-				// 若你的模型有 ReadAt 欄位可加上：
+				// If your model has ReadAt field, you can add:
 				// rec.ReadAt = DateTime.UtcNow;
 				await _context.SaveChangesAsync();
 			}
@@ -124,17 +124,17 @@ namespace GameSpace.Areas.social_hub.Controllers
 		}
 
 		// =========================
-		// 建立通知（Admin）
+		// Create notification (Admin)
 		// GET: social_hub/MessageCenter/Create
 		// =========================
 		public IActionResult Create()
 		{
-			// TODO: 若需要來源/行為下拉選單，請在 ViewData 填入選項
+			// TODO: If you need source/action dropdown options, populate ViewData with options
 			return View();
 		}
 
 		// =========================
-		// 建立通知（Admin）
+		// Create notification (Admin)
 		// POST: social_hub/MessageCenter/Create
 		// =========================
 		[HttpPost]
@@ -145,14 +145,14 @@ namespace GameSpace.Areas.social_hub.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				// TODO: 若有下拉需要回填，請在這裡放 ViewData 後回傳
+				// TODO: If dropdown needs to be repopulated, put ViewData here and return
 				return View(notification);
 			}
 
 			int? senderUserId = TryGetCookieInt("sh_uid");
 			int? senderManagerId = TryGetCookieInt("sh_mid");
 
-			// 使用服務處理 FK 決策、收件人去重與驗證
+			// Use service to handle FK decisions, recipient deduplication and validation
 			var added = await _notificationService.CreateAsync(
 				notification,
 				recipientIds ?? Enumerable.Empty<int>(),
@@ -160,12 +160,12 @@ namespace GameSpace.Areas.social_hub.Controllers
 				senderManagerId
 			);
 
-			TempData["Msg"] = $"✅ 已建立通知 #{notification.NotificationId}，成功寄給 {added} 位收件人。";
+			TempData["Msg"] = $"✅ Notification #{notification.NotificationId} created successfully, sent to {added} recipients.";
 			return RedirectToAction(nameof(Index));
 		}
 
 		// =========================
-		// （選用）刪除通知主檔（若要保留歷史，建議不要提供）
+		// (Optional) Delete notification main record (if you want to preserve history, it's recommended not to provide this)
 		// =========================
 		public async Task<IActionResult> Delete(int id)
 		{
@@ -181,18 +181,18 @@ namespace GameSpace.Areas.social_hub.Controllers
 			var n = await _context.Notifications.FirstOrDefaultAsync(x => x.NotificationId == id);
 			if (n != null)
 			{
-				// 先刪收件明細，再刪主檔（避免 FK）
+				// Delete recipient details first, then main record (avoid FK)
 				var recs = _context.NotificationRecipients.Where(r => r.NotificationId == id);
 				_context.NotificationRecipients.RemoveRange(recs);
 				_context.Notifications.Remove(n);
 				await _context.SaveChangesAsync();
-				TempData["Msg"] = "已刪除通知與其收件明細。";
+				TempData["Msg"] = "Notification and its recipient details deleted.";
 			}
 			return RedirectToAction(nameof(Index));
 		}
 
 		// =========================
-		// 內部用 VM（避免相依外部 ViewModel）
+		// Internal VM (avoid dependency on external ViewModel)
 		// =========================
 		public class NotificationAdminListItemVM
 		{

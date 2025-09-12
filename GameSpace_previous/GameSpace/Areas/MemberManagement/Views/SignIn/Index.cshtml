@@ -1,13 +1,13 @@
 @model GameSpace.Areas.MemberManagement.Controllers.SignInViewModel
 @{
-    ViewData["Title"] = "每日簽到";
+    ViewData["Title"] = "Daily Sign-in";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <h2 class="mb-4">每日簽到</h2>
+            <h2 class="mb-4">Daily Sign-in</h2>
             
             @if (TempData["SuccessMessage"] != null)
             {
@@ -28,28 +28,28 @@
     </div>
 
     <div class="row">
-        <!-- 簽到狀態 -->
+        <!-- Sign-in Status -->
         <div class="col-md-6">
             <div class="glass-card p-4 mb-4">
-                <h4 class="text-center mb-3">今日簽到狀態</h4>
+                <h4 class="text-center mb-3">Today's Sign-in Status</h4>
                 <div class="text-center">
                     @if (Model.HasSignedInToday)
                     {
                         <div class="sign-in-success">
                             <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-                            <h3 class="text-success">已簽到</h3>
-                            <p class="text-muted">恭喜！您今天已經簽到了</p>
+                            <h3 class="text-success">Signed In</h3>
+                            <p class="text-muted">Congratulations! You have signed in today</p>
                         </div>
                     }
                     else
                     {
                         <div class="sign-in-pending">
                             <i class="fas fa-calendar-check fa-3x text-warning mb-3"></i>
-                            <h3 class="text-warning">尚未簽到</h3>
-                            <p class="text-muted">快來簽到獲得獎勵吧！</p>
+                            <h3 class="text-warning">Not Signed In</h3>
+                            <p class="text-muted">Come sign in to get rewards!</p>
                             <form asp-action="PerformSignIn" method="post" class="mt-3">
                                 <button type="submit" class="btn btn-primary btn-lg glass-button">
-                                    <i class="fas fa-gift me-2"></i>立即簽到
+                                    <i class="fas fa-gift me-2"></i>Sign In Now
                                 </button>
                             </form>
                         </div>
@@ -58,54 +58,54 @@
             </div>
         </div>
 
-        <!-- 連續簽到天數 -->
+        <!-- Consecutive Sign-in Days -->
         <div class="col-md-6">
             <div class="glass-card p-4 mb-4">
-                <h4 class="text-center mb-3">連續簽到天數</h4>
+                <h4 class="text-center mb-3">Consecutive Sign-in Days</h4>
                 <div class="text-center">
                     <h1 class="text-primary">@Model.ConsecutiveDays</h1>
-                    <p class="text-muted">天</p>
+                    <p class="text-muted">days</p>
                     @if (Model.ConsecutiveDays >= 7)
                     {
                         <div class="alert alert-success">
                             <i class="fas fa-trophy me-2"></i>
-                            恭喜！您已連續簽到 @Model.ConsecutiveDays 天，獲得額外獎勵！
+                            Congratulations! You have signed in for @Model.ConsecutiveDays consecutive days and earned extra rewards!
                         </div>
                     }
                     else
                     {
-                        <p class="text-muted">再簽到 @(7 - Model.ConsecutiveDays) 天即可獲得額外獎勵</p>
+                        <p class="text-muted">Sign in for @(7 - Model.ConsecutiveDays) more days to get extra rewards</p>
                     }
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 簽到獎勵說明 -->
+    <!-- Sign-in Rewards Description -->
     <div class="row">
         <div class="col-12">
             <div class="glass-card p-4 mb-4">
-                <h4 class="mb-3">簽到獎勵說明</h4>
+                <h4 class="mb-3">Sign-in Rewards Description</h4>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="reward-item text-center">
                             <i class="fas fa-coins fa-2x text-warning mb-2"></i>
-                            <h5>每日獎勵</h5>
-                            <p class="text-muted">20 點積分 + 10 寵物經驗</p>
+                            <h5>Daily Rewards</h5>
+                            <p class="text-muted">20 points + 10 pet experience</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="reward-item text-center">
                             <i class="fas fa-gift fa-2x text-success mb-2"></i>
-                            <h5>連續獎勵</h5>
-                            <p class="text-muted">連續 7 天額外獲得 100 點積分 + 85折優惠券</p>
+                            <h5>Consecutive Rewards</h5>
+                            <p class="text-muted">7 consecutive days: 100 extra points + 85% discount coupon</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="reward-item text-center">
                             <i class="fas fa-star fa-2x text-primary mb-2"></i>
-                            <h5>特殊獎勵</h5>
-                            <p class="text-muted">特定日期可能有特殊獎勵</p>
+                            <h5>Special Rewards</h5>
+                            <p class="text-muted">Special rewards may be available on specific dates</p>
                         </div>
                     </div>
                 </div>
@@ -113,19 +113,19 @@
         </div>
     </div>
 
-    <!-- 簽到記錄 -->
+    <!-- Sign-in History -->
     <div class="row">
         <div class="col-12">
             <div class="glass-card p-4">
-                <h4 class="mb-3">最近簽到記錄</h4>
+                <h4 class="mb-3">Recent Sign-in History</h4>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>簽到時間</th>
-                                <th>獲得積分</th>
-                                <th>獲得經驗</th>
-                                <th>獲得優惠券</th>
+                                <th>Sign-in Time</th>
+                                <th>Points Earned</th>
+                                <th>Experience Earned</th>
+                                <th>Coupon Earned</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -142,7 +142,7 @@
                                         }
                                         else
                                         {
-                                            <span class="text-muted">無</span>
+                                            <span class="text-muted">None</span>
                                         }
                                     </td>
                                 </tr>
@@ -151,7 +151,7 @@
                     </table>
                 </div>
                 <div class="text-center mt-3">
-                    <a href="@Url.Action("History")" class="btn btn-outline-primary">查看完整記錄</a>
+                    <a href="@Url.Action("History")" class="btn btn-outline-primary">View Complete History</a>
                 </div>
             </div>
         </div>

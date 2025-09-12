@@ -1,4 +1,4 @@
-﻿using GameSpace.Areas.social_hub.Models;
+using GameSpace.Areas.social_hub.Models;
 using GameSpace.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +11,10 @@ namespace GameSpace.Areas.social_hub.Controllers
 		private readonly GameSpacedatabaseContext _context;
 		public HomeController(GameSpacedatabaseContext context) => _context = context;
 
-		// 首頁
+		// Home page
 		public IActionResult Index() => View();
 
-		// ======== 一般使用者登入 ========
+		// ======== General user login ========
 		[HttpGet]
 		public IActionResult Login(string? returnUrl = null)
 		{
@@ -34,7 +34,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 
 			if (user == null || user.UserPassword != model.Password)
 			{
-				ModelState.AddModelError(string.Empty, "帳號或密碼不正確");
+				ModelState.AddModelError(string.Empty, "Account or password is incorrect");
 				return View(model);
 			}
 
@@ -45,10 +45,10 @@ namespace GameSpace.Areas.social_hub.Controllers
 				Expires = model.RememberMe ? DateTimeOffset.UtcNow.AddDays(7) : DateTimeOffset.UtcNow.AddHours(8),
 				Path = "/"
 			};
-			// 設定使用者 Cookie
+			// Set user Cookie
 			Response.Cookies.Append("sh_uid", user.UserId.ToString(), options);
 			Response.Cookies.Append("sh_uname", user.UserName ?? user.UserAccount ?? "", options);
-			// 避免身分混淆：清掉管理員 Cookie（可留可刪，建議清）
+			// Avoid identity confusion: clear admin Cookie (can keep or delete, recommended to clear)
 			Response.Cookies.Delete("sh_is_admin");
 			Response.Cookies.Delete("sh_mid");
 			Response.Cookies.Delete("sh_mname");
@@ -59,7 +59,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
-		// ======== 管理員登入 ========
+		// ======== Admin login ========
 		[HttpGet]
 		public IActionResult AdminLogin(string? returnUrl = null)
 		{
@@ -72,14 +72,14 @@ namespace GameSpace.Areas.social_hub.Controllers
 		{
 			if (!ModelState.IsValid) return View(model);
 
-			// 假設你的管理員主檔是 ManagerData（EF 實體多半是 ManagerDatum，DbSet 叫 ManagerData）
-			// 欄位：ManagerAccount / ManagerPassword / ManagerName / ManagerId
+			// Assume your admin main record is ManagerData (EF entity is usually ManagerDatum, DbSet is called ManagerData)
+			// Fields: ManagerAccount / ManagerPassword / ManagerName / ManagerId
 			var manager = await _context.ManagerData
 				.FirstOrDefaultAsync(m => m.ManagerAccount == model.Account);
 
 			if (manager == null || manager.ManagerPassword != model.Password)
 			{
-				ModelState.AddModelError(string.Empty, "帳號或密碼不正確（管理員）");
+				ModelState.AddModelError(string.Empty, "Account or password is incorrect (Admin)");
 				return View(model);
 			}
 
@@ -94,11 +94,11 @@ namespace GameSpace.Areas.social_hub.Controllers
 				Expires = model.RememberMe ? DateTimeOffset.UtcNow.AddDays(7) : DateTimeOffset.UtcNow.AddHours(8),
 				Path = "/"
 			};
-			// 設定管理員 Cookie
+			// Set admin Cookie
 			Response.Cookies.Append("sh_is_admin", "1", options);
 			Response.Cookies.Append("sh_mid", manager.ManagerId.ToString(), options);
 			Response.Cookies.Append("sh_mname", manager.ManagerName ?? manager.ManagerAccount, options);
-			// 避免身分混淆：清掉使用者 Cookie（可留可刪，建議清）
+			// Avoid identity confusion: clear user Cookie (can keep or delete, recommended to clear)
 			Response.Cookies.Delete("sh_uid");
 			Response.Cookies.Delete("sh_uname");
 
@@ -108,15 +108,15 @@ namespace GameSpace.Areas.social_hub.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
-		// ======== 登出（同時清除兩種身分） ========
+		// ======== Logout (clear both identities) ========
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public IActionResult Logout()
 		{
-			// 使用者
+			// User
 			Response.Cookies.Delete("sh_uid");
 			Response.Cookies.Delete("sh_uname");
-			// 管理員
+			// Admin
 			Response.Cookies.Delete("sh_is_admin");
 			Response.Cookies.Delete("sh_mid");
 			Response.Cookies.Delete("sh_mname");

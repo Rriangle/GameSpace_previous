@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +12,11 @@ namespace GameSpace.Areas.social_hub.Controllers
 	[Area("social_hub")]
 	public class MutesController : Controller
 	{
-		// 欄位
+		// Fields
 		private readonly GameSpace.Models.GameSpacedatabaseContext _context;
 		private readonly GameSpace.Areas.social_hub.Services.IMuteFilter _muteFilter;
 
-		// 建構子
+		// Constructor
 		public MutesController(
 			GameSpace.Models.GameSpacedatabaseContext context,
 			GameSpace.Areas.social_hub.Services.IMuteFilter muteFilter)
@@ -63,17 +63,17 @@ namespace GameSpace.Areas.social_hub.Controllers
 		{
 			if (!ModelState.IsValid) return View(mute);
 
-			// 若你的 Mute 模型有 CreatedAt 或 ManagerId，可在這裡補上：
+			// If your Mute model has CreatedAt or ManagerId, add them here:
 			// mute.CreatedAt = DateTime.UtcNow;
-			// mute.ManagerId = 當前管理員ID;
+			// mute.ManagerId = currentManagerId;
 
 			_context.Add(mute);
 			await _context.SaveChangesAsync();
 
-			// 詞庫更新後，立即刷新快取中的過濾規則
+			// Refresh filter rules in cache after vocabulary update
 			await _muteFilter.RefreshAsync();
 
-			TempData["Msg"] = "已新增詞彙並刷新過濾規則。";
+			TempData["Msg"] = "Vocabulary added and filter rules refreshed.";
 			return RedirectToAction(nameof(Index));
 		}
 
@@ -103,7 +103,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 
 				await _muteFilter.RefreshAsync();
 
-				TempData["Msg"] = "已更新詞彙並刷新過濾規則。";
+				TempData["Msg"] = "Vocabulary updated and filter rules refreshed.";
 				return RedirectToAction(nameof(Index));
 			}
 			catch (DbUpdateConcurrencyException)
@@ -141,7 +141,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 
 				await _muteFilter.RefreshAsync();
 
-				TempData["Msg"] = "已刪除詞彙並刷新過濾規則。";
+				TempData["Msg"] = "Vocabulary deleted and filter rules refreshed.";
 			}
 			return RedirectToAction(nameof(Index));
 		}

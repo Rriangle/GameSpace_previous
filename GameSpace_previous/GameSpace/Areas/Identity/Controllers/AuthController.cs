@@ -45,7 +45,7 @@ namespace GameSpace.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Login failed for account: {Account}", account);
-                TempData["ErrorMessage"] = "登入失敗，請稍後再試。";
+                TempData["ErrorMessage"] = "Login failed. Please try again later.";
                 return View();
             }
         }
@@ -113,7 +113,7 @@ namespace GameSpace.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Registration failed for account: {Account}", model.Account);
-                TempData["ErrorMessage"] = "註冊失敗，請稍後再試。";
+                TempData["ErrorMessage"] = "Registration failed. Please try again later.";
                 return View(model);
             }
         }
@@ -122,7 +122,7 @@ namespace GameSpace.Areas.Identity.Controllers
         public async Task<IActionResult> Logout()
         {
             // TODO: Clear authentication cookie or JWT token
-            TempData["SuccessMessage"] = "已成功登出。";
+            TempData["SuccessMessage"] = "Successfully logged out.";
             return RedirectToAction("Index", "Home", new { area = "" });
         }
 
@@ -141,11 +141,11 @@ namespace GameSpace.Areas.Identity.Controllers
                 if (user != null)
                 {
                     // TODO: Send password reset email
-                    TempData["SuccessMessage"] = "密碼重設連結已發送至您的電子郵件。";
+                    TempData["SuccessMessage"] = "Password reset link has been sent to your email.";
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "找不到該電子郵件地址。";
+                    TempData["ErrorMessage"] = "Email address not found.";
                 }
             }
             catch (Exception ex)
