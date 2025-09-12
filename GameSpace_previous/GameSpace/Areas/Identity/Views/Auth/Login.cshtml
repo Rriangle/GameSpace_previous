@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "登入";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
             <div class="glass-card p-4 mt-5">
-                <h2 class="text-center mb-4">Login to GameSpace</h2>
+                <h2 class="text-center mb-4">登入 GameSpace</h2>
                 
                 @if (TempData["SuccessMessage"] != null)
                 {
@@ -27,34 +27,34 @@
 
                 <form asp-action="Login" method="post">
                     <div class="mb-3">
-                        <label for="account" class="form-label">Account or Email</label>
+                        <label for="account" class="form-label">帳號或電子郵件</label>
                         <input type="text" class="form-control glass-input" id="account" name="account" required>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">密碼</label>
                         <input type="password" class="form-control glass-input" id="password" name="password" required>
                     </div>
                     
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="rememberMe">
                         <label class="form-check-label" for="rememberMe">
-                            Remember Me
+                            記住我
                         </label>
                     </div>
                     
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary glass-button">Login</button>
+                        <button type="submit" class="btn btn-primary glass-button">登入</button>
                     </div>
                 </form>
                 
                 <div class="text-center mt-3">
-                    <a href="@Url.Action("ForgotPassword")" class="text-decoration-none">Forgot Password?</a>
+                    <a href="@Url.Action("ForgotPassword")" class="text-decoration-none">忘記密碼？</a>
                 </div>
                 
                 <div class="text-center mt-3">
-                    <span>Don't have an account?</span>
-                    <a href="@Url.Action("Register")" class="text-decoration-none">Register Now</a>
+                    <span>還沒有帳號？</span>
+                    <a href="@Url.Action("Register")" class="text-decoration-none">立即註冊</a>
                 </div>
             </div>
         </div>

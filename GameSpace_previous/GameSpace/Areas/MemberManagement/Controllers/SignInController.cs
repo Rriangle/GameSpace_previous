@@ -60,7 +60,7 @@ namespace GameSpace.Areas.MemberManagement.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Daily sign-in failed for user {UserId}", userId);
-                TempData["ErrorMessage"] = "Sign-in failed. Please try again later.";
+                TempData["ErrorMessage"] = "簽到失敗，請稍後再試。";
             }
 
             return RedirectToAction("Index");

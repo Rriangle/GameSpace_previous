@@ -1,13 +1,13 @@
 @model GameSpace.Models.Pet?
 @{
-    ViewData["Title"] = "My Pet";
+    ViewData["Title"] = "我的寵物";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <h2 class="mb-4">My Pet</h2>
+            <h2 class="mb-4">我的寵物</h2>
             
             @if (TempData["SuccessMessage"] != null)
             {
@@ -34,10 +34,10 @@
             <div class="col-md-6">
                 <div class="glass-card p-5 text-center">
                     <i class="fas fa-paw fa-4x text-muted mb-4"></i>
-                    <h3 class="mb-3">You don't have a pet yet</h3>
-                    <p class="text-muted mb-4">Create your first pet!</p>
+                    <h3 class="mb-3">您還沒有寵物</h3>
+                    <p class="text-muted mb-4">快來創建您的第一隻寵物吧！</p>
                     <a href="@Url.Action("Create")" class="btn btn-primary btn-lg glass-button">
-                        <i class="fas fa-plus me-2"></i>Create Pet
+                        <i class="fas fa-plus me-2"></i>創建寵物
                     </a>
                 </div>
             </div>
@@ -58,15 +58,15 @@
                     
                     <div class="pet-info">
                         <div class="info-item">
-                            <span class="label">Level:</span>
+                            <span class="label">等級：</span>
                             <span class="value">Lv.@Model.Level</span>
                         </div>
                         <div class="info-item">
-                            <span class="label">Experience:</span>
+                            <span class="label">經驗值：</span>
                             <span class="value">@Model.Experience</span>
                         </div>
                         <div class="info-item">
-                            <span class="label">Background:</span>
+                            <span class="label">背景：</span>
                             <span class="value">@Model.BackgroundColor</span>
                         </div>
                     </div>
@@ -76,11 +76,11 @@
             <!-- 寵物屬性 -->
             <div class="col-md-6">
                 <div class="glass-card p-4 mb-4">
-                    <h4 class="mb-3">Pet Attributes</h4>
+                    <h4 class="mb-3">寵物屬性</h4>
                     
                     <div class="attribute-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>Hunger</span>
+                            <span>飢餓度</span>
                             <span>@Model.Hunger%</span>
                         </div>
                         <div class="progress">
@@ -90,7 +90,7 @@
                     
                     <div class="attribute-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>Mood</span>
+                            <span>心情</span>
                             <span>@Model.Mood%</span>
                         </div>
                         <div class="progress">
@@ -100,7 +100,7 @@
                     
                     <div class="attribute-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>Stamina</span>
+                            <span>體力</span>
                             <span>@Model.Stamina%</span>
                         </div>
                         <div class="progress">
@@ -110,7 +110,7 @@
                     
                     <div class="attribute-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>Cleanliness</span>
+                            <span>清潔度</span>
                             <span>@Model.Cleanliness%</span>
                         </div>
                         <div class="progress">
@@ -120,7 +120,7 @@
                     
                     <div class="attribute-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <span>Health</span>
+                            <span>健康度</span>
                             <span>@Model.Health%</span>
                         </div>
                         <div class="progress">
@@ -135,13 +135,13 @@
         <div class="row">
             <div class="col-12">
                 <div class="glass-card p-4 mb-4">
-                    <h4 class="mb-3">Pet Care</h4>
+                    <h4 class="mb-3">寵物照顧</h4>
                     <div class="row">
                         <div class="col-md-3 mb-2">
                             <form asp-action="CareAction" method="post" class="d-inline">
                                 <input type="hidden" name="actionType" value="feed">
                                 <button type="submit" class="btn btn-warning w-100">
-                                    <i class="fas fa-utensils me-2"></i>Feed
+                                    <i class="fas fa-utensils me-2"></i>餵食
                                 </button>
                             </form>
                         </div>
@@ -149,7 +149,7 @@
                             <form asp-action="CareAction" method="post" class="d-inline">
                                 <input type="hidden" name="actionType" value="bath">
                                 <button type="submit" class="btn btn-info w-100">
-                                    <i class="fas fa-shower me-2"></i>Bath
+                                    <i class="fas fa-shower me-2"></i>洗澡
                                 </button>
                             </form>
                         </div>
@@ -157,7 +157,7 @@
                             <form asp-action="CareAction" method="post" class="d-inline">
                                 <input type="hidden" name="actionType" value="play">
                                 <button type="submit" class="btn btn-success w-100">
-                                    <i class="fas fa-gamepad me-2"></i>Play
+                                    <i class="fas fa-gamepad me-2"></i>玩耍
                                 </button>
                             </form>
                         </div>
@@ -165,7 +165,7 @@
                             <form asp-action="CareAction" method="post" class="d-inline">
                                 <input type="hidden" name="actionType" value="rest">
                                 <button type="submit" class="btn btn-secondary w-100">
-                                    <i class="fas fa-bed me-2"></i>Rest
+                                    <i class="fas fa-bed me-2"></i>休息
                                 </button>
                             </form>
                         </div>
