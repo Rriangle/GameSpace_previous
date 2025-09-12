@@ -5,7 +5,7 @@ using GameSpace.Core.Models;
 namespace GameSpace.Web.Controllers
 {
     /// <summary>
-    /// 寵物 MVC 控制器
+    /// Pet management MVC controller
     /// </summary>
     public class PetController : Controller
     {
@@ -17,7 +17,7 @@ namespace GameSpace.Web.Controllers
         }
 
         /// <summary>
-        /// 寵物首頁
+        /// Pet dashboard
         /// </summary>
         public async Task<IActionResult> Index(int userId)
         {
@@ -38,13 +38,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入寵物資訊失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load pet dashboard: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 小遊戲頁
+        /// Mini game list
         /// </summary>
         public async Task<IActionResult> MiniGame(int userId, int limit = 20)
         {
@@ -62,13 +62,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入小遊戲記錄失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load mini games: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 簽到頁
+        /// Sign-in stats
         /// </summary>
         public async Task<IActionResult> SignIn(int userId, int days = 30)
         {
@@ -86,13 +86,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入簽到記錄失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load sign-in stats: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 錢包頁
+        /// Wallet management
         /// </summary>
         public async Task<IActionResult> Wallet(int userId, int limit = 20)
         {
@@ -113,13 +113,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入錢包資訊失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load wallet information: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 優惠券頁
+        /// Coupons
         /// </summary>
         public async Task<IActionResult> Coupons(int userId, bool? isUsed = null)
         {
@@ -135,13 +135,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入優惠券失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load coupons: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 禮券頁
+        /// E-vouchers
         /// </summary>
         public async Task<IActionResult> EVouchers(int userId, bool? isUsed = null)
         {
@@ -157,7 +157,7 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入禮券失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load e-vouchers: {ex.Message}";
                 return View();
             }
         }

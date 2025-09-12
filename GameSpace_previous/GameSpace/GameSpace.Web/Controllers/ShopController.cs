@@ -5,7 +5,7 @@ using GameSpace.Core.Models;
 namespace GameSpace.Web.Controllers
 {
     /// <summary>
-    /// 商城 MVC 控制器
+    /// Shop MVC controller
     /// </summary>
     public class ShopController : Controller
     {
@@ -17,7 +17,7 @@ namespace GameSpace.Web.Controllers
         }
 
         /// <summary>
-        /// 商城首頁
+        /// Shop homepage
         /// </summary>
         public async Task<IActionResult> Index(string? productType = null, int page = 1)
         {
@@ -38,13 +38,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入商城失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load shop homepage: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 商品詳情頁
+        /// Product details
         /// </summary>
         public async Task<IActionResult> Product(int id)
         {
@@ -67,13 +67,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入商品詳情失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load product details: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 排行榜頁
+        /// Rankings
         /// </summary>
         public async Task<IActionResult> Rankings(string? periodType = null)
         {
@@ -88,13 +88,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入排行榜失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load rankings: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 自由市場頁
+        /// Player market
         /// </summary>
         public async Task<IActionResult> Market(string? productType = null, int? sellerId = null, int page = 1)
         {
@@ -116,13 +116,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入自由市場失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load player market: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 自由市場商品詳情頁
+        /// Player market product details
         /// </summary>
         public async Task<IActionResult> MarketProduct(int id)
         {
@@ -143,13 +143,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入自由市場商品詳情失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load player market product details: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 用戶訂單頁
+        /// Order management
         /// </summary>
         public async Task<IActionResult> Orders(int userId, int page = 1)
         {
@@ -168,13 +168,13 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入訂單失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load orders: {ex.Message}";
                 return View();
             }
         }
 
         /// <summary>
-        /// 訂單詳情頁
+        /// Order details
         /// </summary>
         public async Task<IActionResult> Order(int id)
         {
@@ -195,7 +195,7 @@ namespace GameSpace.Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = $"載入訂單詳情失敗: {ex.Message}";
+                ViewBag.Error = $"Failed to load order details: {ex.Message}";
                 return View();
             }
         }
