@@ -8,10 +8,10 @@ namespace GameSpace.Services.Validation
         private readonly ILogger<ValidationService> _logger;
         private readonly HashSet<string> _allowedFileExtensions = new()
         {
-            ".jpg", ".jpeg", ".png", ".gif", ".webp", // 圖片
-            ".pdf", ".doc", ".docx", ".txt", ".rtf", // 文檔
-            ".mp4", ".avi", ".mov", ".wmv", // 視頻
-            ".mp3", ".wav", ".ogg", ".aac" // 音頻
+            ".jpg", ".jpeg", ".png", ".gif", ".webp", // Images
+            ".pdf", ".doc", ".docx", ".txt", ".rtf", // Documents
+            ".mp4", ".avi", ".mov", ".wmv", // Videos
+            ".mp3", ".wav", ".ogg", ".aac" // Audio
         };
 
         private readonly Dictionary<FileType, long> _maxFileSizes = new()
@@ -36,30 +36,30 @@ namespace GameSpace.Services.Validation
                     return new ValidationResult
                     {
                         IsValid = false,
-                        Message = "電子郵件不能為空",
+                        Message = "Email cannot be empty",
                         Errors = { "Email is required" }
                     };
                 }
 
-                // 基本長度檢查
+                // Basic length check
                 if (email.Length > 254)
                 {
                     return new ValidationResult
                     {
                         IsValid = false,
-                        Message = "電子郵件長度不能超過 254 個字符",
+                        Message = "Email length cannot exceed 254 characters",
                         Errors = { "Email too long" }
                     };
                 }
 
-                // 正則表達式驗證
+                // Regex validation
                 var emailRegex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
                 if (!emailRegex.IsMatch(email))
                 {
                     return new ValidationResult
                     {
                         IsValid = false,
-                        Message = "電子郵件格式不正確",
+                        Message = "Invalid email format",
                         Errors = { "Invalid email format" }
                     };
                 }

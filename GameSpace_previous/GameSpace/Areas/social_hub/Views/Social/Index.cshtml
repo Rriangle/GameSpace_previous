@@ -1,13 +1,13 @@
 @model GameSpace.Areas.social_hub.Controllers.SocialIndexViewModel
 @{
-    ViewData["Title"] = "社群互動中心";
+    ViewData["Title"] = "Social Hub";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <h2 class="mb-4">社群互動中心</h2>
+            <h2 class="mb-4">Social Hub</h2>
             
             @if (TempData["SuccessMessage"] != null)
             {
@@ -28,11 +28,11 @@
     </div>
 
     <div class="row">
-        <!-- 我的群組 -->
+        <!-- My Groups -->
         <div class="col-md-6 mb-4">
             <div class="glass-card p-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4>我的群組</h4>
+                    <h4>My Groups</h4>
                     <a href="@Url.Action("CreateGroup")" class="btn btn-primary btn-sm glass-button">
                         <i class="fas fa-plus me-1"></i>創建群組
                     </a>

@@ -134,8 +134,8 @@ namespace GameSpace.Areas.OnlineStore.Controllers
             // TODO: Get current user ID from authentication
             int userId = 1; // Placeholder
 
-            // 這裡應該從購物車獲取商品
-            var orderItems = new List<OrderItem>(); // 模擬訂單商品
+            // Get items from shopping cart
+            var orderItems = new List<OrderItem>(); // Mock order items
 
             var result = await _storeService.CreateOrderAsync(userId, orderItems, model.ShippingAddress, model.PaymentMethod);
             if (result.Success)

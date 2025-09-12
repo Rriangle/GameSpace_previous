@@ -46,7 +46,7 @@ namespace GameSpace.Areas.MiniGame.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to start game for user {UserId}", userId);
-                return Json(new { success = false, message = "遊戲開始失敗，請稍後再試。" });
+                return Json(new { success = false, message = "Failed to start game. Please try again later." });
             }
         }
 
@@ -68,7 +68,7 @@ namespace GameSpace.Areas.MiniGame.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to end game {PlayId}", playId);
-                return Json(new { success = false, message = "遊戲結算失敗，請稍後再試。" });
+                return Json(new { success = false, message = "Failed to complete game. Please try again later." });
             }
         }
 

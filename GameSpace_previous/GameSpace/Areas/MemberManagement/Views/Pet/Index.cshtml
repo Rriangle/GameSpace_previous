@@ -1,13 +1,13 @@
 @model GameSpace.Models.Pet?
 @{
-    ViewData["Title"] = "我的寵物";
+    ViewData["Title"] = "My Pet";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <h2 class="mb-4">我的寵物</h2>
+            <h2 class="mb-4">My Pet</h2>
             
             @if (TempData["SuccessMessage"] != null)
             {
@@ -29,12 +29,12 @@
 
     @if (Model == null)
     {
-        <!-- 沒有寵物時顯示創建按鈕 -->
+        <!-- Show create button when no pet -->
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="glass-card p-5 text-center">
                     <i class="fas fa-paw fa-4x text-muted mb-4"></i>
-                    <h3 class="mb-3">您還沒有寵物</h3>
+                    <h3 class="mb-3">You don't have a pet yet</h3>
                     <p class="text-muted mb-4">快來創建您的第一隻寵物吧！</p>
                     <a href="@Url.Action("Create")" class="btn btn-primary btn-lg glass-button">
                         <i class="fas fa-plus me-2"></i>創建寵物

@@ -1,13 +1,13 @@
 @model GameSpace.Areas.OnlineStore.Controllers.StoreIndexViewModel
 @{
-    ViewData["Title"] = "官方商城";
+    ViewData["Title"] = "Official Store";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <h2 class="mb-4">官方商城</h2>
+            <h2 class="mb-4">Official Store</h2>
             
             @if (TempData["SuccessMessage"] != null)
             {
@@ -28,13 +28,13 @@
     </div>
 
     <div class="row">
-        <!-- 側邊欄 -->
+        <!-- Sidebar -->
         <div class="col-md-3 mb-4">
             <div class="glass-card p-4">
-                <h5 class="mb-3">商品分類</h5>
+                <h5 class="mb-3">Categories</h5>
                 <div class="category-list">
                     <a href="@Url.Action("Index")" class="category-item @(string.IsNullOrEmpty(Model.CurrentCategory) ? "active" : "")">
-                        <i class="fas fa-th-large me-2"></i>全部商品
+                        <i class="fas fa-th-large me-2"></i>All Products
                     </a>
                     @foreach (var category in Model.Categories)
                     {
@@ -46,7 +46,7 @@
                 
                 <hr class="my-4">
                 
-                <h5 class="mb-3">價格篩選</h5>
+                <h5 class="mb-3">Price Filter</h5>
                 <div class="price-filter">
                     <div class="mb-3">
                         <label for="minPrice" class="form-label">最低價格</label>

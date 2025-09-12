@@ -57,7 +57,7 @@ namespace GameSpace.Areas.MemberManagement.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Pet creation failed for user {UserId}", userId);
-                TempData["ErrorMessage"] = "寵物創建失敗，請稍後再試。";
+                TempData["ErrorMessage"] = "Failed to create pet. Please try again later.";
                 return View();
             }
         }
@@ -83,7 +83,7 @@ namespace GameSpace.Areas.MemberManagement.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Pet care action failed for user {UserId}", userId);
-                TempData["ErrorMessage"] = "寵物照顧失敗，請稍後再試。";
+                TempData["ErrorMessage"] = "Failed to care for pet. Please try again later.";
             }
 
             return RedirectToAction("Index");
@@ -110,7 +110,7 @@ namespace GameSpace.Areas.MemberManagement.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Pet skin color change failed for user {UserId}", userId);
-                TempData["ErrorMessage"] = "寵物膚色更換失敗，請稍後再試。";
+                TempData["ErrorMessage"] = "Failed to change pet skin color. Please try again later.";
             }
 
             return RedirectToAction("Index");
@@ -137,7 +137,7 @@ namespace GameSpace.Areas.MemberManagement.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Pet background color change failed for user {UserId}", userId);
-                TempData["ErrorMessage"] = "寵物背景更換失敗，請稍後再試。";
+                TempData["ErrorMessage"] = "Failed to change pet background. Please try again later.";
             }
 
             return RedirectToAction("Index");
