@@ -1,7 +1,7 @@
-﻿namespace GameSpace.Services.Caching
+namespace GameSpace.Services.Caching
 {
     /// <summary>
-    /// 快取服務介面
+    /// Cache service interface
     /// </summary>
     public interface ICacheService
     {

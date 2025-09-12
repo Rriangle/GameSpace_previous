@@ -1,7 +1,7 @@
-﻿namespace GameSpace.Services.Validation
+namespace GameSpace.Services.Validation
 {
     /// <summary>
-    /// 驗證服務介面
+    /// Validation service interface
     /// </summary>
     public interface IValidationService
     {

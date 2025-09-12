@@ -1,9 +1,9 @@
-﻿using System.Text;
+using System.Text;
 
 namespace GameSpace.Middleware
 {
     /// <summary>
-    /// CorrelationId 中介軟體，用於追蹤請求的唯一識別符
+    /// CorrelationId middleware for tracking unique request identifiers
     /// </summary>
     public class CorrelationIdMiddleware
     {
@@ -19,25 +19,25 @@ namespace GameSpace.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            // 檢查請求中是否已有 Correlation ID
+            // Check if request already has Correlation ID
             var correlationId = context.Request.Headers[CorrelationIdHeader].FirstOrDefault();
 
-            // 如果沒有，則生成一個新的
+            // If not, generate a new one
             if (string.IsNullOrEmpty(correlationId))
             {
                 correlationId = Guid.NewGuid().ToString();
             }
 
-            // 將 Correlation ID 加入回應標頭
+            // Add Correlation ID to response headers
             context.Response.Headers[CorrelationIdHeader] = correlationId;
 
-            // 將 Correlation ID 加入記錄內容
+            // Add Correlation ID to log context
             using (_logger.BeginScope(new Dictionary<string, object>
             {
                 ["CorrelationId"] = correlationId
             }))
             {
-                _logger.LogInformation("處理請求 {Method} {Path} (CorrelationId: {CorrelationId})", 
+                _logger.LogInformation("Processing request {Method} {Path} (CorrelationId: {CorrelationId})", 
                     context.Request.Method, context.Request.Path, correlationId);
 
                 await _next(context);

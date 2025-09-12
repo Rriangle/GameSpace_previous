@@ -1,9 +1,9 @@
-﻿@{
-    ViewData["Title"] = "寵物首頁";
+@{
+    ViewData["Title"] = "Pet Home";
 }
 
 <div class="container mt-4">
-    <h1>我的寵物</h1>
+    <h1>My Pet</h1>
     @if (ViewBag.Error != null)
     {
         <div class="alert alert-danger">@ViewBag.Error</div>
@@ -14,18 +14,18 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h5>寵物資訊</h5>
+                        <h5>Pet Information</h5>
                     </div>
                     <div class="card-body">
                         @if (ViewBag.Pet != null)
                         {
-                            <p>寵物名稱: @ViewBag.Pet.Pet_Name</p>
-                            <p>等級: @ViewBag.Pet.Pet_Level</p>
-                            <p>經驗值: @ViewBag.Pet.Pet_Exp</p>
+                            <p>Pet Name: @ViewBag.Pet.Pet_Name</p>
+                            <p>Level: @ViewBag.Pet.Pet_Level</p>
+                            <p>Experience: @ViewBag.Pet.Pet_Exp</p>
                         }
                         else
                         {
-                            <p>尚未擁有寵物</p>
+                            <p>No pet owned yet</p>
                         }
                     </div>
                 </div>
@@ -33,10 +33,10 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h5>錢包餘額</h5>
+                        <h5>Wallet Balance</h5>
                     </div>
                     <div class="card-body">
-                        <p>點數: @ViewBag.WalletBalance</p>
+                        <p>Points: @ViewBag.WalletBalance</p>
                     </div>
                 </div>
             </div>
