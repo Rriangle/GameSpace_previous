@@ -45,8 +45,10 @@ namespace GameSpace.Services.Seeding
                 // 創建寵物數據（200行）
                 await CreatePetDataAsync(connection);
 
-                // 創建錢包數據（200行）
-                await CreateWalletDataAsync(connection);
+            // 創建錢包數據（200行）
+            await CreateWalletDataAsync(connection);
+            // 創建每日簽到數據（200行）
+            await CreateDailyCheckInDataAsync(connection);
 
                 _logger.LogInformation("種子數據創建完成");
                 return true;
@@ -532,6 +534,81 @@ namespace GameSpace.Services.Seeding
                 _logger.LogInformation("已新增 {Count} 行錢包數據。", values.Count);
             }
             _logger.LogInformation("錢包數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "User_Wallet"));
+        }
+
+        private async Task CreateDailyCheckInDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建每日簽到數據 (目標: 200 行)");
+            
+            var existingCount = await GetTableRowCount(connection, "DailyCheckIn");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("每日簽到數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42); // 固定種子確保可重複性
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var userId = random.Next(1, 201); // 假設有200個用戶
+                var checkInDate = DateTime.Now.AddDays(-random.Next(0, 365)); // 過去一年內的隨機日期
+                var consecutiveDays = random.Next(1, 31); // 1-30天連續簽到
+                var rewardDetails = GenerateRewardDetails(consecutiveDays, random);
+                var createdAt = checkInDate;
+                var updatedAt = checkInDate;
+
+                values.Add($"({i}, {userId}, '{checkInDate:yyyy-MM-dd HH:mm:ss}', {consecutiveDays}, '{rewardDetails}', '{createdAt:yyyy-MM-dd HH:mm:ss}', '{updatedAt:yyyy-MM-dd HH:mm:ss}')");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO DailyCheckIn (CheckInId, UserId, CheckInDate, ConsecutiveDays, RewardDetails, CreatedAt, UpdatedAt)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("每日簽到數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "DailyCheckIn"));
+        }
+
+        private string GenerateRewardDetails(int consecutiveDays, Random random)
+        {
+            var rewards = new List<string>();
+            
+            // 基礎點數獎勵
+            var basePoints = 10 + Math.Min(consecutiveDays * 2, 50);
+            rewards.Add($"點數: {basePoints}");
+            
+            // 寵物經驗獎勵
+            var petExp = 5 + Math.Min(consecutiveDays, 20);
+            rewards.Add($"寵物經驗: {petExp}");
+            
+            // 特殊獎勵（每7天）
+            if (consecutiveDays % 7 == 0)
+            {
+                var specialRewards = new[] { "優惠券", "特殊道具", "額外點數", "寵物食物" };
+                rewards.Add($"特殊獎勵: {specialRewards[random.Next(specialRewards.Length)]}");
+            }
+            
+            // 連續簽到獎勵
+            if (consecutiveDays >= 30)
+            {
+                rewards.Add("連續30天獎勵: 稀有道具");
+            }
+            else if (consecutiveDays >= 14)
+            {
+                rewards.Add("連續14天獎勵: 高級道具");
+            }
+            else if (consecutiveDays >= 7)
+            {
+                rewards.Add("連續7天獎勵: 普通道具");
+            }
+            
+            return string.Join(", ", rewards);
         }
     }
 }

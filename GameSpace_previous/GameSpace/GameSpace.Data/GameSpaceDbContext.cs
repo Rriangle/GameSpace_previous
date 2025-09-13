@@ -54,6 +54,9 @@ namespace GameSpace.Data
         public DbSet<UserWallet> UserWallets { get; set; }
         public DbSet<WalletHistory> WalletHistories { get; set; }
 
+        // 簽到相關模型
+        public DbSet<DailyCheckIn> DailyCheckIns { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
