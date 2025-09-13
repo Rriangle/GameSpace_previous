@@ -50,6 +50,10 @@ namespace GameSpace.Data
         public DbSet<GameSourceMap> GameSourceMaps { get; set; }
         public DbSet<Forum> Forums { get; set; }
 
+        // 錢包相關模型
+        public DbSet<UserWallet> UserWallets { get; set; }
+        public DbSet<WalletHistory> WalletHistories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

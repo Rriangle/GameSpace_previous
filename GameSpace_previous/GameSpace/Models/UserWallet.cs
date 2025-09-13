@@ -1,13 +1,19 @@
 using System;
 using System.Collections.Generic;
 
-namespace GameSpace.Models;
-
-public partial class UserWallet
+namespace GameSpace.Models
 {
-    public int UserId { get; set; }
+    /// <summary>
+    /// 用戶錢包資料表
+    /// </summary>
+    public partial class UserWallet
+    {
+        public int UserId { get; set; }
+        public decimal UserPoint { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
-    public int UserPoint { get; set; }
-
-    public virtual Users User { get; set; } = null!;
+        public virtual Users User { get; set; } = null!;
+        public virtual ICollection<WalletHistory> WalletHistories { get; set; } = new List<WalletHistory>();
+    }
 }

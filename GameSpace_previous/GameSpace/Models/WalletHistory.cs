@@ -1,23 +1,23 @@
 using System;
-using System.Collections.Generic;
 
-namespace GameSpace.Models;
-
-public partial class WalletHistory
+namespace GameSpace.Models
 {
-    public int LogId { get; set; }
+    /// <summary>
+    /// 錢包交易歷史資料表
+    /// </summary>
+    public partial class WalletHistory
+    {
+        public int HistoryId { get; set; }
+        public int UserId { get; set; }
+        public string TransactionType { get; set; } = null!;
+        public decimal Amount { get; set; }
+        public decimal BalanceBefore { get; set; }
+        public decimal BalanceAfter { get; set; }
+        public string? Description { get; set; }
+        public string? ReferenceId { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-    public int UserId { get; set; }
-
-    public string ChangeType { get; set; } = null!;
-
-    public int PointsChanged { get; set; }
-
-    public string? ItemCode { get; set; }
-
-    public string? Description { get; set; }
-
-    public DateTime ChangeTime { get; set; }
-
-    public virtual Users User { get; set; } = null!;
+        public virtual Users User { get; set; } = null!;
+        public virtual UserWallet UserWallet { get; set; } = null!;
+    }
 }

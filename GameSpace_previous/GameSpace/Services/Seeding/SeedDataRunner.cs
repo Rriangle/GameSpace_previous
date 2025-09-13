@@ -45,6 +45,9 @@ namespace GameSpace.Services.Seeding
                 // 創建寵物數據（200行）
                 await CreatePetDataAsync(connection);
 
+                // 創建錢包數據（200行）
+                await CreateWalletDataAsync(connection);
+
                 _logger.LogInformation("種子數據創建完成");
                 return true;
             }
@@ -500,6 +503,35 @@ namespace GameSpace.Services.Seeding
                 _logger.LogInformation("已新增 {Count} 行寵物數據。", values.Count);
             }
             _logger.LogInformation("寵物數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "Pet"));
+        }
+
+        private async Task CreateWalletDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建錢包數據 (目標: 200 行)");
+            var existingCount = await GetTableRowCount(connection, "User_Wallet");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("User_Wallet 表已有 {Count} 行，無需新增。", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var userId = i;
+                var points = Random.Shared.Next(0, 10000); // 0-10000點隨機餘額
+                
+                values.Add($"({userId}, {points}, GETUTCDATE(), GETUTCDATE())");
+            }
+
+            if (values.Any())
+            {
+                var walletData = $"INSERT INTO User_Wallet (UserId, UserPoint, CreatedAt, UpdatedAt) VALUES {string.Join(",", values)};";
+                using var command = new SqlCommand(walletData, connection);
+                await command.ExecuteNonQueryAsync();
+                _logger.LogInformation("已新增 {Count} 行錢包數據。", values.Count);
+            }
+            _logger.LogInformation("錢包數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "User_Wallet"));
         }
     }
 }
