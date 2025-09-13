@@ -49,7 +49,11 @@ public partial class GameSpacedatabaseContext : DbContext
 
     public virtual DbSet<Group> Groups { get; set; }
 
+    public virtual DbSet<Groups> GroupsNew { get; set; }
+
     public virtual DbSet<GroupBlock> GroupBlocks { get; set; }
+
+    public virtual DbSet<Group_Read_States> GroupReadStates { get; set; }
 
     public virtual DbSet<GroupChat> GroupChats { get; set; }
 
@@ -58,6 +62,8 @@ public partial class GameSpacedatabaseContext : DbContext
     public virtual DbSet<LeaderboardSnapshot> LeaderboardSnapshots { get; set; }
 
     public virtual DbSet<ManagerDatum> ManagerData { get; set; }
+
+    public virtual DbSet<ManagerData> ManagerDataNew { get; set; }
 
     public virtual DbSet<ManagerRolePermission> ManagerRolePermissions { get; set; }
 
@@ -2011,6 +2017,136 @@ public partial class GameSpacedatabaseContext : DbContext
             entity.Property(e => e.Stock).HasColumnName("stock");
             entity.Property(e => e.MinStock).HasColumnName("min_stock");
             entity.Property(e => e.Notes).HasColumnName("notes");
+        });
+
+        // 配置 Group_Read_States 模型
+        modelBuilder.Entity<Group_Read_States>(entity =>
+        {
+            entity.HasKey(e => e.StateId).HasName("PK_Group_Read_States");
+            entity.ToTable("Group_Read_States");
+            entity.Property(e => e.StateId).HasColumnName("state_id");
+            entity.Property(e => e.GroupId).HasColumnName("group_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.LastReadMessageId).HasColumnName("last_read_message_id");
+            entity.Property(e => e.LastReadAt).HasColumnName("last_read_at");
+            entity.Property(e => e.UnreadCount).HasColumnName("unread_count");
+            entity.Property(e => e.IsMuted).HasColumnName("is_muted");
+            entity.Property(e => e.MutedAt).HasColumnName("muted_at");
+            entity.Property(e => e.MuteExpiresAt).HasColumnName("mute_expires_at");
+            entity.Property(e => e.IsBlocked).HasColumnName("is_blocked");
+            entity.Property(e => e.BlockedAt).HasColumnName("blocked_at");
+            entity.Property(e => e.BlockReason).HasColumnName("block_reason");
+            entity.Property(e => e.HasLeft).HasColumnName("has_left");
+            entity.Property(e => e.LeftAt).HasColumnName("left_at");
+            entity.Property(e => e.LeaveReason).HasColumnName("leave_reason");
+            entity.Property(e => e.HasJoined).HasColumnName("has_joined");
+            entity.Property(e => e.JoinedAt).HasColumnName("joined_at");
+            entity.Property(e => e.Role).HasColumnName("role");
+            entity.Property(e => e.Permissions).HasColumnName("permissions");
+            entity.Property(e => e.LastActivityAt).HasColumnName("last_activity_at");
+            entity.Property(e => e.ReceiveNotifications).HasColumnName("receive_notifications");
+            entity.Property(e => e.NotificationSettings).HasColumnName("notification_settings");
+            entity.Property(e => e.GroupNickname).HasColumnName("group_nickname");
+            entity.Property(e => e.PersonalNote).HasColumnName("personal_note");
+            entity.Property(e => e.IsPinned).HasColumnName("is_pinned");
+            entity.Property(e => e.PinnedAt).HasColumnName("pinned_at");
+            entity.Property(e => e.PinOrder).HasColumnName("pin_order");
+        });
+
+        // 配置 Groups 模型
+        modelBuilder.Entity<Groups>(entity =>
+        {
+            entity.HasKey(e => e.GroupId).HasName("PK_Groups");
+            entity.ToTable("Groups");
+            entity.Property(e => e.GroupId).HasColumnName("group_id");
+            entity.Property(e => e.OwnerUserId).HasColumnName("owner_user_id");
+            entity.Property(e => e.GroupName).HasColumnName("group_name");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.AvatarUrl).HasColumnName("avatar_url");
+            entity.Property(e => e.CoverUrl).HasColumnName("cover_url");
+            entity.Property(e => e.GroupType).HasColumnName("group_type");
+            entity.Property(e => e.Category).HasColumnName("category");
+            entity.Property(e => e.Tags).HasColumnName("tags");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.IsPublic).HasColumnName("is_public");
+            entity.Property(e => e.RequiresApproval).HasColumnName("requires_approval");
+            entity.Property(e => e.MaxMembers).HasColumnName("max_members");
+            entity.Property(e => e.CurrentMembers).HasColumnName("current_members");
+            entity.Property(e => e.Rules).HasColumnName("rules");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.LastActivityAt).HasColumnName("last_activity_at");
+            entity.Property(e => e.IsArchived).HasColumnName("is_archived");
+            entity.Property(e => e.ArchivedAt).HasColumnName("archived_at");
+            entity.Property(e => e.ArchiveReason).HasColumnName("archive_reason");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.Level).HasColumnName("level");
+            entity.Property(e => e.Experience).HasColumnName("experience");
+            entity.Property(e => e.Points).HasColumnName("points");
+            entity.Property(e => e.Ranking).HasColumnName("ranking");
+            entity.Property(e => e.Rating).HasColumnName("rating");
+            entity.Property(e => e.RatingCount).HasColumnName("rating_count");
+            entity.Property(e => e.ViewCount).HasColumnName("view_count");
+            entity.Property(e => e.JoinCount).HasColumnName("join_count");
+            entity.Property(e => e.LeaveCount).HasColumnName("leave_count");
+            entity.Property(e => e.Location).HasColumnName("location");
+            entity.Property(e => e.Website).HasColumnName("website");
+            entity.Property(e => e.Contact).HasColumnName("contact");
+            entity.Property(e => e.Language).HasColumnName("language");
+            entity.Property(e => e.Timezone).HasColumnName("timezone");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+        });
+
+        // 配置 ManagerData 模型
+        modelBuilder.Entity<ManagerData>(entity =>
+        {
+            entity.HasKey(e => e.ManagerId).HasName("PK_ManagerData");
+            entity.ToTable("ManagerData");
+            entity.Property(e => e.ManagerId).HasColumnName("Manager_Id");
+            entity.Property(e => e.ManagerName).HasColumnName("Manager_Name");
+            entity.Property(e => e.ManagerAccount).HasColumnName("Manager_Account");
+            entity.Property(e => e.ManagerPassword).HasColumnName("Manager_Password");
+            entity.Property(e => e.ManagerEmail).HasColumnName("Manager_Email");
+            entity.Property(e => e.ManagerEmailConfirmed).HasColumnName("Manager_EmailConfirmed");
+            entity.Property(e => e.ManagerPhone).HasColumnName("Manager_Phone");
+            entity.Property(e => e.ManagerPhoneConfirmed).HasColumnName("Manager_PhoneConfirmed");
+            entity.Property(e => e.ManagerStatus).HasColumnName("Manager_Status");
+            entity.Property(e => e.ManagerRole).HasColumnName("Manager_Role");
+            entity.Property(e => e.ManagerPermissions).HasColumnName("Manager_Permissions");
+            entity.Property(e => e.Department).HasColumnName("Department");
+            entity.Property(e => e.Position).HasColumnName("Position");
+            entity.Property(e => e.Level).HasColumnName("Level");
+            entity.Property(e => e.AvatarUrl).HasColumnName("Avatar_Url");
+            entity.Property(e => e.Profile).HasColumnName("Profile");
+            entity.Property(e => e.Notes).HasColumnName("Notes");
+            entity.Property(e => e.AdministratorRegistrationDate).HasColumnName("Administrator_registration_date");
+            entity.Property(e => e.LastLoginAt).HasColumnName("Last_Login_At");
+            entity.Property(e => e.LastLoginIp).HasColumnName("Last_Login_Ip");
+            entity.Property(e => e.ManagerAccessFailedCount).HasColumnName("Manager_AccessFailedCount");
+            entity.Property(e => e.ManagerLockoutEnabled).HasColumnName("Manager_LockoutEnabled");
+            entity.Property(e => e.ManagerLockoutEnd).HasColumnName("Manager_LockoutEnd");
+            entity.Property(e => e.ManagerTwoFactorEnabled).HasColumnName("Manager_TwoFactorEnabled");
+            entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+            entity.Property(e => e.UpdatedAt).HasColumnName("Updated_At");
+            entity.Property(e => e.CreatedBy).HasColumnName("Created_By");
+            entity.Property(e => e.UpdatedBy).HasColumnName("Updated_By");
+            entity.Property(e => e.IsDeleted).HasColumnName("Is_Deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("Deleted_At");
+            entity.Property(e => e.DeletedBy).HasColumnName("Deleted_By");
+            entity.Property(e => e.Settings).HasColumnName("Settings");
+            entity.Property(e => e.Preferences).HasColumnName("Preferences");
+            entity.Property(e => e.WorkSchedule).HasColumnName("Work_Schedule");
+            entity.Property(e => e.ContactInfo).HasColumnName("Contact_Info");
+            entity.Property(e => e.EmergencyContact).HasColumnName("Emergency_Contact");
+            entity.Property(e => e.Address).HasColumnName("Address");
+            entity.Property(e => e.BirthDate).HasColumnName("Birth_Date");
+            entity.Property(e => e.Gender).HasColumnName("Gender");
+            entity.Property(e => e.IdNumber).HasColumnName("Id_Number");
+            entity.Property(e => e.BankAccountNumber).HasColumnName("Bank_Account_Number");
+            entity.Property(e => e.BankCode).HasColumnName("Bank_Code");
         });
 
         modelBuilder.HasSequence("SeqOrderCode")

@@ -1,55 +1,210 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.Collections.Generic;
 
-namespace GameSpace.Models
+namespace GameSpace.Models;
+
+/// <summary>
+/// 群組表
+/// </summary>
+public partial class Groups
 {
     /// <summary>
-    /// 群組模型
+    /// 群組ID
     /// </summary>
-    public partial class Groups
-    {
-        [Key]
-        [Column("group_id")]
-        public int GroupId { get; set; }
+    public int GroupId { get; set; }
 
-        [Column("owner_user_id")]
-        public int OwnerUserId { get; set; }
+    /// <summary>
+    /// 群組擁有者用戶ID
+    /// </summary>
+    public int OwnerUserId { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        [Column("group_name")]
-        public string GroupName { get; set; } = null!;
+    /// <summary>
+    /// 群組名稱
+    /// </summary>
+    public string GroupName { get; set; } = null!;
 
-        [StringLength(200)]
-        [Column("description")]
-        public string? Description { get; set; }
+    /// <summary>
+    /// 群組描述
+    /// </summary>
+    public string? Description { get; set; }
 
-        [Column("is_private")]
-        public bool IsPrivate { get; set; }
+    /// <summary>
+    /// 群組頭像URL
+    /// </summary>
+    public string? AvatarUrl { get; set; }
 
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+    /// <summary>
+    /// 群組封面URL
+    /// </summary>
+    public string? CoverUrl { get; set; }
 
-        [Column("updated_at")]
-        public DateTime? UpdatedAt { get; set; }
+    /// <summary>
+    /// 群組類型
+    /// </summary>
+    public string? GroupType { get; set; }
 
-        [Column("max_members")]
-        public int? MaxMembers { get; set; }
+    /// <summary>
+    /// 群組分類
+    /// </summary>
+    public string? Category { get; set; }
 
-        [StringLength(100)]
-        [Column("group_avatar")]
-        public string? GroupAvatar { get; set; }
+    /// <summary>
+    /// 群組標籤
+    /// </summary>
+    public string? Tags { get; set; }
 
-        [Column("is_active")]
-        public bool IsActive { get; set; } = true;
+    /// <summary>
+    /// 群組狀態
+    /// </summary>
+    public string Status { get; set; } = "active";
 
-        // 導航屬性
-        [ForeignKey("OwnerUserId")]
-        public virtual Users OwnerUser { get; set; } = null!;
+    /// <summary>
+    /// 是否公開
+    /// </summary>
+    public bool IsPublic { get; set; }
 
-        public virtual ICollection<GroupMember> GroupMembers { get; set; } = new List<GroupMember>();
-        public virtual ICollection<GroupChat> GroupChats { get; set; } = new List<GroupChat>();
-        public virtual ICollection<GroupBlock> GroupBlocks { get; set; } = new List<GroupBlock>();
-        public virtual ICollection<GroupReadState> GroupReadStates { get; set; } = new List<GroupReadState>();
-    }
+    /// <summary>
+    /// 是否需要審核加入
+    /// </summary>
+    public bool RequiresApproval { get; set; }
+
+    /// <summary>
+    /// 最大成員數
+    /// </summary>
+    public int? MaxMembers { get; set; }
+
+    /// <summary>
+    /// 當前成員數
+    /// </summary>
+    public int CurrentMembers { get; set; }
+
+    /// <summary>
+    /// 群組規則
+    /// </summary>
+    public string? Rules { get; set; }
+
+    /// <summary>
+    /// 群組設定（JSON格式）
+    /// </summary>
+    public string? Settings { get; set; }
+
+    /// <summary>
+    /// 建立時間
+    /// </summary>
+    public DateTime CreatedAt { get; set; }
+
+    /// <summary>
+    /// 更新時間
+    /// </summary>
+    public DateTime? UpdatedAt { get; set; }
+
+    /// <summary>
+    /// 最後活動時間
+    /// </summary>
+    public DateTime? LastActivityAt { get; set; }
+
+    /// <summary>
+    /// 是否已封存
+    /// </summary>
+    public bool IsArchived { get; set; }
+
+    /// <summary>
+    /// 封存時間
+    /// </summary>
+    public DateTime? ArchivedAt { get; set; }
+
+    /// <summary>
+    /// 封存原因
+    /// </summary>
+    public string? ArchiveReason { get; set; }
+
+    /// <summary>
+    /// 是否已刪除
+    /// </summary>
+    public bool IsDeleted { get; set; }
+
+    /// <summary>
+    /// 刪除時間
+    /// </summary>
+    public DateTime? DeletedAt { get; set; }
+
+    /// <summary>
+    /// 刪除者ID
+    /// </summary>
+    public int? DeletedBy { get; set; }
+
+    /// <summary>
+    /// 群組等級
+    /// </summary>
+    public int? Level { get; set; }
+
+    /// <summary>
+    /// 群組經驗值
+    /// </summary>
+    public int? Experience { get; set; }
+
+    /// <summary>
+    /// 群組積分
+    /// </summary>
+    public int? Points { get; set; }
+
+    /// <summary>
+    /// 群組排名
+    /// </summary>
+    public int? Ranking { get; set; }
+
+    /// <summary>
+    /// 群組評分
+    /// </summary>
+    public decimal? Rating { get; set; }
+
+    /// <summary>
+    /// 評分人數
+    /// </summary>
+    public int? RatingCount { get; set; }
+
+    /// <summary>
+    /// 群組瀏覽次數
+    /// </summary>
+    public int? ViewCount { get; set; }
+
+    /// <summary>
+    /// 群組加入次數
+    /// </summary>
+    public int? JoinCount { get; set; }
+
+    /// <summary>
+    /// 群組離開次數
+    /// </summary>
+    public int? LeaveCount { get; set; }
+
+    /// <summary>
+    /// 群組位置
+    /// </summary>
+    public string? Location { get; set; }
+
+    /// <summary>
+    /// 群組網站
+    /// </summary>
+    public string? Website { get; set; }
+
+    /// <summary>
+    /// 群組聯絡方式
+    /// </summary>
+    public string? Contact { get; set; }
+
+    /// <summary>
+    /// 群組語言
+    /// </summary>
+    public string? Language { get; set; }
+
+    /// <summary>
+    /// 群組時區
+    /// </summary>
+    public string? Timezone { get; set; }
+
+    /// <summary>
+    /// 群組備註
+    /// </summary>
+    public string? Notes { get; set; }
 }
