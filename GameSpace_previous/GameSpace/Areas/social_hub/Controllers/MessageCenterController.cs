@@ -115,8 +115,8 @@ namespace GameSpace.Areas.social_hub.Controllers
 			if (!rec.IsRead)
 			{
 				rec.IsRead = true;
-				// 若你的模型有 ReadAt 欄位可加上：
-				// rec.ReadAt = DateTime.UtcNow;
+			// 若模型有 ReadAt 欄位可加上：
+			// rec.ReadAt = DateTime.UtcNow;
 				await _context.SaveChangesAsync();
 			}
 
@@ -124,7 +124,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		}
 
 		// =========================
-		// 建立通知（Admin）
+		// 建立通知（管理員）
 		// GET: social_hub/MessageCenter/Create
 		// =========================
 		public IActionResult Create()
@@ -134,7 +134,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		}
 
 		// =========================
-		// 建立通知（Admin）
+		// 建立通知（管理員）
 		// POST: social_hub/MessageCenter/Create
 		// =========================
 		[HttpPost]
@@ -152,7 +152,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 			int? senderUserId = TryGetCookieInt("sh_uid");
 			int? senderManagerId = TryGetCookieInt("sh_mid");
 
-			// 使用服務處理 FK 決策、收件人去重與驗證
+			// 使用服務處理外鍵決策、收件人去重與驗證
 			var added = await _notificationService.CreateAsync(
 				notification,
 				recipientIds ?? Enumerable.Empty<int>(),
@@ -181,7 +181,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 			var n = await _context.Notifications.FirstOrDefaultAsync(x => x.NotificationId == id);
 			if (n != null)
 			{
-				// 先刪收件明細，再刪主檔（避免 FK）
+				// 先刪收件明細，再刪主檔（避免外鍵約束）
 				var recs = _context.NotificationRecipients.Where(r => r.NotificationId == id);
 				_context.NotificationRecipients.RemoveRange(recs);
 				_context.Notifications.Remove(n);
@@ -192,7 +192,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		}
 
 		// =========================
-		// 內部用 VM（避免相依外部 ViewModel）
+		// 內部使用視圖模型（避免相依外部 ViewModel）
 		// =========================
 		public class NotificationAdminListItemVM
 		{
