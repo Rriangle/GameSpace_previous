@@ -1,0 +1,123 @@
+@{
+    ViewData["Title"] = "RBAC 權限管理";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>RBAC 權限管理系統</h4>
+                <p class="text-muted mb-0">基於角色的存取控制 (Role-Based Access Control)</p>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="card-title">角色管理</h5>
+                                        <p class="card-text">管理系統角色和權限設定</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-users-cog fa-2x"></i>
+                                    </div>
+                                </div>
+                                <a asp-action="Roles" class="btn btn-light">
+                                    <i class="fas fa-arrow-right"></i> 進入角色管理
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="card-title">管理員角色分配</h5>
+                                        <p class="card-text">為管理員分配適當的角色</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-user-tag fa-2x"></i>
+                                    </div>
+                                </div>
+                                <a asp-action="ManagerRoles" class="btn btn-light">
+                                    <i class="fas fa-arrow-right"></i> 進入角色分配
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h5>系統功能說明</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card border-left-primary">
+                                    <div class="card-body">
+                                        <h6 class="text-primary">角色管理</h6>
+                                        <ul class="list-unstyled mb-0">
+                                            <li><i class="fas fa-check text-success"></i> 創建角色</li>
+                                            <li><i class="fas fa-check text-success"></i> 編輯角色權限</li>
+                                            <li><i class="fas fa-check text-success"></i> 刪除角色</li>
+                                            <li><i class="fas fa-check text-success"></i> 查看角色列表</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="card border-left-success">
+                                    <div class="card-body">
+                                        <h6 class="text-success">權限控制</h6>
+                                        <ul class="list-unstyled mb-0">
+                                            <li><i class="fas fa-check text-success"></i> 管理員權限管理</li>
+                                            <li><i class="fas fa-check text-success"></i> 用戶狀態管理</li>
+                                            <li><i class="fas fa-check text-success"></i> 購物權限管理</li>
+                                            <li><i class="fas fa-check text-success"></i> 訊息權限管理</li>
+                                            <li><i class="fas fa-check text-success"></i> 寵物權限管理</li>
+                                            <li><i class="fas fa-check text-success"></i> 客服權限</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="card border-left-info">
+                                    <div class="card-body">
+                                        <h6 class="text-info">管理員分配</h6>
+                                        <ul class="list-unstyled mb-0">
+                                            <li><i class="fas fa-check text-success"></i> 分配角色給管理員</li>
+                                            <li><i class="fas fa-check text-success"></i> 編輯管理員角色</li>
+                                            <li><i class="fas fa-check text-success"></i> 移除管理員角色</li>
+                                            <li><i class="fas fa-check text-success"></i> 查看分配狀態</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.border-left-primary {
+    border-left: 4px solid #007bff !important;
+}
+
+.border-left-success {
+    border-left: 4px solid #28a745 !important;
+}
+
+.border-left-info {
+    border-left: 4px solid #17a2b8 !important;
+}
+</style>

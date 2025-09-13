@@ -25,6 +25,9 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // 添加OAuth服務
 builder.Services.AddScoped<OAuthService>();
 
+// 添加RBAC服務
+builder.Services.AddScoped<RBACService>();
+
 // 添加控制器
 builder.Services.AddControllersWithViews();
 

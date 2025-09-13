@@ -1,0 +1,99 @@
+@model GameSpace.Controllers.Admin.EditManagerRoleViewModel
+@{
+    ViewData["Title"] = "編輯管理員角色";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>編輯管理員角色</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="EditManagerRole" method="post">
+                    <input asp-for="ManagerId" type="hidden" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">管理員</label>
+                        <input type="text" class="form-control" value="@Model.ManagerName (@Model.ManagerAccount)" readonly />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="RoleId" class="form-label">選擇新角色</label>
+                        <select asp-for="RoleId" asp-items="Model.RoleList" class="form-select">
+                            <option value="">請選擇角色</option>
+                        </select>
+                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="ManagerRoles" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> 返回管理員角色列表
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 更新角色
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>當前角色資訊</h5>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(Model.CurrentRoleName))
+                {
+                    <p><strong>當前角色：</strong> <span class="badge bg-primary">@Model.CurrentRoleName</span></p>
+                    
+                    <h6>當前權限：</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        @if (Model.AdministratorPrivilegesManagement)
+                        {
+                            <span class="badge bg-danger">管理員權限</span>
+                        }
+                        @if (Model.UserStatusManagement)
+                        {
+                            <span class="badge bg-success">用戶管理</span>
+                        }
+                        @if (Model.ShoppingPermissionManagement)
+                        {
+                            <span class="badge bg-info">購物管理</span>
+                        }
+                        @if (Model.MessagePermissionManagement)
+                        {
+                            <span class="badge bg-warning">訊息管理</span>
+                        }
+                        @if (Model.PetRightsManagement)
+                        {
+                            <span class="badge bg-purple">寵物管理</span>
+                        }
+                        @if (Model.CustomerService)
+                        {
+                            <span class="badge bg-secondary">客服</span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">此管理員尚未分配角色</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.badge.bg-purple {
+    background-color: #6f42c1 !important;
+}
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

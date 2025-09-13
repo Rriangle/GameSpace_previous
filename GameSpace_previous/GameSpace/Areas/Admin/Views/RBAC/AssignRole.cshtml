@@ -1,0 +1,70 @@
+@model GameSpace.Controllers.Admin.AssignRoleViewModel
+@{
+    ViewData["Title"] = "分配角色";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>分配角色給管理員</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="AssignRole" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="ManagerId" class="form-label">選擇管理員</label>
+                        <select asp-for="ManagerId" asp-items="Model.ManagerList" class="form-select">
+                            <option value="">請選擇管理員</option>
+                        </select>
+                        <span asp-validation-for="ManagerId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="RoleId" class="form-label">選擇角色</label>
+                        <select asp-for="RoleId" asp-items="Model.RoleList" class="form-select">
+                            <option value="">請選擇角色</option>
+                        </select>
+                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Roles" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> 返回角色列表
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> 分配角色
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>角色分配說明</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">為管理員分配適當的角色，以控制其系統權限。</p>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>注意：</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>一個管理員只能有一個角色</li>
+                        <li>重新分配角色會覆蓋現有角色</li>
+                        <li>角色權限會立即生效</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

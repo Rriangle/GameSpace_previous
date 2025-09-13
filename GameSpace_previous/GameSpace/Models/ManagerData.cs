@@ -1,35 +1,31 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameSpace.Models
 {
-    /// <summary>
-    /// 管理員數據模型
-    /// </summary>
-    public partial class ManagerData
+    [Table("ManagerData")]
+    public class ManagerData
     {
         [Key]
         [Column("Manager_Id")]
         public int ManagerId { get; set; }
 
-        [StringLength(30)]
         [Column("Manager_Name")]
+        [StringLength(30)]
         public string? ManagerName { get; set; }
 
-        [StringLength(30)]
         [Column("Manager_Account")]
+        [StringLength(30)]
         public string? ManagerAccount { get; set; }
 
-        [StringLength(200)]
         [Column("Manager_Password")]
+        [StringLength(200)]
         public string? ManagerPassword { get; set; }
 
-        [Column("Administrator_registration_date")]
-        public DateTime? AdministratorRegistrationDate { get; set; }
-
+        [Column("Manager_Email")]
         [Required]
         [StringLength(255)]
-        [Column("Manager_Email")]
         public string ManagerEmail { get; set; } = null!;
 
         [Column("Manager_EmailConfirmed")]
@@ -44,7 +40,7 @@ namespace GameSpace.Models
         [Column("Manager_LockoutEnd")]
         public DateTime? ManagerLockoutEnd { get; set; }
 
-        // 導航屬性
+        // Navigation properties
         public virtual ICollection<ManagerRole> ManagerRoles { get; set; } = new List<ManagerRole>();
     }
 }

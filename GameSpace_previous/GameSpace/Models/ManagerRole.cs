@@ -1,12 +1,11 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameSpace.Models
 {
-    /// <summary>
-    /// 管理員角色模型
-    /// </summary>
-    public partial class ManagerRole
+    [Table("ManagerRole")]
+    public class ManagerRole
     {
         [Key]
         [Column("Manager_Id")]
@@ -16,11 +15,11 @@ namespace GameSpace.Models
         [Column("ManagerRole_Id")]
         public int ManagerRoleId { get; set; }
 
-        // 導航屬性
+        // Navigation properties
         [ForeignKey("ManagerId")]
         public virtual ManagerData Manager { get; set; } = null!;
 
         [ForeignKey("ManagerRoleId")]
-        public virtual ManagerRolePermission ManagerRolePermission { get; set; } = null!;
+        public virtual ManagerRolePermission RolePermission { get; set; } = null!;
     }
 }
