@@ -205,7 +205,7 @@
 
 **Resolution Plan**: 完善關卡難度設計和遊戲機制
 
-### 13. 商城系統不完整 (HIGH)
+### 13. 商城系統基本完成 (MEDIUM)
 **Location**: 官方商城功能
 **Required State**:
 - ProductInfo表商品管理
@@ -215,8 +215,16 @@
 - 庫存管理
 - 訂單狀態流程
 
-**Current State**: 基本模型存在，缺少完整功能
-**Resolution Plan**: 實現商城系統的完整業務邏輯和UI
+**Current State**: 主要功能已實現，部分功能待完善
+- ✅ ProductInfo、OrderInfo、OrderItem模型已存在
+- ✅ ShopController完整功能已實現（商品列表、詳情、購物車、結帳、訂單查詢）
+- ✅ 所有視圖已實現（商品列表、詳情、購物車、我的訂單、訂單成功）
+- ✅ 訂單創建和查詢功能已實現
+- ✅ 購物車功能已實現
+- ⚠️ 優惠券使用驗證待實現
+- ⚠️ 庫存管理功能待完善
+
+**Resolution Plan**: 實現優惠券使用驗證和完善庫存管理功能
 
 ### 14. 論壇系統不完整 (MEDIUM)
 **Location**: 討論論壇功能
@@ -364,7 +372,7 @@
 | 每日簽到系統 | Completed | N/A | 0小時 | 功能完整實現，無需修復 |
 | 寵物系統 | In-Progress | Medium | 4小時 | 主要功能已實現，需要完善外觀自定義功能 |
 | 小遊戲系統 | In-Progress | Medium | 4小時 | 主要功能已實現，需要完善關卡難度設計 |
-| 商城系統 | In-Progress | High | 10小時 | 基本模型存在，需要完善功能 |
+| 商城系統 | In-Progress | Medium | 3小時 | 主要功能已實現，需要完善優惠券使用和庫存管理 |
 | 優惠券/禮券系統 | In-Progress | High | 6小時 | 基本模型存在，需要完善功能 |
 | 管理後台系統 | Open | High | 15小時 | 完全缺失，需要從零開始 |
 | 前台UI設計 | In-Progress | High | 8小時 | 部分實現，需要按規範完善 |

@@ -24,8 +24,8 @@ namespace GameSpace.Controllers
         /// </summary>
         public async Task<IActionResult> Index()
         {
-            var products = await _context.Products
-                .Where(p => p.IsActive)
+            var products = await _context.ProductInfo
+                .Where(p => p.Status == "Active")
                 .OrderByDescending(p => p.CreatedAt)
                 .Take(20)
                 .ToListAsync();
@@ -38,8 +38,8 @@ namespace GameSpace.Controllers
         /// </summary>
         public async Task<IActionResult> Product(int id)
         {
-            var product = await _context.Products
-                .FirstOrDefaultAsync(p => p.ProductId == id && p.IsActive);
+            var product = await _context.ProductInfo
+                .FirstOrDefaultAsync(p => p.ProductId == id && p.Status == "Active");
 
             if (product == null)
             {
@@ -62,8 +62,8 @@ namespace GameSpace.Controllers
                 return Json(new { success = false, message = "請先登入" });
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(p => p.ProductId == productId && p.IsActive);
+            var product = await _context.ProductInfo
+                .FirstOrDefaultAsync(p => p.ProductId == productId && p.Status == "Active");
 
             if (product == null)
             {
@@ -117,34 +117,38 @@ namespace GameSpace.Controllers
             try
             {
                 // 創建訂單
-                var order = new Order
+                var order = new OrderInfo
                 {
                     UserId = userId.Value,
-                    OrderDate = DateTime.UtcNow,
-                    TotalAmount = model.TotalAmount,
-                    Status = "待付款",
-                    ShippingAddress = model.ShippingAddress,
+                    OrderCode = GenerateOrderCode(),
+                    OrderStatus = "待付款",
+                    PaymentStatus = "未付款",
+                    OrderTotal = model.TotalAmount,
+                    Paid = false,
+                    Shipped = false,
+                    Completed = false,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
 
-                _context.Orders.Add(order);
+                _context.OrderInfo.Add(order);
                 await _context.SaveChangesAsync();
 
                 // 創建訂單項目
+                int lineNo = 1;
                 foreach (var item in model.Items)
                 {
                     var orderItem = new OrderItem
                     {
                         OrderId = order.OrderId,
                         ProductId = item.ProductId,
-                        Quantity = item.Quantity,
+                        LineNo = lineNo++,
                         UnitPrice = item.UnitPrice,
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow
+                        Quantity = item.Quantity,
+                        Subtotal = item.UnitPrice * item.Quantity
                     };
 
-                    _context.OrderItems.Add(orderItem);
+                    _context.OrderItem.Add(orderItem);
                 }
 
                 await _context.SaveChangesAsync();
@@ -166,7 +170,7 @@ namespace GameSpace.Controllers
         /// </summary>
         public async Task<IActionResult> OrderSuccess(int id)
         {
-            var order = await _context.Orders
+            var order = await _context.OrderInfo
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
                 .FirstOrDefaultAsync(o => o.OrderId == id);
@@ -190,11 +194,11 @@ namespace GameSpace.Controllers
                 return RedirectToAction("Login", "Auth");
             }
 
-            var orders = await _context.Orders
+            var orders = await _context.OrderInfo
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
                 .Where(o => o.UserId == userId)
-                .OrderByDescending(o => o.OrderDate)
+                .OrderByDescending(o => o.CreatedAt)
                 .ToListAsync();
 
             return View(orders);
@@ -207,6 +211,14 @@ namespace GameSpace.Controllers
         {
             var userIdStr = HttpContext.Session.GetString("UserId");
             return int.TryParse(userIdStr, out var userId) ? userId : null;
+        }
+
+        /// <summary>
+        /// 生成訂單編號
+        /// </summary>
+        private string GenerateOrderCode()
+        {
+            return "ORD" + DateTime.UtcNow.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999);
         }
     }
 
