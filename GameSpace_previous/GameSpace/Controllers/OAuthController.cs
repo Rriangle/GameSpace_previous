@@ -18,11 +18,11 @@ namespace GameSpace.Controllers
     /// </summary>
     public class OAuthController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly GameSpaceDbContext _context;
         private readonly OAuthService _oauthService;
         private readonly ILogger<OAuthController> _logger;
 
-        public OAuthController(ApplicationDbContext context, OAuthService oauthService, ILogger<OAuthController> logger)
+        public OAuthController(GameSpaceDbContext context, OAuthService oauthService, ILogger<OAuthController> logger)
         {
             _context = context;
             _oauthService = oauthService;
@@ -268,7 +268,7 @@ namespace GameSpace.Controllers
         /// <param name="provider">提供者</param>
         /// <param name="externalId">外部ID</param>
         /// <returns>用戶對象</returns>
-        private async Task<User?> FindOrCreateUserAsync(string email, string? name, string provider, string externalId)
+        private async Task<Users?> FindOrCreateUserAsync(string email, string? name, string provider, string externalId)
         {
             try
             {
@@ -286,7 +286,7 @@ namespace GameSpace.Controllers
                 }
 
                 // 創建新用戶
-                var newUser = new User
+                var newUser = new Users
                 {
                     UserAccount = email, // 使用email作為帳號
                     UserEmail = email,
@@ -318,7 +318,7 @@ namespace GameSpace.Controllers
                 _context.UserIntroduces.Add(userIntroduce);
 
                 // 創建用戶權限
-                var userRights = new UserRights
+                var userRights = new UserRight
                 {
                     UserId = newUser.UserId,
                     UserStatus = true,
@@ -348,7 +348,7 @@ namespace GameSpace.Controllers
         /// 登入用戶
         /// </summary>
         /// <param name="user">用戶對象</param>
-        private async Task SignInUserAsync(User user)
+        private async Task SignInUserAsync(Users user)
         {
             var claims = new List<Claim>
             {

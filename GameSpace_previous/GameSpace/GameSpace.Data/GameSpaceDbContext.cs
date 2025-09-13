@@ -20,6 +20,7 @@ namespace GameSpace.Data
         public DbSet<Pet> Pets { get; set; }
         public DbSet<UserSignInStat> UserSignInStats { get; set; }
         public DbSet<MiniGame> MiniGames { get; set; }
+        public DbSet<UserToken> UserTokens { get; set; }
 
         // 社群相關模型
         public DbSet<Post> Posts { get; set; }

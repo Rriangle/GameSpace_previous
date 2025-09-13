@@ -55,6 +55,6 @@ namespace GameSpace.Models
         /// 導航屬性 - 關聯的用戶
         /// </summary>
         [ForeignKey("UserId")]
-        public virtual User? User { get; set; }
+        public virtual Users? User { get; set; }
     }
 }

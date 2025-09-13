@@ -11,10 +11,10 @@ namespace GameSpace.Services
     /// </summary>
     public class OAuthService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly GameSpaceDbContext _context;
         private readonly ILogger<OAuthService> _logger;
 
-        public OAuthService(ApplicationDbContext context, ILogger<OAuthService> logger)
+        public OAuthService(GameSpaceDbContext context, ILogger<OAuthService> logger)
         {
             _context = context;
             _logger = logger;
