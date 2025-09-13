@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -23,7 +23,7 @@ public partial class ChatMessage
 
     public virtual ManagerDatum? Manager { get; set; }
 
-    public virtual User? Receiver { get; set; }
+    public virtual Users? Receiver { get; set; }
 
-    public virtual User Sender { get; set; } = null!;
+    public virtual Users Sender { get; set; } = null!;
 }

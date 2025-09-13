@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -19,5 +19,5 @@ public partial class GroupChat
 
     public virtual Group? Group { get; set; }
 
-    public virtual User? Sender { get; set; }
+    public virtual Users? Sender { get; set; }
 }

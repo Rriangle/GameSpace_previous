@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -37,5 +37,5 @@ public partial class PlayerMarketProductInfo
 
     public virtual ICollection<PlayerMarketRanking> PlayerMarketRankings { get; set; } = new List<PlayerMarketRanking>();
 
-    public virtual User? Seller { get; set; }
+    public virtual Users? Seller { get; set; }
 }

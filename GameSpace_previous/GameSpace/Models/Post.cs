@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -29,7 +29,7 @@ public partial class Post
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual User? CreatedByNavigation { get; set; }
+    public virtual Users? CreatedByNavigation { get; set; }
 
     public virtual Game? Game { get; set; }
 

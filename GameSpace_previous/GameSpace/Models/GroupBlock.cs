@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -15,9 +15,9 @@ public partial class GroupBlock
 
     public DateTime? CreatedAt { get; set; }
 
-    public virtual User? BlockedByNavigation { get; set; }
+    public virtual Users? BlockedByNavigation { get; set; }
 
     public virtual Group? Group { get; set; }
 
-    public virtual User? User { get; set; }
+    public virtual Users? User { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -29,11 +29,11 @@ public partial class PlayerMarketOrderInfo
 
     public DateTime? POrderUpdatedAt { get; set; }
 
-    public virtual User? Buyer { get; set; }
+    public virtual Users? Buyer { get; set; }
 
     public virtual PlayerMarketProductInfo? PProduct { get; set; }
 
     public virtual ICollection<PlayerMarketOrderTradepage> PlayerMarketOrderTradepages { get; set; } = new List<PlayerMarketOrderTradepage>();
 
-    public virtual User? Seller { get; set; }
+    public virtual Users? Seller { get; set; }
 }

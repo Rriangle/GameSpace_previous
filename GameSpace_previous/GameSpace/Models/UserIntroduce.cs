@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -27,5 +27,5 @@ public partial class UserIntroduce
 
     public string? UserIntroduce1 { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    public virtual Users User { get; set; } = null!;
 }

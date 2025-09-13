@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -29,7 +29,7 @@ public partial class Notification
 
     public virtual ICollection<NotificationRecipient> NotificationRecipients { get; set; } = new List<NotificationRecipient>();
 
-    public virtual User Sender { get; set; } = null!;
+    public virtual Users Sender { get; set; } = null!;
 
     public virtual ManagerDatum? SenderManager { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -15,5 +15,5 @@ public partial class GroupMember
 
     public virtual Group Group { get; set; } = null!;
 
-    public virtual User User { get; set; } = null!;
+    public virtual Users User { get; set; } = null!;
 }

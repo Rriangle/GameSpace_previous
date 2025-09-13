@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -15,5 +15,5 @@ public partial class Bookmark
 
     public DateTime? CreatedAt { get; set; }
 
-    public virtual User? User { get; set; }
+    public virtual Users? User { get; set; }
 }

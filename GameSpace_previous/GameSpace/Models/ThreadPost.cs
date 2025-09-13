@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -21,7 +21,7 @@ public partial class ThreadPost
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual User? AuthorUser { get; set; }
+    public virtual Users? AuthorUser { get; set; }
 
     public virtual ICollection<ThreadPost> InverseParentPost { get; set; } = new List<ThreadPost>();
 

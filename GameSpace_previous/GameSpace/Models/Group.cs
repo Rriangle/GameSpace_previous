@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
@@ -13,7 +13,7 @@ public partial class Group
 
     public DateTime? CreatedAt { get; set; }
 
-    public virtual User? CreatedByNavigation { get; set; }
+    public virtual Users? CreatedByNavigation { get; set; }
 
     public virtual ICollection<GroupBlock> GroupBlocks { get; set; } = new List<GroupBlock>();
 

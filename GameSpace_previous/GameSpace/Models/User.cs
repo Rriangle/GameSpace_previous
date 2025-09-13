@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
 
-public partial class User
+public partial class Users
 {
     public int UserId { get; set; }
 
