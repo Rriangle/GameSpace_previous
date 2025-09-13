@@ -99,6 +99,9 @@ public partial class GameSpacedatabaseContext : DbContext
         public virtual DbSet<OrderItems> OrderItemsNew { get; set; }
         public virtual DbSet<OtherProductDetails> OtherProductDetailsNew { get; set; }
         public virtual DbSet<PaymentTransactions> PaymentTransactionsNew { get; set; }
+        public virtual DbSet<PlayerMarketProductImgs> PlayerMarketProductImgsNew { get; set; }
+        public virtual DbSet<ProductImages> ProductImagesNew { get; set; }
+        public virtual DbSet<Shipments> ShipmentsNew { get; set; }
 
     public virtual DbSet<OrderInfo> OrderInfos { get; set; }
 
@@ -2458,6 +2461,148 @@ public partial class GameSpacedatabaseContext : DbContext
             entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
             entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
             entity.Property(e => e.Settings).HasColumnName("settings");
+        });
+
+        // 配置 PlayerMarketProductImgs 模型
+        modelBuilder.Entity<PlayerMarketProductImgs>(entity =>
+        {
+            entity.HasKey(e => e.ImageId).HasName("PK_PlayerMarketProductImgs");
+            entity.ToTable("PlayerMarketProductImgs");
+            entity.Property(e => e.ImageId).HasColumnName("image_id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.ImageUrl).HasColumnName("image_url");
+            entity.Property(e => e.ImageType).HasColumnName("image_type");
+            entity.Property(e => e.ImageFormat).HasColumnName("image_format");
+            entity.Property(e => e.ImageSize).HasColumnName("image_size");
+            entity.Property(e => e.Width).HasColumnName("width");
+            entity.Property(e => e.Height).HasColumnName("height");
+            entity.Property(e => e.AltText).HasColumnName("alt_text");
+            entity.Property(e => e.Caption).HasColumnName("caption");
+            entity.Property(e => e.SortOrder).HasColumnName("sort_order");
+            entity.Property(e => e.IsPrimary).HasColumnName("is_primary");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Tags).HasColumnName("tags");
+            entity.Property(e => e.Category).HasColumnName("category");
+            entity.Property(e => e.SubCategory).HasColumnName("sub_category");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+        });
+
+        // 配置 ProductImages 模型
+        modelBuilder.Entity<ProductImages>(entity =>
+        {
+            entity.HasKey(e => e.ImageId).HasName("PK_ProductImages");
+            entity.ToTable("ProductImages");
+            entity.Property(e => e.ImageId).HasColumnName("image_id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.ImageUrl).HasColumnName("image_url");
+            entity.Property(e => e.ImageType).HasColumnName("image_type");
+            entity.Property(e => e.ImageFormat).HasColumnName("image_format");
+            entity.Property(e => e.ImageSize).HasColumnName("image_size");
+            entity.Property(e => e.Width).HasColumnName("width");
+            entity.Property(e => e.Height).HasColumnName("height");
+            entity.Property(e => e.AltText).HasColumnName("alt_text");
+            entity.Property(e => e.Caption).HasColumnName("caption");
+            entity.Property(e => e.SortOrder).HasColumnName("sort_order");
+            entity.Property(e => e.IsPrimary).HasColumnName("is_primary");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Tags).HasColumnName("tags");
+            entity.Property(e => e.Category).HasColumnName("category");
+            entity.Property(e => e.SubCategory).HasColumnName("sub_category");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+        });
+
+        // 配置 Shipments 模型
+        modelBuilder.Entity<Shipments>(entity =>
+        {
+            entity.HasKey(e => e.ShipmentId).HasName("PK_Shipments");
+            entity.ToTable("Shipments");
+            entity.Property(e => e.ShipmentId).HasColumnName("shipment_id");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.TrackingNumber).HasColumnName("tracking_number");
+            entity.Property(e => e.Carrier).HasColumnName("carrier");
+            entity.Property(e => e.ServiceType).HasColumnName("service_type");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.ShippedAt).HasColumnName("shipped_at");
+            entity.Property(e => e.DeliveredAt).HasColumnName("delivered_at");
+            entity.Property(e => e.ExpectedDeliveryAt).HasColumnName("expected_delivery_at");
+            entity.Property(e => e.DeliveryAddress).HasColumnName("delivery_address");
+            entity.Property(e => e.RecipientName).HasColumnName("recipient_name");
+            entity.Property(e => e.RecipientPhone).HasColumnName("recipient_phone");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.ShippingCost).HasColumnName("shipping_cost");
+            entity.Property(e => e.CurrencyCode).HasColumnName("currency_code");
+            entity.Property(e => e.PackageType).HasColumnName("package_type");
+            entity.Property(e => e.Weight).HasColumnName("weight");
+            entity.Property(e => e.Dimensions).HasColumnName("dimensions");
+            entity.Property(e => e.InsuranceValue).HasColumnName("insurance_value");
+            entity.Property(e => e.RequiresSignature).HasColumnName("requires_signature");
+            entity.Property(e => e.IsFragile).HasColumnName("is_fragile");
+            entity.Property(e => e.IsHazardous).HasColumnName("is_hazardous");
+            entity.Property(e => e.SpecialInstructions).HasColumnName("special_instructions");
+            entity.Property(e => e.DeliveryInstructions).HasColumnName("delivery_instructions");
+            entity.Property(e => e.DeliveryTimePreference).HasColumnName("delivery_time_preference");
+            entity.Property(e => e.DeliveryMethod).HasColumnName("delivery_method");
+            entity.Property(e => e.DeliveryCompany).HasColumnName("delivery_company");
+            entity.Property(e => e.DeliveryStatus).HasColumnName("delivery_status");
+            entity.Property(e => e.DeliveredTo).HasColumnName("delivered_to");
+            entity.Property(e => e.SignedAt).HasColumnName("signed_at");
+            entity.Property(e => e.SignatureNotes).HasColumnName("signature_notes");
+            entity.Property(e => e.DeliveryProof).HasColumnName("delivery_proof");
+            entity.Property(e => e.DeliveryPhoto).HasColumnName("delivery_photo");
+            entity.Property(e => e.DeliveryVideo).HasColumnName("delivery_video");
+            entity.Property(e => e.DeliveryAudio).HasColumnName("delivery_audio");
+            entity.Property(e => e.DeliveryLocation).HasColumnName("delivery_location");
+            entity.Property(e => e.DeliveryLatitude).HasColumnName("delivery_latitude");
+            entity.Property(e => e.DeliveryLongitude).HasColumnName("delivery_longitude");
+            entity.Property(e => e.DeliveryAccuracy).HasColumnName("delivery_accuracy");
+            entity.Property(e => e.DeliveryAltitude).HasColumnName("delivery_altitude");
+            entity.Property(e => e.DeliverySpeed).HasColumnName("delivery_speed");
+            entity.Property(e => e.DeliveryDirection).HasColumnName("delivery_direction");
+            entity.Property(e => e.DeliveryDistance).HasColumnName("delivery_distance");
+            entity.Property(e => e.DeliveryDuration).HasColumnName("delivery_duration");
+            entity.Property(e => e.DeliveryRoute).HasColumnName("delivery_route");
+            entity.Property(e => e.DeliveryStops).HasColumnName("delivery_stops");
+            entity.Property(e => e.DeliveryDelays).HasColumnName("delivery_delays");
+            entity.Property(e => e.DeliveryIssues).HasColumnName("delivery_issues");
+            entity.Property(e => e.DeliveryResolutions).HasColumnName("delivery_resolutions");
+            entity.Property(e => e.DeliveryFeedback).HasColumnName("delivery_feedback");
+            entity.Property(e => e.DeliveryRating).HasColumnName("delivery_rating");
+            entity.Property(e => e.DeliveryComments).HasColumnName("delivery_comments");
+            entity.Property(e => e.DeliveryTags).HasColumnName("delivery_tags");
+            entity.Property(e => e.DeliveryCategory).HasColumnName("delivery_category");
+            entity.Property(e => e.DeliverySubCategory).HasColumnName("delivery_sub_category");
+            entity.Property(e => e.DeliveryMetadata).HasColumnName("delivery_metadata");
+            entity.Property(e => e.DeliverySettings).HasColumnName("delivery_settings");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
         });
 
         modelBuilder.HasSequence("SeqOrderCode")
