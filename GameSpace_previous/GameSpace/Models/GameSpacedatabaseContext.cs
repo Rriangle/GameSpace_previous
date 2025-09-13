@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
@@ -137,7 +137,7 @@ public partial class GameSpacedatabaseContext : DbContext
 
     public virtual DbSet<ThreadPost> ThreadPosts { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Users> Users { get; set; }
 
     public virtual DbSet<UserIntroduce> UserIntroduces { get; set; }
 
@@ -1733,7 +1733,7 @@ public partial class GameSpacedatabaseContext : DbContext
                 .HasConstraintName("FK__thread_po__threa__67DE6983");
         });
 
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<Users>(entity =>
         {
             entity.HasKey(e => e.UserId).HasName("PK__Users__206D9190FA40893F");
 
