@@ -1,5 +1,10 @@
 using GameSpace.Infrastructure;
 using GameSpace.Middleware;
+using GameSpace.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Microsoft;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +21,9 @@ builder.Host.UseSerilog();
 
 // 使用基礎設施專案添加服務
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// 添加OAuth服務
+builder.Services.AddScoped<OAuthService>();
 
 // 添加控制器
 builder.Services.AddControllersWithViews();
@@ -41,6 +49,39 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
+});
+
+// 添加認證服務
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.ExpireTimeSpan = TimeSpan.FromDays(30);
+    options.SlidingExpiration = true;
+})
+.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "";
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "";
+    options.CallbackPath = "/OAuth/GoogleCallback";
+})
+.AddFacebook(FacebookDefaults.AuthenticationScheme, options =>
+{
+    options.AppId = builder.Configuration["Authentication:Facebook:AppId"] ?? "";
+    options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"] ?? "";
+    options.CallbackPath = "/OAuth/FacebookCallback";
+})
+.AddMicrosoftAccount(MicrosoftAccountDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"] ?? "";
+    options.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"] ?? "";
+    options.CallbackPath = "/OAuth/MicrosoftCallback";
 });
 
 var app = builder.Build();
@@ -73,6 +114,8 @@ app.UseHttpsRedirection();
 // 添加Session中介軟體
 app.UseSession();
 
+// 添加認證和授權中介軟體
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,0 +1,68 @@
+@{
+    ViewData["Title"] = "第三方登入";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">選擇登入方式</h3>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-3">
+                        <!-- Google 登入 -->
+                        <a href="@Url.Action("GoogleLogin", "OAuth")" class="btn btn-outline-danger btn-lg">
+                            <i class="fab fa-google me-2"></i>
+                            使用 Google 登入
+                        </a>
+
+                        <!-- Facebook 登入 -->
+                        <a href="@Url.Action("FacebookLogin", "OAuth")" class="btn btn-outline-primary btn-lg">
+                            <i class="fab fa-facebook-f me-2"></i>
+                            使用 Facebook 登入
+                        </a>
+
+                        <!-- Microsoft 登入 -->
+                        <a href="@Url.Action("MicrosoftLogin", "OAuth")" class="btn btn-outline-secondary btn-lg">
+                            <i class="fab fa-microsoft me-2"></i>
+                            使用 Microsoft 登入
+                        </a>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="text-muted">或</p>
+                        <a href="@Url.Action("Login", "Auth")" class="btn btn-outline-dark">
+                            <i class="fas fa-user me-2"></i>
+                            使用帳號密碼登入
+                        </a>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            沒有帳號？<a href="@Url.Action("Register", "Auth")">立即註冊</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 隱私說明 -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h6 class="card-title">隱私說明</h6>
+                    <p class="card-text small text-muted">
+                        使用第三方登入時，我們只會獲取您的基本資訊（姓名、電子郵件）用於建立帳號。
+                        我們不會存取您的其他個人資料或進行任何未經授權的操作。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+}

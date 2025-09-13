@@ -4,6 +4,9 @@ using GameSpace.Data;
 using GameSpace.Models;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace GameSpace.Controllers
 {
@@ -157,11 +160,40 @@ namespace GameSpace.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             HttpContext.Session.Clear();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             _logger.LogInformation("用戶已登出");
             return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
+        /// 顯示OAuth登入選項
+        /// </summary>
+        [HttpGet]
+        public IActionResult OAuthLogin()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 處理OAuth登入錯誤
+        /// </summary>
+        [HttpGet]
+        public IActionResult OAuthError(string error)
+        {
+            ViewBag.ErrorMessage = error switch
+            {
+                "google_auth_failed" => "Google 登入失敗，請稍後再試",
+                "facebook_auth_failed" => "Facebook 登入失敗，請稍後再試",
+                "microsoft_auth_failed" => "Microsoft 登入失敗，請稍後再試",
+                "no_user_info" => "無法獲取用戶資訊，請稍後再試",
+                "missing_info" => "缺少必要的用戶資訊，請稍後再試",
+                "user_creation_failed" => "創建用戶失敗，請稍後再試",
+                _ => "登入過程中發生未知錯誤，請稍後再試"
+            };
+            return View();
         }
 
         /// <summary>
