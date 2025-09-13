@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>與 @otherUser.Username 的對話 - GameSpace</title>
+    <title>與 @otherUser.UserName 的對話 - GameSpace</title>
     <style>
         :root{
             --bg:#eef3f8; --bg2:#ffffff; --ink:#1f2937; --muted:#64748b; --line:#e5e7eb;
@@ -150,10 +150,10 @@
         <!-- 聊天頭部 -->
         <div class="chat-header">
             <div class="chat-avatar">
-                @otherUser.Username.Substring(0, 1).ToUpper()
+                @otherUser.UserName.Substring(0, 1).ToUpper()
             </div>
             <div class="chat-user-info">
-                <div class="chat-user-name">@otherUser.Username</div>
+                <div class="chat-user-name">@otherUser.UserName</div>
                 <div class="chat-user-status">在線</div>
             </div>
             <div class="chat-actions">
@@ -170,7 +170,7 @@
                 {
                     var isSent = message.SenderUserId == 1;
                     var messageClass = isSent ? "sent" : "received";
-                    var senderName = isSent ? "我" : message.SenderUser.Username;
+                    var senderName = isSent ? "我" : message.SenderUser.UserName;
                     
                     <div class="message @messageClass">
                         <div class="message-avatar">
