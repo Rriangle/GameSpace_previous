@@ -11,11 +11,15 @@ public partial class ThreadPost
 
     public int? AuthorUserId { get; set; }
 
+    public string? Content { get; set; }
+
     public string? ContentMd { get; set; }
 
     public long? ParentPostId { get; set; }
 
     public string? Status { get; set; }
+
+    public bool IsActive { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 

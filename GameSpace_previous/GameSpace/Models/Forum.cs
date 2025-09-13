@@ -14,6 +14,7 @@ namespace GameSpace.Models
         public string? Description { get; set; }
         public int ThreadCount { get; set; }
         public int PostCount { get; set; }
+        public int ViewCount { get; set; }
         public DateTime? LastActivity { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }

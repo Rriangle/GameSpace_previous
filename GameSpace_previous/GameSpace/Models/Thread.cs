@@ -13,7 +13,19 @@ public partial class Thread
 
     public string? Title { get; set; }
 
+    public string? Content { get; set; }
+
     public string? Status { get; set; }
+
+    public bool IsPinned { get; set; }
+
+    public bool IsActive { get; set; }
+
+    public int ViewCount { get; set; }
+
+    public int ReplyCount { get; set; }
+
+    public DateTime? LastActivity { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
