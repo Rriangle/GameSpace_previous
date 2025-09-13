@@ -80,3 +80,39 @@
 - 所有RBAC相關文件已創建並配置完成
 - 系統已準備好進行權限控制測試
 - 下一步將實現數據庫表結構完善
+
+## 2025-01-09 17:15 - 數據庫表結構完善完成
+
+### 已完成項目
+1. **修復重複DbSet定義** - 清理了DbContext中的重複定義：
+   - 移除重複的Coupon, CouponType, EVoucher等DbSet
+   - 重新組織DbSet定義結構，提高可讀性
+2. **新增重要業務模型** - 創建了完整的業務模型：
+   - OrderInfo, OrderAddress, OrderStatusHistory - 訂單管理
+   - PaymentTransaction - 支付交易
+   - ProductInfo, ProductImage, StockMovement - 產品管理
+   - Supplier, Provider - 供應商管理
+   - SupportTicket, SupportTicketMessage, SupportTicketAssignment - 客服工單
+3. **更新DbContext** - 添加了所有新模型的DbSet定義：
+   - 完善了數據庫上下文配置
+   - 確保所有模型都有對應的DbSet
+   - 遵循Entity Framework Core最佳實踐
+
+### 技術實現細節
+- 使用Data Annotations進行模型配置
+- 實現了完整的導航屬性關係
+- 遵循database.json的數據庫設計規範
+- 所有模型都包含適當的驗證屬性
+- 實現了外鍵關係和約束
+
+### 數據庫表結構狀態
+- 修復了重複的DbSet定義問題
+- 添加了75個表中的重要業務表
+- 完善了訂單、產品、支付、客服等核心功能
+- 確保數據庫結構與database.json一致
+
+### 狀態更新
+- AUDIT.md中數據庫表結構項目已標記為"Fixed"
+- 所有重要業務模型已創建並配置完成
+- 數據庫結構完整性大幅提升
+- 系統已準備好進行完整的業務功能測試

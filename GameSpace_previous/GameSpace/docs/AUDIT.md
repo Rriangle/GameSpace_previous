@@ -130,7 +130,7 @@
 | 即時聊天系統 | 已完成 | Medium | 12小時 |
 | OAuth認證 | 已完成 | Medium | 6小時 |
 | RBAC權限控制 | Fixed | Medium | 8小時 |
-| 數據庫表結構 | Open | Low | 20小時 |
+| 數據庫表結構 | Fixed | Low | 20小時 |
 
 ## Notes
 
