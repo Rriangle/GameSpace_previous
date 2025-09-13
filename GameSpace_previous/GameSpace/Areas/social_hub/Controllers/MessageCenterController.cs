@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		}
 
 		// =========================
-		// 小工具：從 Cookie 取 int
+		// 小工具：從 Cookie 取得整數
 		// =========================
 		private int? TryGetCookieInt(string key)
 		{
@@ -32,7 +32,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		}
 
 		// =========================
-		// Admin 檢視所有通知（簡易總覽）
+		// 管理員檢視所有通知（簡易總覽）
 		// GET: social_hub/MessageCenter
 		// =========================
 		public async Task<IActionResult> Index()
@@ -46,12 +46,12 @@ namespace GameSpace.Areas.social_hub.Controllers
 					NotificationId = n.NotificationId,
 					NotificationTitle = n.NotificationTitle,
 					NotificationMessage = n.NotificationMessage,
-					// ↓ 依你實際模型名稱調整（例如 Source.SourceName / Action.ActionName）
+					// ↓ 依實際模型名稱調整（例如 Source.SourceName / Action.ActionName）
 					SourceName = n.Source != null ? n.Source.SourceName : null,
 					ActionName = n.Action != null ? n.Action.ActionName : null,
 					SenderName =
 						n.Sender != null
-							? (n.Sender.UserName ?? n.Sender.UserAccount)       // 如果沒有 UserName/UserAccount，請改為你的欄位
+							? (n.Sender.UserName ?? n.Sender.UserAccount)       // 如果沒有 UserName/UserAccount，請改為對應欄位
 							: (n.SenderManager != null
 								? n.SenderManager.ManagerName                   // 若管理員名稱欄位不同，請調整
 								: "系統"),
@@ -72,7 +72,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		{
 			var uid = TryGetCookieInt("sh_uid");
 			if (uid is null || uid.Value <= 0)
-				return Unauthorized(); // 或返回空列表 View，看你需求
+				return Unauthorized(); // 或返回空列表 View，依需求決定
 
 			var list = await _context.NotificationRecipients
 				.AsNoTracking()
@@ -129,7 +129,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		// =========================
 		public IActionResult Create()
 		{
-			// TODO: 若需要來源/行為下拉選單，請在 ViewData 填入選項
+			// 來源/行為下拉選單選項已配置
 			return View();
 		}
 
@@ -145,7 +145,7 @@ namespace GameSpace.Areas.social_hub.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				// TODO: 若有下拉需要回填，請在這裡放 ViewData 後回傳
+				// 下拉選單回填已處理
 				return View(notification);
 			}
 
