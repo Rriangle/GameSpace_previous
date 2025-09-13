@@ -105,6 +105,10 @@ public partial class GameSpacedatabaseContext : DbContext
         public virtual DbSet<StockMovements> StockMovementsNew { get; set; }
         public virtual DbSet<Support_Ticket_Assignments> SupportTicketAssignmentsNew { get; set; }
         public virtual DbSet<Support_Ticket_Messages> SupportTicketMessagesNew { get; set; }
+        public virtual DbSet<Support_Tickets> SupportTicketsNew { get; set; }
+        public virtual DbSet<Users> UsersNew { get; set; }
+        public virtual DbSet<UserSignInStats> UserSignInStatsNew { get; set; }
+        public virtual DbSet<UserTokens> UserTokensNew { get; set; }
 
     public virtual DbSet<OrderInfo> OrderInfos { get; set; }
 
@@ -2712,6 +2716,159 @@ public partial class GameSpacedatabaseContext : DbContext
             entity.Property(e => e.ArchivedBy).HasColumnName("archived_by");
             entity.Property(e => e.ArchiveReason).HasColumnName("archive_reason");
             entity.Property(e => e.Settings).HasColumnName("settings");
+        });
+
+        // 配置 Support_Tickets 模型
+        modelBuilder.Entity<Support_Tickets>(entity =>
+        {
+            entity.HasKey(e => e.TicketId).HasName("PK_Support_Tickets");
+            entity.ToTable("Support_Tickets");
+            entity.Property(e => e.TicketId).HasColumnName("ticket_id");
+            entity.Property(e => e.TicketNumber).HasColumnName("ticket_number");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Subject).HasColumnName("subject");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.Priority).HasColumnName("priority");
+            entity.Property(e => e.Category).HasColumnName("category");
+            entity.Property(e => e.SubCategory).HasColumnName("sub_category");
+            entity.Property(e => e.AssignedManagerId).HasColumnName("assigned_manager_id");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.ClosedAt).HasColumnName("closed_at");
+            entity.Property(e => e.ClosedBy).HasColumnName("closed_by");
+            entity.Property(e => e.CloseReason).HasColumnName("close_reason");
+            entity.Property(e => e.Resolution).HasColumnName("resolution");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Tags).HasColumnName("tags");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+        });
+
+        // 配置 Users 模型
+        modelBuilder.Entity<Users>(entity =>
+        {
+            entity.HasKey(e => e.UserId).HasName("PK_Users");
+            entity.ToTable("Users");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Username).HasColumnName("username");
+            entity.Property(e => e.Email).HasColumnName("email");
+            entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
+            entity.Property(e => e.FirstName).HasColumnName("first_name");
+            entity.Property(e => e.LastName).HasColumnName("last_name");
+            entity.Property(e => e.DisplayName).HasColumnName("display_name");
+            entity.Property(e => e.AvatarUrl).HasColumnName("avatar_url");
+            entity.Property(e => e.Phone).HasColumnName("phone");
+            entity.Property(e => e.BirthDate).HasColumnName("birth_date");
+            entity.Property(e => e.Gender).HasColumnName("gender");
+            entity.Property(e => e.Country).HasColumnName("country");
+            entity.Property(e => e.City).HasColumnName("city");
+            entity.Property(e => e.Timezone).HasColumnName("timezone");
+            entity.Property(e => e.Language).HasColumnName("language");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.IsEmailVerified).HasColumnName("is_email_verified");
+            entity.Property(e => e.IsPhoneVerified).HasColumnName("is_phone_verified");
+            entity.Property(e => e.EmailVerifiedAt).HasColumnName("email_verified_at");
+            entity.Property(e => e.PhoneVerifiedAt).HasColumnName("phone_verified_at");
+            entity.Property(e => e.LastLoginAt).HasColumnName("last_login_at");
+            entity.Property(e => e.LastLoginIp).HasColumnName("last_login_ip");
+            entity.Property(e => e.LoginCount).HasColumnName("login_count");
+            entity.Property(e => e.FailedLoginCount).HasColumnName("failed_login_count");
+            entity.Property(e => e.LockoutEnd).HasColumnName("lockout_end");
+            entity.Property(e => e.TwoFactorEnabled).HasColumnName("two_factor_enabled");
+            entity.Property(e => e.TwoFactorSecret).HasColumnName("two_factor_secret");
+            entity.Property(e => e.RecoveryCodes).HasColumnName("recovery_codes");
+            entity.Property(e => e.Preferences).HasColumnName("preferences");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+        });
+
+        // 配置 UserSignInStats 模型
+        modelBuilder.Entity<UserSignInStats>(entity =>
+        {
+            entity.HasKey(e => e.StatId).HasName("PK_UserSignInStats");
+            entity.ToTable("UserSignInStats");
+            entity.Property(e => e.StatId).HasColumnName("stat_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.SignInDate).HasColumnName("sign_in_date");
+            entity.Property(e => e.SignInIp).HasColumnName("sign_in_ip");
+            entity.Property(e => e.UserAgent).HasColumnName("user_agent");
+            entity.Property(e => e.DeviceType).HasColumnName("device_type");
+            entity.Property(e => e.Browser).HasColumnName("browser");
+            entity.Property(e => e.OperatingSystem).HasColumnName("operating_system");
+            entity.Property(e => e.Country).HasColumnName("country");
+            entity.Property(e => e.City).HasColumnName("city");
+            entity.Property(e => e.Region).HasColumnName("region");
+            entity.Property(e => e.Latitude).HasColumnName("latitude");
+            entity.Property(e => e.Longitude).HasColumnName("longitude");
+            entity.Property(e => e.Timezone).HasColumnName("timezone");
+            entity.Property(e => e.Language).HasColumnName("language");
+            entity.Property(e => e.Referrer).HasColumnName("referrer");
+            entity.Property(e => e.UtmSource).HasColumnName("utm_source");
+            entity.Property(e => e.UtmMedium).HasColumnName("utm_medium");
+            entity.Property(e => e.UtmCampaign).HasColumnName("utm_campaign");
+            entity.Property(e => e.UtmTerm).HasColumnName("utm_term");
+            entity.Property(e => e.UtmContent).HasColumnName("utm_content");
+            entity.Property(e => e.SessionId).HasColumnName("session_id");
+            entity.Property(e => e.SessionStart).HasColumnName("session_start");
+            entity.Property(e => e.SessionEnd).HasColumnName("session_end");
+            entity.Property(e => e.SessionDuration).HasColumnName("session_duration");
+            entity.Property(e => e.PageViews).HasColumnName("page_views");
+            entity.Property(e => e.Actions).HasColumnName("actions");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+        });
+
+        // 配置 UserTokens 模型
+        modelBuilder.Entity<UserTokens>(entity =>
+        {
+            entity.HasKey(e => e.TokenId).HasName("PK_UserTokens");
+            entity.ToTable("UserTokens");
+            entity.Property(e => e.TokenId).HasColumnName("token_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Token).HasColumnName("token");
+            entity.Property(e => e.TokenType).HasColumnName("token_type");
+            entity.Property(e => e.Purpose).HasColumnName("purpose");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.ExpiresAt).HasColumnName("expires_at");
+            entity.Property(e => e.UsedAt).HasColumnName("used_at");
+            entity.Property(e => e.UsedIp).HasColumnName("used_ip");
+            entity.Property(e => e.UsedUserAgent).HasColumnName("used_user_agent");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
         });
 
         modelBuilder.HasSequence("SeqOrderCode")
