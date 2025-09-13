@@ -126,7 +126,7 @@
 | 優惠券/禮券系統 | 已完成 | High | 6小時 |
 | 管理後台系統 | 已完成 | High | 12小時 |
 | 通知系統 | 已完成 | Medium | 8小時 |
-| 好友和群組功能 | Open | Medium | 10小時 |
+| 好友和群組功能 | 已完成 | Medium | 10小時 |
 | 即時聊天系統 | Open | Medium | 12小時 |
 | OAuth認證 | Open | Medium | 6小時 |
 | RBAC權限控制 | Open | Medium | 8小時 |

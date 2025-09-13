@@ -77,6 +77,14 @@ namespace GameSpace.Data
         public DbSet<NotificationSource> NotificationSources { get; set; }
         public DbSet<NotificationAction> NotificationActions { get; set; }
         public DbSet<NotificationRecipient> NotificationRecipients { get; set; }
+        
+        // 好友和群組相關模型
+        public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<Groups> Groups { get; set; }
+        public DbSet<GroupMember> GroupMembers { get; set; }
+        public DbSet<GroupChat> GroupChats { get; set; }
+        public DbSet<GroupBlock> GroupBlocks { get; set; }
+        public DbSet<GroupReadState> GroupReadStates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

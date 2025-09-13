@@ -61,6 +61,8 @@ namespace GameSpace.Services.Seeding
             await CreateManagerDataAsync(connection);
             // 創建通知數據（200行）
             await CreateNotificationDataAsync(connection);
+            // 創建好友和群組數據（200行）
+            await CreateFriendshipAndGroupDataAsync(connection);
 
                 _logger.LogInformation("種子數據創建完成");
                 return true;
@@ -1120,6 +1122,195 @@ namespace GameSpace.Services.Seeding
                 "重要公告已發布，請及時查看相關內容。"
             };
             return contents[random.Next(contents.Length)];
+        }
+
+        private async Task CreateFriendshipAndGroupDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建好友和群組數據 (目標: 200 行)");
+            
+            // 先創建群組數據
+            await CreateGroupsDataAsync(connection);
+            
+            // 創建好友關係數據
+            await CreateFriendshipDataAsync(connection);
+            
+            // 創建群組成員數據
+            await CreateGroupMemberDataAsync(connection);
+            
+            _logger.LogInformation("好友和群組數據創建完成");
+        }
+
+        private async Task CreateGroupsDataAsync(SqlConnection connection)
+        {
+            var existingCount = await GetTableRowCount(connection, "Groups");
+            if (existingCount >= 50)
+            {
+                _logger.LogInformation("群組數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42);
+
+            for (int i = existingCount + 1; i <= 50; i++)
+            {
+                var ownerUserId = random.Next(1, 201); // 假設有200個用戶
+                var groupName = GenerateGroupName(random);
+                var description = GenerateGroupDescription(random);
+                var isPrivate = random.Next(3) == 0; // 33%機率是私人群組
+                var createdAt = DateTime.Now.AddDays(-random.Next(0, 90));
+                var maxMembers = random.Next(10, 101); // 10-100人
+                var groupAvatar = random.Next(2) == 0 ? $"avatar_{random.Next(1, 10)}.jpg" : null;
+
+                values.Add($"({i}, {ownerUserId}, '{groupName}', '{description}', {(isPrivate ? 1 : 0)}, '{createdAt:yyyy-MM-dd HH:mm:ss}', NULL, {maxMembers}, {(groupAvatar != null ? $"'{groupAvatar}'" : "NULL")}, 1)");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO Groups (group_id, owner_user_id, group_name, description, is_private, created_at, updated_at, max_members, group_avatar, is_active)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("群組數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "Groups"));
+        }
+
+        private async Task CreateFriendshipDataAsync(SqlConnection connection)
+        {
+            var existingCount = await GetTableRowCount(connection, "Friendship");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("好友關係數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42);
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var userId = random.Next(1, 201); // 假設有200個用戶
+                var friendId = random.Next(1, 201);
+                
+                // 確保不會自己加自己為好友
+                if (userId == friendId)
+                {
+                    friendId = (friendId % 200) + 1;
+                }
+                
+                var status = new[] { "Accepted", "Pending", "Blocked" }[random.Next(3)];
+                var createdAt = DateTime.Now.AddDays(-random.Next(0, 90));
+                var acceptedAt = status == "Accepted" ? (DateTime?)createdAt.AddDays(random.Next(1, 7)) : null;
+                var blockedAt = status == "Blocked" ? (DateTime?)createdAt.AddDays(random.Next(1, 30)) : null;
+                var note = random.Next(3) == 0 ? GenerateFriendshipNote(random) : null;
+
+                values.Add($"({i}, {userId}, {friendId}, '{status}', '{createdAt:yyyy-MM-dd HH:mm:ss}', {(acceptedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")}, {(blockedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")}, {(note != null ? $"'{note}'" : "NULL")}, 1)");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO Friendship (friendship_id, user_id, friend_id, status, created_at, accepted_at, blocked_at, note, is_active)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("好友關係數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "Friendship"));
+        }
+
+        private async Task CreateGroupMemberDataAsync(SqlConnection connection)
+        {
+            var existingCount = await GetTableRowCount(connection, "Group_Member");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("群組成員數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42);
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var groupId = random.Next(1, 51); // 假設有50個群組
+                var userId = random.Next(1, 201); // 假設有200個用戶
+                var role = new[] { "Owner", "Admin", "Moderator", "Member" }[random.Next(4)];
+                var joinedAt = DateTime.Now.AddDays(-random.Next(0, 90));
+                var lastActiveAt = random.Next(2) == 0 ? (DateTime?)joinedAt.AddDays(random.Next(1, 30)) : null;
+                var nickname = random.Next(3) == 0 ? GenerateNickname(random) : null;
+
+                values.Add($"({i}, {groupId}, {userId}, '{role}', '{joinedAt:yyyy-MM-dd HH:mm:ss}', {(lastActiveAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")}, 1, {(nickname != null ? $"'{nickname}'" : "NULL")})");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO Group_Member (member_id, group_id, user_id, role, joined_at, last_active_at, is_active, nickname)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("群組成員數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "Group_Member"));
+        }
+
+        private string GenerateGroupName(Random random)
+        {
+            var prefixes = new[] { "遊戲", "聊天", "學習", "工作", "興趣", "運動", "音樂", "電影", "讀書", "旅行" };
+            var suffixes = new[] { "群組", "小組", "團隊", "俱樂部", "社團", "聯盟", "公會", "家族" };
+            return $"{prefixes[random.Next(prefixes.Length)]}{suffixes[random.Next(suffixes.Length)]}";
+        }
+
+        private string GenerateGroupDescription(Random random)
+        {
+            var descriptions = new[]
+            {
+                "歡迎加入我們的群組！",
+                "一起分享遊戲心得",
+                "學習交流的好地方",
+                "工作討論專區",
+                "興趣愛好分享",
+                "運動健身群組",
+                "音樂愛好者聚集地",
+                "電影討論區",
+                "讀書分享會",
+                "旅行經驗交流"
+            };
+            return descriptions[random.Next(descriptions.Length)];
+        }
+
+        private string GenerateFriendshipNote(Random random)
+        {
+            var notes = new[]
+            {
+                "遊戲好友",
+                "同學",
+                "同事",
+                "鄰居",
+                "親戚",
+                "網友",
+                "興趣相投",
+                "推薦好友",
+                "活動認識",
+                "共同朋友"
+            };
+            return notes[random.Next(notes.Length)];
+        }
+
+        private string GenerateNickname(Random random)
+        {
+            var nicknames = new[]
+            {
+                "小遊戲", "玩家", "高手", "新手", "老手", "達人", "專家", "愛好者", "粉絲", "朋友",
+                "遊戲王", "大神", "菜鳥", "老鳥", "新星", "明星", "偶像", "偶像", "偶像", "偶像"
+            };
+            return nicknames[random.Next(nicknames.Length)];
         }
     }
 }
