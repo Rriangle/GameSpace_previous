@@ -95,7 +95,10 @@ public partial class GameSpacedatabaseContext : DbContext
 
     public virtual DbSet<OrderAddress> OrderAddresses { get; set; }
 
-    public virtual DbSet<OrderAddresses> OrderAddressesNew { get; set; }
+        public virtual DbSet<OrderAddresses> OrderAddressesNew { get; set; }
+        public virtual DbSet<OrderItems> OrderItemsNew { get; set; }
+        public virtual DbSet<OtherProductDetails> OtherProductDetailsNew { get; set; }
+        public virtual DbSet<PaymentTransactions> PaymentTransactionsNew { get; set; }
 
     public virtual DbSet<OrderInfo> OrderInfos { get; set; }
 
@@ -2289,6 +2292,171 @@ public partial class GameSpacedatabaseContext : DbContext
             entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
             entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
             entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+        });
+
+        // 配置 OrderItems 模型
+        modelBuilder.Entity<OrderItems>(entity =>
+        {
+            entity.HasKey(e => e.OrderItemId).HasName("PK_OrderItems");
+            entity.ToTable("OrderItems");
+            entity.Property(e => e.OrderItemId).HasColumnName("order_item_id");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.ProductName).HasColumnName("product_name");
+            entity.Property(e => e.ProductType).HasColumnName("product_type");
+            entity.Property(e => e.ProductSku).HasColumnName("product_sku");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.UnitPrice).HasColumnName("unit_price");
+            entity.Property(e => e.TotalPrice).HasColumnName("total_price");
+            entity.Property(e => e.DiscountAmount).HasColumnName("discount_amount");
+            entity.Property(e => e.TaxAmount).HasColumnName("tax_amount");
+            entity.Property(e => e.ShippingCost).HasColumnName("shipping_cost");
+            entity.Property(e => e.CurrencyCode).HasColumnName("currency_code");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+            entity.Property(e => e.Specifications).HasColumnName("specifications");
+            entity.Property(e => e.Variants).HasColumnName("variants");
+            entity.Property(e => e.Customizations).HasColumnName("customizations");
+            entity.Property(e => e.GiftMessage).HasColumnName("gift_message");
+            entity.Property(e => e.IsGift).HasColumnName("is_gift");
+            entity.Property(e => e.GiftWrapType).HasColumnName("gift_wrap_type");
+            entity.Property(e => e.GiftWrapCost).HasColumnName("gift_wrap_cost");
+            entity.Property(e => e.WarrantyInfo).HasColumnName("warranty_info");
+            entity.Property(e => e.ReturnPolicy).HasColumnName("return_policy");
+            entity.Property(e => e.IsReturnable).HasColumnName("is_returnable");
+            entity.Property(e => e.ReturnDeadline).HasColumnName("return_deadline");
+            entity.Property(e => e.SupplierInfo).HasColumnName("supplier_info");
+            entity.Property(e => e.InventoryLocation).HasColumnName("inventory_location");
+            entity.Property(e => e.TrackingInfo).HasColumnName("tracking_info");
+            entity.Property(e => e.DeliveryInstructions).HasColumnName("delivery_instructions");
+            entity.Property(e => e.SpecialRequirements).HasColumnName("special_requirements");
+            entity.Property(e => e.Tags).HasColumnName("tags");
+            entity.Property(e => e.Category).HasColumnName("category");
+            entity.Property(e => e.SubCategory).HasColumnName("sub_category");
+            entity.Property(e => e.Weight).HasColumnName("weight");
+            entity.Property(e => e.Dimensions).HasColumnName("dimensions");
+            entity.Property(e => e.Material).HasColumnName("material");
+            entity.Property(e => e.Color).HasColumnName("color");
+            entity.Property(e => e.Size).HasColumnName("size");
+            entity.Property(e => e.Brand).HasColumnName("brand");
+            entity.Property(e => e.Model).HasColumnName("model");
+            entity.Property(e => e.Barcode).HasColumnName("barcode");
+            entity.Property(e => e.ImageUrl).HasColumnName("image_url");
+            entity.Property(e => e.VideoUrl).HasColumnName("video_url");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Features).HasColumnName("features");
+            entity.Property(e => e.Requirements).HasColumnName("requirements");
+            entity.Property(e => e.Rating).HasColumnName("rating");
+            entity.Property(e => e.RatingCount).HasColumnName("rating_count");
+            entity.Property(e => e.ViewCount).HasColumnName("view_count");
+            entity.Property(e => e.PurchaseCount).HasColumnName("purchase_count");
+            entity.Property(e => e.Reviews).HasColumnName("reviews");
+            entity.Property(e => e.Qa).HasColumnName("qa");
+            entity.Property(e => e.Faq).HasColumnName("faq");
+            entity.Property(e => e.Manual).HasColumnName("manual");
+            entity.Property(e => e.SupportInfo).HasColumnName("support_info");
+            entity.Property(e => e.RelatedProducts).HasColumnName("related_products");
+            entity.Property(e => e.CrossSells).HasColumnName("cross_sells");
+            entity.Property(e => e.UpSells).HasColumnName("up_sells");
+            entity.Property(e => e.Bundles).HasColumnName("bundles");
+            entity.Property(e => e.Promotions).HasColumnName("promotions");
+            entity.Property(e => e.Coupons).HasColumnName("coupons");
+            entity.Property(e => e.LoyaltyPoints).HasColumnName("loyalty_points");
+            entity.Property(e => e.Rewards).HasColumnName("rewards");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+        });
+
+        // 配置 OtherProductDetails 模型
+        modelBuilder.Entity<OtherProductDetails>(entity =>
+        {
+            entity.HasKey(e => e.ProductId).HasName("PK_OtherProductDetails");
+            entity.ToTable("OtherProductDetails");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.ProductName).HasColumnName("product_name");
+            entity.Property(e => e.ProductType).HasColumnName("product_type");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Price).HasColumnName("price");
+            entity.Property(e => e.CurrencyCode).HasColumnName("currency_code");
+            entity.Property(e => e.ImageUrl).HasColumnName("image_url");
+            entity.Property(e => e.VideoUrl).HasColumnName("video_url");
+            entity.Property(e => e.Tags).HasColumnName("tags");
+            entity.Property(e => e.Category).HasColumnName("category");
+            entity.Property(e => e.SubCategory).HasColumnName("sub_category");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.PublishedAt).HasColumnName("published_at");
+            entity.Property(e => e.UnpublishedAt).HasColumnName("unpublished_at");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.Specifications).HasColumnName("specifications");
+            entity.Property(e => e.Features).HasColumnName("features");
+            entity.Property(e => e.Requirements).HasColumnName("requirements");
+            entity.Property(e => e.Rating).HasColumnName("rating");
+            entity.Property(e => e.RatingCount).HasColumnName("rating_count");
+            entity.Property(e => e.ViewCount).HasColumnName("view_count");
+            entity.Property(e => e.PurchaseCount).HasColumnName("purchase_count");
+            entity.Property(e => e.Weight).HasColumnName("weight");
+            entity.Property(e => e.Dimensions).HasColumnName("dimensions");
+            entity.Property(e => e.Material).HasColumnName("material");
+            entity.Property(e => e.Color).HasColumnName("color");
+            entity.Property(e => e.Brand).HasColumnName("brand");
+            entity.Property(e => e.Model).HasColumnName("model");
+            entity.Property(e => e.Barcode).HasColumnName("barcode");
+            entity.Property(e => e.Sku).HasColumnName("sku");
+            entity.Property(e => e.Stock).HasColumnName("stock");
+            entity.Property(e => e.MinStock).HasColumnName("min_stock");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+        });
+
+        // 配置 PaymentTransactions 模型
+        modelBuilder.Entity<PaymentTransactions>(entity =>
+        {
+            entity.HasKey(e => e.TransactionId).HasName("PK_PaymentTransactions");
+            entity.ToTable("PaymentTransactions");
+            entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
+            entity.Property(e => e.TransactionCode).HasColumnName("transaction_code");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Amount).HasColumnName("amount");
+            entity.Property(e => e.CurrencyCode).HasColumnName("currency_code");
+            entity.Property(e => e.PaymentMethod).HasColumnName("payment_method");
+            entity.Property(e => e.PaymentProvider).HasColumnName("payment_provider");
+            entity.Property(e => e.PaymentStatus).HasColumnName("payment_status");
+            entity.Property(e => e.PaymentReference).HasColumnName("payment_reference");
+            entity.Property(e => e.PaymentGatewayResponse).HasColumnName("payment_gateway_response");
+            entity.Property(e => e.PaymentGatewayTransactionId).HasColumnName("payment_gateway_transaction_id");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.ProcessedAt).HasColumnName("processed_at");
+            entity.Property(e => e.CompletedAt).HasColumnName("completed_at");
+            entity.Property(e => e.FailedAt).HasColumnName("failed_at");
+            entity.Property(e => e.CancelledAt).HasColumnName("cancelled_at");
+            entity.Property(e => e.RefundedAt).HasColumnName("refunded_at");
+            entity.Property(e => e.FailureReason).HasColumnName("failure_reason");
+            entity.Property(e => e.CancellationReason).HasColumnName("cancellation_reason");
+            entity.Property(e => e.RefundReason).HasColumnName("refund_reason");
+            entity.Property(e => e.RefundAmount).HasColumnName("refund_amount");
+            entity.Property(e => e.RefundReference).HasColumnName("refund_reference");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
             entity.Property(e => e.Settings).HasColumnName("settings");
         });
 
