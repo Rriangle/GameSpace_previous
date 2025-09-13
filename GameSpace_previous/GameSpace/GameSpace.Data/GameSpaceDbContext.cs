@@ -71,6 +71,12 @@ namespace GameSpace.Data
         public DbSet<ManagerData> ManagerData { get; set; }
         public DbSet<ManagerRole> ManagerRoles { get; set; }
         public DbSet<ManagerRolePermission> ManagerRolePermissions { get; set; }
+        
+        // 通知相關模型
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<NotificationSource> NotificationSources { get; set; }
+        public DbSet<NotificationAction> NotificationActions { get; set; }
+        public DbSet<NotificationRecipient> NotificationRecipients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -59,6 +59,8 @@ namespace GameSpace.Services.Seeding
             await CreateEVoucherDataAsync(connection);
             // 創建管理員數據（200行）
             await CreateManagerDataAsync(connection);
+            // 創建通知數據（200行）
+            await CreateNotificationDataAsync(connection);
 
                 _logger.LogInformation("種子數據創建完成");
                 return true;
@@ -917,6 +919,207 @@ namespace GameSpace.Services.Seeding
             var domains = new[] { "gamespace.com", "admin.gamespace.com", "management.gamespace.com" };
             var username = GenerateManagerAccount(random);
             return $"{username}@{domains[random.Next(domains.Length)]}";
+        }
+
+        private async Task CreateNotificationDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建通知數據 (目標: 200 行)");
+            
+            // 先創建通知來源和動作
+            await CreateNotificationSourcesAsync(connection);
+            await CreateNotificationActionsAsync(connection);
+            
+            var existingCount = await GetTableRowCount(connection, "Notifications");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("通知數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42); // 固定種子確保可重複性
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var sourceId = random.Next(1, 11); // 假設有10個通知來源
+                var actionId = random.Next(1, 11); // 假設有10個通知動作
+                var title = GenerateNotificationTitle(random);
+                var content = GenerateNotificationContent(random);
+                var priority = new[] { "Low", "Normal", "High", "Urgent" }[random.Next(4)];
+                var type = new[] { "Info", "Warning", "Error", "Success" }[random.Next(4)];
+                var isRead = random.Next(3) == 0; // 33%機率已讀
+                var createdAt = DateTime.Now.AddDays(-random.Next(0, 30));
+                var readAt = isRead ? (DateTime?)createdAt.AddMinutes(random.Next(1, 1440)) : null;
+                var expiresAt = random.Next(2) == 0 ? (DateTime?)createdAt.AddDays(random.Next(1, 30)) : null;
+
+                values.Add($"({i}, {sourceId}, {actionId}, NULL, NULL, NULL, '{title}', '{content}', {(isRead ? 1 : 0)}, '{createdAt:yyyy-MM-dd HH:mm:ss}', {(readAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")}, {(expiresAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")}, '{priority}', '{type}')");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO Notifications (notification_id, source_id, action_id, group_id, sender_user_id, sender_manager_id, title, content, is_read, created_at, read_at, expires_at, priority, type)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            // 創建通知接收者記錄
+            await CreateNotificationRecipientsAsync(connection);
+
+            _logger.LogInformation("通知數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "Notifications"));
+        }
+
+        private async Task CreateNotificationSourcesAsync(SqlConnection connection)
+        {
+            var existingCount = await GetTableRowCount(connection, "Notification_Sources");
+            if (existingCount >= 10)
+            {
+                return;
+            }
+
+            var sources = new[]
+            {
+                ("系統通知", "系統自動發送的通知"),
+                ("活動通知", "遊戲活動相關通知"),
+                ("訂單通知", "訂單狀態變更通知"),
+                ("優惠券通知", "優惠券發放和使用通知"),
+                ("安全通知", "帳號安全相關通知"),
+                ("維護通知", "系統維護和更新通知"),
+                ("社群通知", "社群互動相關通知"),
+                ("推薦通知", "推薦和邀請通知"),
+                ("客服通知", "客服支援相關通知"),
+                ("公告通知", "重要公告和通知")
+            };
+
+            var values = new List<string>();
+            for (int i = existingCount + 1; i <= 10; i++)
+            {
+                var source = sources[i - 1];
+                var createdAt = DateTime.Now.AddDays(-random.Next(0, 30));
+                values.Add($"({i}, '{source.Item1}', '{source.Item2}', 1, '{createdAt:yyyy-MM-dd HH:mm:ss}', '{createdAt:yyyy-MM-dd HH:mm:ss}')");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO Notification_Sources (source_id, source_name, description, is_active, created_at, updated_at)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        private async Task CreateNotificationActionsAsync(SqlConnection connection)
+        {
+            var existingCount = await GetTableRowCount(connection, "Notification_Actions");
+            if (existingCount >= 10)
+            {
+                return;
+            }
+
+            var actions = new[]
+            {
+                ("查看詳情", "查看詳細信息", "/details", "Link"),
+                ("立即處理", "立即處理相關事務", "/process", "Button"),
+                ("前往頁面", "跳轉到相關頁面", "/redirect", "Redirect"),
+                ("確認操作", "確認執行操作", "/confirm", "Modal"),
+                ("忽略通知", "忽略此通知", "/ignore", "Button"),
+                ("分享通知", "分享此通知", "/share", "Button"),
+                ("回覆通知", "回覆此通知", "/reply", "Modal"),
+                ("收藏通知", "收藏此通知", "/favorite", "Button"),
+                ("舉報通知", "舉報此通知", "/report", "Modal"),
+                ("關閉通知", "關閉此通知", "/close", "Button")
+            };
+
+            var values = new List<string>();
+            for (int i = existingCount + 1; i <= 10; i++)
+            {
+                var action = actions[i - 1];
+                var createdAt = DateTime.Now.AddDays(-random.Next(0, 30));
+                values.Add($"({i}, '{action.Item1}', '{action.Item2}', '{action.Item3}', '{action.Item4}', 1, '{createdAt:yyyy-MM-dd HH:mm:ss}', '{createdAt:yyyy-MM-dd HH:mm:ss}')");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO Notification_Actions (action_id, action_name, description, action_url, action_type, is_active, created_at, updated_at)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        private async Task CreateNotificationRecipientsAsync(SqlConnection connection)
+        {
+            var existingCount = await GetTableRowCount(connection, "Notification_Recipients");
+            if (existingCount >= 200)
+            {
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42);
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var notificationId = random.Next(1, 201); // 假設有200個通知
+                var userId = random.Next(1, 201); // 假設有200個用戶
+                var isRead = random.Next(3) == 0; // 33%機率已讀
+                var createdAt = DateTime.Now.AddDays(-random.Next(0, 30));
+                var readAt = isRead ? (DateTime?)createdAt.AddMinutes(random.Next(1, 1440)) : null;
+
+                values.Add($"({i}, {notificationId}, {userId}, NULL, {(isRead ? 1 : 0)}, {(readAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")}, '{createdAt:yyyy-MM-dd HH:mm:ss}')");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO Notification_Recipients (recipient_id, notification_id, user_id, manager_id, is_read, read_at, created_at)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        private string GenerateNotificationTitle(Random random)
+        {
+            var titles = new[]
+            {
+                "歡迎加入GameSpace！",
+                "您有新的優惠券",
+                "訂單狀態更新",
+                "系統維護通知",
+                "活動開始提醒",
+                "帳號安全提醒",
+                "好友邀請通知",
+                "推薦獎勵到帳",
+                "客服回覆通知",
+                "重要公告發布"
+            };
+            return titles[random.Next(titles.Length)];
+        }
+
+        private string GenerateNotificationContent(Random random)
+        {
+            var contents = new[]
+            {
+                "感謝您註冊GameSpace，開始您的遊戲之旅吧！",
+                "您獲得了一張新的優惠券，快來使用吧！",
+                "您的訂單已發貨，請注意查收。",
+                "系統將於今晚進行維護，請提前保存遊戲進度。",
+                "限時活動已開始，快來參與贏取豐厚獎勵！",
+                "檢測到異常登入，請確認是否為本人操作。",
+                "您收到了一個好友邀請，快來查看吧！",
+                "推薦好友成功，獎勵已發放到您的帳戶。",
+                "您的問題已得到回覆，請查看詳細內容。",
+                "重要公告已發布，請及時查看相關內容。"
+            };
+            return contents[random.Next(contents.Length)];
         }
     }
 }

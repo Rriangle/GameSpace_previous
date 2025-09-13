@@ -1,21 +1,43 @@
-using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameSpace.Models;
-
-public partial class NotificationRecipient
+namespace GameSpace.Models
 {
-    public int RecipientId { get; set; }
+    /// <summary>
+    /// 通知接收者模型
+    /// </summary>
+    public partial class NotificationRecipient
+    {
+        [Key]
+        [Column("recipient_id")]
+        public int RecipientId { get; set; }
 
-    public int NotificationId { get; set; }
+        [Column("notification_id")]
+        public int NotificationId { get; set; }
 
-    public int UserId { get; set; }
+        [Column("user_id")]
+        public int? UserId { get; set; }
 
-    public bool IsRead { get; set; }
+        [Column("manager_id")]
+        public int? ManagerId { get; set; }
 
-    public DateTime? ReadAt { get; set; }
+        [Column("is_read")]
+        public bool IsRead { get; set; }
 
-    public virtual Notification Notification { get; set; } = null!;
+        [Column("read_at")]
+        public DateTime? ReadAt { get; set; }
 
-    public virtual Users User { get; set; } = null!;
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        // 導航屬性
+        [ForeignKey("NotificationId")]
+        public virtual Notification Notification { get; set; } = null!;
+
+        [ForeignKey("UserId")]
+        public virtual Users? User { get; set; }
+
+        [ForeignKey("ManagerId")]
+        public virtual ManagerData? Manager { get; set; }
+    }
 }

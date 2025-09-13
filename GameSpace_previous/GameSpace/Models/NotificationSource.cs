@@ -1,13 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameSpace.Models;
-
-public partial class NotificationSource
+namespace GameSpace.Models
 {
-    public int SourceId { get; set; }
+    /// <summary>
+    /// 通知來源模型
+    /// </summary>
+    public partial class NotificationSource
+    {
+        [Key]
+        [Column("source_id")]
+        public int SourceId { get; set; }
 
-    public string? SourceName { get; set; }
+        [Required]
+        [StringLength(100)]
+        [Column("source_name")]
+        public string SourceName { get; set; } = null!;
 
-    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        [StringLength(500)]
+        [Column("description")]
+        public string? Description { get; set; }
+
+        [Column("is_active")]
+        public bool IsActive { get; set; } = true;
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
+
+        // 導航屬性
+        public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+    }
 }

@@ -1,37 +1,74 @@
-using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameSpace.Models;
-
-public partial class Notification
+namespace GameSpace.Models
 {
-    public int NotificationId { get; set; }
+    /// <summary>
+    /// 通知模型
+    /// </summary>
+    public partial class Notification
+    {
+        [Key]
+        [Column("notification_id")]
+        public int NotificationId { get; set; }
 
-    public int SourceId { get; set; }
+        [Column("source_id")]
+        public int SourceId { get; set; }
 
-    public int ActionId { get; set; }
+        [Column("action_id")]
+        public int ActionId { get; set; }
 
-    public int SenderId { get; set; }
+        [Column("group_id")]
+        public int? GroupId { get; set; }
 
-    public int? SenderManagerId { get; set; }
+        [Column("sender_user_id")]
+        public int? SenderUserId { get; set; }
 
-    public string? NotificationTitle { get; set; }
+        [Column("sender_manager_id")]
+        public int? SenderManagerId { get; set; }
 
-    public string? NotificationMessage { get; set; }
+        [Required]
+        [StringLength(500)]
+        [Column("title")]
+        public string Title { get; set; } = null!;
 
-    public DateTime CreatedAt { get; set; }
+        [StringLength(2000)]
+        [Column("content")]
+        public string? Content { get; set; }
 
-    public int? GroupId { get; set; }
+        [Column("is_read")]
+        public bool IsRead { get; set; }
 
-    public virtual NotificationAction Action { get; set; } = null!;
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
 
-    public virtual Group? Group { get; set; }
+        [Column("read_at")]
+        public DateTime? ReadAt { get; set; }
 
-    public virtual ICollection<NotificationRecipient> NotificationRecipients { get; set; } = new List<NotificationRecipient>();
+        [Column("expires_at")]
+        public DateTime? ExpiresAt { get; set; }
 
-    public virtual Users Sender { get; set; } = null!;
+        [StringLength(50)]
+        [Column("priority")]
+        public string Priority { get; set; } = "Normal"; // Low, Normal, High, Urgent
 
-    public virtual ManagerDatum? SenderManager { get; set; }
+        [StringLength(50)]
+        [Column("type")]
+        public string Type { get; set; } = "Info"; // Info, Warning, Error, Success
 
-    public virtual NotificationSource Source { get; set; } = null!;
+        // 導航屬性
+        [ForeignKey("SourceId")]
+        public virtual NotificationSource NotificationSource { get; set; } = null!;
+
+        [ForeignKey("ActionId")]
+        public virtual NotificationAction NotificationAction { get; set; } = null!;
+
+        [ForeignKey("SenderUserId")]
+        public virtual Users? SenderUser { get; set; }
+
+        [ForeignKey("SenderManagerId")]
+        public virtual ManagerData? SenderManager { get; set; }
+
+        public virtual ICollection<NotificationRecipient> NotificationRecipients { get; set; } = new List<NotificationRecipient>();
+    }
 }
