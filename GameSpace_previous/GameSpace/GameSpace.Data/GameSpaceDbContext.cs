@@ -43,6 +43,13 @@ namespace GameSpace.Data
         public DbSet<PlayerMarketProductInfo> PlayerMarketProducts { get; set; }
         public DbSet<PlayerMarketOrderInfo> PlayerMarketOrders { get; set; }
 
+        // 遊戲相關模型
+        public DbSet<Game> Games { get; set; }
+        public DbSet<GameMetricDaily> GameMetricDailies { get; set; }
+        public DbSet<GameProductDetail> GameProductDetails { get; set; }
+        public DbSet<GameSourceMap> GameSourceMaps { get; set; }
+        public DbSet<Forum> Forums { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

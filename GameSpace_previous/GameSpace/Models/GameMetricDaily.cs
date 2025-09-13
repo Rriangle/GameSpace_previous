@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 
-namespace GameSpace.Models;
-
-public partial class GameMetricDaily
+namespace GameSpace.Models
 {
-    public int Id { get; set; }
+    /// <summary>
+    /// 遊戲每日指標資料表
+    /// </summary>
+    public partial class GameMetricDaily
+    {
+        public int MetricId { get; set; }
+        public int GameId { get; set; }
+        public DateTime MetricDate { get; set; }
+        public int? ViewCount { get; set; }
+        public int? PostCount { get; set; }
+        public int? ThreadCount { get; set; }
+        public int? UserCount { get; set; }
+        public decimal? AverageRating { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-    public int? GameId { get; set; }
-
-    public int? MetricId { get; set; }
-
-    public DateOnly? Date { get; set; }
-
-    public decimal? Value { get; set; }
-
-    public string? AggMethod { get; set; }
-
-    public string? Quality { get; set; }
-
-    public DateTime? CreatedAt { get; set; }
-
-    public DateTime? UpdatedAt { get; set; }
-
-    public virtual Game? Game { get; set; }
-
-    public virtual Metric? Metric { get; set; }
+        public virtual Game Game { get; set; } = null!;
+    }
 }

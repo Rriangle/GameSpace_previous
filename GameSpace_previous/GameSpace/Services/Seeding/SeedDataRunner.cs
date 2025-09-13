@@ -30,14 +30,20 @@ namespace GameSpace.Services.Seeding
                 // 創建用戶數據（200行）
                 await CreateUserDataAsync(connection);
                 
+                // 創建遊戲數據（200行）
+                await CreateGameDataAsync(connection);
+                
+                // 創建論壇數據（200行）
+                await CreateForumDataAsync(connection);
+                
                 // 創建社群數據（200行）
                 await CreateCommunityDataAsync(connection);
                 
                 // 創建商城數據（200行）
                 await CreateCommerceDataAsync(connection);
 
-                // 創建其他必要數據（200行）
-                await CreateAdditionalDataAsync(connection);
+                // 創建寵物數據（200行）
+                await CreatePetDataAsync(connection);
 
                 _logger.LogInformation("種子數據創建完成");
                 return true;
@@ -389,6 +395,111 @@ namespace GameSpace.Services.Seeding
                 INSERT INTO EVoucher (EVoucher_ID, User_ID, EVoucher_Code, Value, Is_Used, CreatedAt, UpdatedAt)
                 VALUES {string.Join(",\n", values)}
             ";
+        }
+
+        private async Task CreateGameDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建遊戲數據 (目標: 200 行)");
+            var existingCount = await GetTableRowCount(connection, "Games");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("Games 表已有 {Count} 行，無需新增。", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var id = i;
+                var gameName = $"遊戲_{i:D3}";
+                var description = $"這是第 {i} 個遊戲的詳細描述，包含豐富的遊戲內容和特色功能。";
+                var genre = new[] { "RPG", "動作", "策略", "射擊", "模擬", "競速", "益智" }[i % 7];
+                var platform = new[] { "PC", "PS5", "Xbox", "Switch", "Mobile" }[i % 5];
+                var releaseDate = DateTime.UtcNow.AddDays(-Random.Shared.Next(1, 365));
+                var imageUrl = $"https://example.com/game{id}.jpg";
+                
+                values.Add($"({id}, '{gameName}', '{description}', '{imageUrl}', '{genre}', '{platform}', '{releaseDate:yyyy-MM-dd}', 1, GETUTCDATE(), GETUTCDATE())");
+            }
+
+            if (values.Any())
+            {
+                var gameData = $"SET IDENTITY_INSERT Games ON; INSERT INTO Games (GameId, GameName, GameDescription, GameImageUrl, GameGenre, GamePlatform, ReleaseDate, IsActive, CreatedAt, UpdatedAt) VALUES {string.Join(",", values)}; SET IDENTITY_INSERT Games OFF;";
+                using var command = new SqlCommand(gameData, connection);
+                await command.ExecuteNonQueryAsync();
+                _logger.LogInformation("已新增 {Count} 行遊戲數據。", values.Count);
+            }
+            _logger.LogInformation("遊戲數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "Games"));
+        }
+
+        private async Task CreateForumDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建論壇數據 (目標: 200 行)");
+            var existingCount = await GetTableRowCount(connection, "Forums");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("Forums 表已有 {Count} 行，無需新增。", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var id = i;
+                var gameId = (i % 50) + 1; // 假設有50個遊戲
+                var forumName = $"論壇_{i:D3}";
+                var description = $"這是第 {i} 個論壇的詳細描述，討論相關遊戲內容。";
+                var threadCount = Random.Shared.Next(10, 1000);
+                var postCount = Random.Shared.Next(50, 5000);
+                var lastActivity = DateTime.UtcNow.AddHours(-Random.Shared.Next(1, 168));
+                
+                values.Add($"({id}, {gameId}, '{forumName}', '{description}', {threadCount}, {postCount}, '{lastActivity:yyyy-MM-dd HH:mm:ss}', 1, GETUTCDATE(), GETUTCDATE())");
+            }
+
+            if (values.Any())
+            {
+                var forumData = $"SET IDENTITY_INSERT Forums ON; INSERT INTO Forums (ForumId, GameId, ForumName, Description, ThreadCount, PostCount, LastActivity, IsActive, CreatedAt, UpdatedAt) VALUES {string.Join(",", values)}; SET IDENTITY_INSERT Forums OFF;";
+                using var command = new SqlCommand(forumData, connection);
+                await command.ExecuteNonQueryAsync();
+                _logger.LogInformation("已新增 {Count} 行論壇數據。", values.Count);
+            }
+            _logger.LogInformation("論壇數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "Forums"));
+        }
+
+        private async Task CreatePetDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建寵物數據 (目標: 200 行)");
+            var existingCount = await GetTableRowCount(connection, "Pet");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("Pet 表已有 {Count} 行，無需新增。", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var id = i;
+                var userId = (i % 200) + 1; // 假設有200個用戶
+                var petName = $"史萊姆_{i:D3}";
+                var level = Random.Shared.Next(1, 50);
+                var hunger = Random.Shared.Next(0, 100);
+                var mood = Random.Shared.Next(0, 100);
+                var energy = Random.Shared.Next(0, 100);
+                var cleanliness = Random.Shared.Next(0, 100);
+                var health = Random.Shared.Next(0, 100);
+                var experience = Random.Shared.Next(0, 10000);
+                
+                values.Add($"({id}, {userId}, '{petName}', {level}, {hunger}, {mood}, {energy}, {cleanliness}, {health}, {experience}, GETUTCDATE(), GETUTCDATE())");
+            }
+
+            if (values.Any())
+            {
+                var petData = $"SET IDENTITY_INSERT Pet ON; INSERT INTO Pet (PetId, UserId, PetName, Level, Hunger, Mood, Energy, Cleanliness, Health, Experience, CreatedAt, UpdatedAt) VALUES {string.Join(",", values)}; SET IDENTITY_INSERT Pet OFF;";
+                using var command = new SqlCommand(petData, connection);
+                await command.ExecuteNonQueryAsync();
+                _logger.LogInformation("已新增 {Count} 行寵物數據。", values.Count);
+            }
+            _logger.LogInformation("寵物數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "Pet"));
         }
     }
 }
