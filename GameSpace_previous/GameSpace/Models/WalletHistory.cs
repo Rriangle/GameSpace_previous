@@ -18,6 +18,5 @@ namespace GameSpace.Models
         public DateTime CreatedAt { get; set; }
 
         public virtual Users User { get; set; } = null!;
-        public virtual UserWallet UserWallet { get; set; } = null!;
     }
 }

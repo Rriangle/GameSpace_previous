@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using GameSpace.Data;
 using GameSpace.Models;
+using GameSpace.Services;
 
 namespace GameSpace.Controllers
 {
@@ -12,11 +14,13 @@ namespace GameSpace.Controllers
     {
         private readonly GameSpaceDbContext _context;
         private readonly ILogger<WalletController> _logger;
+        private readonly WalletService _walletService;
 
-        public WalletController(GameSpaceDbContext context, ILogger<WalletController> logger)
+        public WalletController(GameSpaceDbContext context, ILogger<WalletController> logger, WalletService walletService)
         {
             _context = context;
             _logger = logger;
+            _walletService = walletService;
         }
 
         /// <summary>
@@ -64,50 +68,17 @@ namespace GameSpace.Controllers
                 return Json(new { success = false, message = "請先登入" });
             }
 
-            if (model.Amount <= 0)
-            {
-                return Json(new { success = false, message = "充值金額必須大於0" });
-            }
+            var result = await _walletService.AddPointsAsync(
+                userId.Value, 
+                model.Amount, 
+                $"充值 {model.Amount} 點"
+            );
 
-            try
-            {
-                var wallet = await _context.UserWallets
-                    .FirstOrDefaultAsync(w => w.UserId == userId);
-
-                if (wallet == null)
-                {
-                    wallet = await CreateNewWalletAsync(userId.Value);
-                }
-
-                var balanceBefore = wallet.UserPoint;
-                wallet.UserPoint += model.Amount;
-                wallet.UpdatedAt = DateTime.UtcNow;
-
-                // 記錄交易歷史
-                var history = new WalletHistory
-                {
-                    UserId = userId.Value,
-                    TransactionType = "充值",
-                    Amount = model.Amount,
-                    BalanceBefore = balanceBefore,
-                    BalanceAfter = wallet.UserPoint,
-                    Description = $"充值 {model.Amount} 點",
-                    ReferenceId = Guid.NewGuid().ToString(),
-                    CreatedAt = DateTime.UtcNow
-                };
-
-                _context.WalletHistories.Add(history);
-                await _context.SaveChangesAsync();
-
-                _logger.LogInformation("用戶 {UserId} 充值 {Amount} 點，餘額: {Balance}", userId, model.Amount, wallet.UserPoint);
-
-                return Json(new { success = true, message = $"充值成功！當前餘額: {wallet.UserPoint} 點", balance = wallet.UserPoint });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "充值過程中發生錯誤");
-                return Json(new { success = false, message = "充值失敗，請稍後再試" });
-            }
+            return Json(new { 
+                success = result.Success, 
+                message = result.Message, 
+                balance = result.NewBalance 
+            });
         }
 
         /// <summary>
@@ -123,55 +94,18 @@ namespace GameSpace.Controllers
                 return Json(new { success = false, message = "請先登入" });
             }
 
-            if (model.Amount <= 0)
-            {
-                return Json(new { success = false, message = "消費金額必須大於0" });
-            }
+            var result = await _walletService.SpendPointsAsync(
+                userId.Value, 
+                model.Amount, 
+                model.Description ?? $"消費 {model.Amount} 點",
+                model.ReferenceId
+            );
 
-            try
-            {
-                var wallet = await _context.UserWallets
-                    .FirstOrDefaultAsync(w => w.UserId == userId);
-
-                if (wallet == null)
-                {
-                    return Json(new { success = false, message = "錢包不存在" });
-                }
-
-                if (wallet.UserPoint < model.Amount)
-                {
-                    return Json(new { success = false, message = "餘額不足" });
-                }
-
-                var balanceBefore = wallet.UserPoint;
-                wallet.UserPoint -= model.Amount;
-                wallet.UpdatedAt = DateTime.UtcNow;
-
-                // 記錄交易歷史
-                var history = new WalletHistory
-                {
-                    UserId = userId.Value,
-                    TransactionType = "消費",
-                    Amount = -model.Amount,
-                    BalanceBefore = balanceBefore,
-                    BalanceAfter = wallet.UserPoint,
-                    Description = model.Description ?? $"消費 {model.Amount} 點",
-                    ReferenceId = model.ReferenceId ?? Guid.NewGuid().ToString(),
-                    CreatedAt = DateTime.UtcNow
-                };
-
-                _context.WalletHistories.Add(history);
-                await _context.SaveChangesAsync();
-
-                _logger.LogInformation("用戶 {UserId} 消費 {Amount} 點，餘額: {Balance}", userId, model.Amount, wallet.UserPoint);
-
-                return Json(new { success = true, message = $"消費成功！當前餘額: {wallet.UserPoint} 點", balance = wallet.UserPoint });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "消費過程中發生錯誤");
-                return Json(new { success = false, message = "消費失敗，請稍後再試" });
-            }
+            return Json(new { 
+                success = result.Success, 
+                message = result.Message, 
+                balance = result.NewBalance 
+            });
         }
 
         /// <summary>
@@ -222,20 +156,6 @@ namespace GameSpace.Controllers
 
             try
             {
-                var wallet = await _context.UserWallets
-                    .FirstOrDefaultAsync(w => w.UserId == userId);
-
-                if (wallet == null)
-                {
-                    return Json(new { success = false, message = "錢包不存在" });
-                }
-
-                // 檢查點數餘額
-                if (wallet.UserPoint < model.RequiredPoints)
-                {
-                    return Json(new { success = false, message = "點數餘額不足" });
-                }
-
                 // 獲取電子禮券類型
                 var eVoucherType = await _context.EVoucherTypes
                     .FirstOrDefaultAsync(et => et.EVoucherTypeId == model.EVoucherTypeId);
@@ -247,25 +167,19 @@ namespace GameSpace.Controllers
 
                 using var transaction = await _context.Database.BeginTransactionAsync();
 
-                // 扣除點數
-                var balanceBefore = wallet.UserPoint;
-                wallet.UserPoint -= model.RequiredPoints;
-                wallet.UpdatedAt = DateTime.UtcNow;
+                // 使用服務扣除點數
+                var spendResult = await _walletService.SpendPointsAsync(
+                    userId.Value,
+                    model.RequiredPoints,
+                    $"兌換電子禮券: {eVoucherType.TypeName}",
+                    Guid.NewGuid().ToString()
+                );
 
-                // 記錄點數消費歷史
-                var spendHistory = new WalletHistory
+                if (!spendResult.Success)
                 {
-                    UserId = userId.Value,
-                    TransactionType = "兌換電子禮券",
-                    Amount = -model.RequiredPoints,
-                    BalanceBefore = balanceBefore,
-                    BalanceAfter = wallet.UserPoint,
-                    Description = $"兌換電子禮券: {eVoucherType.TypeName}",
-                    ReferenceId = Guid.NewGuid().ToString(),
-                    CreatedAt = DateTime.UtcNow
-                };
-
-                _context.WalletHistories.Add(spendHistory);
+                    await transaction.RollbackAsync();
+                    return Json(new { success = false, message = spendResult.Message });
+                }
 
                 // 生成電子禮券
                 var eVoucherCode = GenerateEVoucherCode();
@@ -288,7 +202,8 @@ namespace GameSpace.Controllers
                     success = true, 
                     message = $"成功兌換電子禮券: {eVoucherCode}",
                     eVoucherCode = eVoucherCode,
-                    eVoucherType = eVoucherType.TypeName
+                    eVoucherType = eVoucherType.TypeName,
+                    balance = spendResult.NewBalance
                 });
             }
             catch (Exception ex)
@@ -330,17 +245,6 @@ namespace GameSpace.Controllers
 
             try
             {
-                var wallet = await _context.UserWallets.FirstOrDefaultAsync(w => w.UserId == userId);
-                if (wallet == null)
-                {
-                    return Json(new { success = false, message = "錢包不存在" });
-                }
-
-                if (wallet.UserPoint < model.RequiredPoints)
-                {
-                    return Json(new { success = false, message = "點數餘額不足" });
-                }
-
                 var couponType = await _context.CouponTypes.FirstOrDefaultAsync(ct => ct.CouponTypeId == model.CouponTypeId);
                 if (couponType == null || !couponType.IsActive)
                 {
@@ -349,23 +253,19 @@ namespace GameSpace.Controllers
 
                 using var transaction = await _context.Database.BeginTransactionAsync();
 
-                // 扣除點數
-                var balanceBefore = wallet.UserPoint;
-                wallet.UserPoint -= model.RequiredPoints;
-                wallet.UpdatedAt = DateTime.UtcNow;
+                // 使用服務扣除點數
+                var spendResult = await _walletService.SpendPointsAsync(
+                    userId.Value,
+                    model.RequiredPoints,
+                    $"兌換優惠券: {couponType.TypeName}",
+                    Guid.NewGuid().ToString()
+                );
 
-                // 記錄點數變動歷史
-                var spendHistory = new WalletHistory
+                if (!spendResult.Success)
                 {
-                    UserId = userId.Value,
-                    ChangeType = "兌換優惠券",
-                    PointsChanged = -model.RequiredPoints,
-                    BalanceBefore = balanceBefore,
-                    BalanceAfter = wallet.UserPoint,
-                    Description = $"兌換優惠券: {couponType.TypeName}",
-                    CreatedAt = DateTime.UtcNow
-                };
-                _context.WalletHistories.Add(spendHistory);
+                    await transaction.RollbackAsync();
+                    return Json(new { success = false, message = spendResult.Message });
+                }
 
                 // 生成優惠券
                 var couponCode = GenerateCouponCode();
@@ -390,7 +290,8 @@ namespace GameSpace.Controllers
                     success = true, 
                     message = $"成功兌換優惠券: {couponCode}", 
                     couponCode = couponCode,
-                    couponType = couponType.TypeName
+                    couponType = couponType.TypeName,
+                    balance = spendResult.NewBalance
                 });
             }
             catch (Exception ex)
@@ -410,6 +311,61 @@ namespace GameSpace.Controllers
             var result = new string(Enumerable.Repeat(chars, 12)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
             return $"CP{result}";
+        }
+
+        /// <summary>
+        /// 轉帳給其他用戶
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TransferPoints(TransferPointsViewModel model)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+            {
+                return Json(new { success = false, message = "請先登入" });
+            }
+
+            var result = await _walletService.TransferPointsAsync(
+                userId.Value,
+                model.ToUserId,
+                model.Amount,
+                model.Description ?? $"轉帳給用戶 {model.ToUserId}"
+            );
+
+            return Json(new { 
+                success = result.Success, 
+                message = result.Message, 
+                balance = result.NewBalance 
+            });
+        }
+
+        /// <summary>
+        /// 管理員調整點數
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminAdjustPoints(AdminAdjustPointsViewModel model)
+        {
+            var adminUserId = GetCurrentUserId();
+            if (adminUserId == null)
+            {
+                return Json(new { success = false, message = "請先登入" });
+            }
+
+            var result = await _walletService.AdminAdjustPointsAsync(
+                model.UserId,
+                model.Amount,
+                model.Reason,
+                adminUserId.Value
+            );
+
+            return Json(new { 
+                success = result.Success, 
+                message = result.Message, 
+                balance = result.NewBalance 
+            });
         }
     }
 
@@ -447,5 +403,25 @@ namespace GameSpace.Controllers
     {
         public int CouponTypeId { get; set; }
         public decimal RequiredPoints { get; set; }
+    }
+
+    /// <summary>
+    /// 轉帳視圖模型
+    /// </summary>
+    public class TransferPointsViewModel
+    {
+        public int ToUserId { get; set; }
+        public decimal Amount { get; set; }
+        public string? Description { get; set; }
+    }
+
+    /// <summary>
+    /// 管理員調整點數視圖模型
+    /// </summary>
+    public class AdminAdjustPointsViewModel
+    {
+        public int UserId { get; set; }
+        public decimal Amount { get; set; }
+        public string Reason { get; set; } = string.Empty;
     }
 }

@@ -118,6 +118,51 @@ namespace GameSpace.Data
                 entity.Property(e => e.UserLockoutEnabled).HasColumnName("User_LockoutEnabled");
                 entity.Property(e => e.UserLockoutEnd).HasColumnName("User_LockoutEnd");
             });
+
+            // 配置 UserWallet 表
+            modelBuilder.Entity<UserWallet>(entity =>
+            {
+                entity.ToTable("User_Wallet");
+                entity.HasKey(e => e.UserId);
+                entity.Property(e => e.UserId).HasColumnName("User_Id");
+                entity.Property(e => e.UserPoint).HasColumnName("User_Point");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                entity.Property(e => e.UpdatedAt).HasColumnName("Updated_At");
+                
+                // 添加約束：點數不能為負數
+                entity.HasCheckConstraint("CK_UserWallet_UserPoint_NonNegative", "User_Point >= 0");
+                
+                // 添加約束：點數不能超過最大值
+                entity.HasCheckConstraint("CK_UserWallet_UserPoint_MaxValue", "User_Point <= 999999999.99");
+                
+                // 配置與 Users 的關係
+                entity.HasOne(e => e.User)
+                    .WithOne()
+                    .HasForeignKey<UserWallet>(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // 配置 WalletHistory 表
+            modelBuilder.Entity<WalletHistory>(entity =>
+            {
+                entity.ToTable("Wallet_History");
+                entity.HasKey(e => e.HistoryId);
+                entity.Property(e => e.HistoryId).HasColumnName("History_Id");
+                entity.Property(e => e.UserId).HasColumnName("User_Id");
+                entity.Property(e => e.TransactionType).HasColumnName("Transaction_Type");
+                entity.Property(e => e.Amount).HasColumnName("Amount");
+                entity.Property(e => e.BalanceBefore).HasColumnName("Balance_Before");
+                entity.Property(e => e.BalanceAfter).HasColumnName("Balance_After");
+                entity.Property(e => e.Description).HasColumnName("Description");
+                entity.Property(e => e.ReferenceId).HasColumnName("Reference_Id");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                
+                // 配置與 Users 的關係
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }
