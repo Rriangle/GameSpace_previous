@@ -4,21 +4,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GameSpace.Models
 {
     /// <summary>
-    /// 優惠券模型
+    /// 電子禮券模型
     /// </summary>
-    public partial class Coupon
+    public partial class EVoucher
     {
         [Key]
-        [Column("CouponID")]
-        public int CouponId { get; set; }
+        [Column("EVoucherID")]
+        public int EVoucherId { get; set; }
 
         [Required]
-        [StringLength(20)]
-        [Column("CouponCode")]
-        public string CouponCode { get; set; } = null!;
+        [StringLength(50)]
+        [Column("EVoucherCode")]
+        public string EVoucherCode { get; set; } = null!;
 
-        [Column("CouponTypeID")]
-        public int CouponTypeId { get; set; }
+        [Column("EVoucherTypeID")]
+        public int EVoucherTypeId { get; set; }
 
         [Column("UserID")]
         public int UserId { get; set; }
@@ -35,14 +35,21 @@ namespace GameSpace.Models
         [Column("UsedInOrderID")]
         public int? UsedInOrderId { get; set; }
 
+        [Column("ExpiryDate")]
+        public DateTime? ExpiryDate { get; set; }
+
         // 導航屬性
-        [ForeignKey("CouponTypeId")]
-        public virtual CouponType CouponType { get; set; } = null!;
+        [ForeignKey("EVoucherTypeId")]
+        public virtual EVoucherType EVoucherType { get; set; } = null!;
 
         [ForeignKey("UserId")]
         public virtual Users User { get; set; } = null!;
 
         [ForeignKey("UsedInOrderId")]
         public virtual OrderInfo? UsedInOrder { get; set; }
+
+        public virtual ICollection<EVoucherRedeemLog> EVoucherRedeemLogs { get; set; } = new List<EVoucherRedeemLog>();
+
+        public virtual ICollection<EVoucherToken> EVoucherTokens { get; set; } = new List<EVoucherToken>();
     }
 }

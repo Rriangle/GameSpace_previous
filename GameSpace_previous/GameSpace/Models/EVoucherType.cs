@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GameSpace.Models
 {
     /// <summary>
-    /// 優惠券類型模型
+    /// 電子禮券類型模型
     /// </summary>
-    public partial class CouponType
+    public partial class EVoucherType
     {
         [Key]
-        [Column("CouponTypeID")]
-        public int CouponTypeId { get; set; }
+        [Column("EVoucherTypeID")]
+        public int EVoucherTypeId { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -21,18 +21,12 @@ namespace GameSpace.Models
         [Column("Description")]
         public string? Description { get; set; }
 
-        [Column("DiscountType")]
-        [StringLength(20)]
-        public string DiscountType { get; set; } = null!; // "Percentage" 或 "FixedAmount"
+        [Column("Value")]
+        public decimal Value { get; set; }
 
-        [Column("DiscountValue")]
-        public decimal DiscountValue { get; set; }
-
-        [Column("MinOrderAmount")]
-        public decimal? MinOrderAmount { get; set; }
-
-        [Column("MaxDiscountAmount")]
-        public decimal? MaxDiscountAmount { get; set; }
+        [Column("Currency")]
+        [StringLength(10)]
+        public string Currency { get; set; } = "TWD";
 
         [Column("IsActive")]
         public bool IsActive { get; set; } = true;
@@ -50,6 +44,6 @@ namespace GameSpace.Models
         public DateTime UpdatedAt { get; set; }
 
         // 導航屬性
-        public virtual ICollection<Coupon> Coupons { get; set; } = new List<Coupon>();
+        public virtual ICollection<EVoucher> EVouchers { get; set; } = new List<EVoucher>();
     }
 }

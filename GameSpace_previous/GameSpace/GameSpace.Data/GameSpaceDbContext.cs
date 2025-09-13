@@ -56,6 +56,16 @@ namespace GameSpace.Data
 
         // 簽到相關模型
         public DbSet<DailyCheckIn> DailyCheckIns { get; set; }
+        
+        // 優惠券相關模型
+        public DbSet<Coupon> Coupons { get; set; }
+        public DbSet<CouponType> CouponTypes { get; set; }
+        
+        // 電子禮券相關模型
+        public DbSet<EVoucher> EVouchers { get; set; }
+        public DbSet<EVoucherType> EVoucherTypes { get; set; }
+        public DbSet<EVoucherRedeemLog> EVoucherRedeemLogs { get; set; }
+        public DbSet<EVoucherToken> EVoucherTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

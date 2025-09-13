@@ -49,6 +49,14 @@ namespace GameSpace.Services.Seeding
             await CreateWalletDataAsync(connection);
             // 創建每日簽到數據（200行）
             await CreateDailyCheckInDataAsync(connection);
+            // 創建優惠券類型數據（200行）
+            await CreateCouponTypeDataAsync(connection);
+            // 創建優惠券數據（200行）
+            await CreateCouponDataAsync(connection);
+            // 創建電子禮券類型數據（200行）
+            await CreateEVoucherTypeDataAsync(connection);
+            // 創建電子禮券數據（200行）
+            await CreateEVoucherDataAsync(connection);
 
                 _logger.LogInformation("種子數據創建完成");
                 return true;
@@ -609,6 +617,233 @@ namespace GameSpace.Services.Seeding
             }
             
             return string.Join(", ", rewards);
+        }
+
+        private async Task CreateCouponTypeDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建優惠券類型數據 (目標: 200 行)");
+            
+            var existingCount = await GetTableRowCount(connection, "CouponType");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("優惠券類型數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42); // 固定種子確保可重複性
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var typeName = GenerateCouponTypeName(random);
+                var description = GenerateCouponDescription(random);
+                var discountType = random.Next(2) == 0 ? "Percentage" : "FixedAmount";
+                var discountValue = discountType == "Percentage" ? random.Next(5, 51) : random.Next(10, 501);
+                var minOrderAmount = random.Next(2) == 0 ? (decimal?)null : random.Next(100, 1001);
+                var maxDiscountAmount = discountType == "Percentage" ? (decimal?)random.Next(50, 201) : null;
+                var validFrom = DateTime.Now.AddDays(-random.Next(0, 30));
+                var validTo = validFrom.AddDays(random.Next(30, 365));
+                var createdAt = DateTime.Now.AddDays(-random.Next(0, 30));
+                var updatedAt = createdAt;
+
+                values.Add($"({i}, '{typeName}', '{description}', '{discountType}', {discountValue}, {minOrderAmount?.ToString() ?? "NULL"}, {maxDiscountAmount?.ToString() ?? "NULL"}, 1, '{validFrom:yyyy-MM-dd HH:mm:ss}', '{validTo:yyyy-MM-dd HH:mm:ss}', '{createdAt:yyyy-MM-dd HH:mm:ss}', '{updatedAt:yyyy-MM-dd HH:mm:ss}')");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO CouponType (CouponTypeID, TypeName, Description, DiscountType, DiscountValue, MinOrderAmount, MaxDiscountAmount, IsActive, ValidFrom, ValidTo, CreatedAt, UpdatedAt)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("優惠券類型數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "CouponType"));
+        }
+
+        private async Task CreateCouponDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建優惠券數據 (目標: 200 行)");
+            
+            var existingCount = await GetTableRowCount(connection, "Coupon");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("優惠券數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42); // 固定種子確保可重複性
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var couponCode = GenerateCouponCode(random);
+                var couponTypeId = random.Next(1, 201); // 假設有200個優惠券類型
+                var userId = random.Next(1, 201); // 假設有200個用戶
+                var isUsed = random.Next(4) == 0; // 25%機率已使用
+                var acquiredTime = DateTime.Now.AddDays(-random.Next(0, 90));
+                var usedTime = isUsed ? (DateTime?)acquiredTime.AddDays(random.Next(1, 30)) : null;
+                var usedInOrderId = isUsed ? (int?)random.Next(1, 1001) : null;
+
+                values.Add($"({i}, '{couponCode}', {couponTypeId}, {userId}, {(isUsed ? 1 : 0)}, '{acquiredTime:yyyy-MM-dd HH:mm:ss}', {(usedTime?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")}, {(usedInOrderId?.ToString() ?? "NULL")})");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO Coupon (CouponID, CouponCode, CouponTypeID, UserID, IsUsed, AcquiredTime, UsedTime, UsedInOrderID)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("優惠券數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "Coupon"));
+        }
+
+        private async Task CreateEVoucherTypeDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建電子禮券類型數據 (目標: 200 行)");
+            
+            var existingCount = await GetTableRowCount(connection, "EVoucherType");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("電子禮券類型數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42); // 固定種子確保可重複性
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var typeName = GenerateEVoucherTypeName(random);
+                var description = GenerateEVoucherDescription(random);
+                var value = random.Next(50, 2001); // 50-2000元
+                var currency = "TWD";
+                var validFrom = DateTime.Now.AddDays(-random.Next(0, 30));
+                var validTo = validFrom.AddDays(random.Next(30, 365));
+                var createdAt = DateTime.Now.AddDays(-random.Next(0, 30));
+                var updatedAt = createdAt;
+
+                values.Add($"({i}, '{typeName}', '{description}', {value}, '{currency}', 1, '{validFrom:yyyy-MM-dd HH:mm:ss}', '{validTo:yyyy-MM-dd HH:mm:ss}', '{createdAt:yyyy-MM-dd HH:mm:ss}', '{updatedAt:yyyy-MM-dd HH:mm:ss}')");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO EVoucherType (EVoucherTypeID, TypeName, Description, Value, Currency, IsActive, ValidFrom, ValidTo, CreatedAt, UpdatedAt)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("電子禮券類型數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "EVoucherType"));
+        }
+
+        private async Task CreateEVoucherDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建電子禮券數據 (目標: 200 行)");
+            
+            var existingCount = await GetTableRowCount(connection, "EVoucher");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("電子禮券數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42); // 固定種子確保可重複性
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var eVoucherCode = GenerateEVoucherCode(random);
+                var eVoucherTypeId = random.Next(1, 201); // 假設有200個電子禮券類型
+                var userId = random.Next(1, 201); // 假設有200個用戶
+                var isUsed = random.Next(4) == 0; // 25%機率已使用
+                var acquiredTime = DateTime.Now.AddDays(-random.Next(0, 90));
+                var usedTime = isUsed ? (DateTime?)acquiredTime.AddDays(random.Next(1, 30)) : null;
+                var usedInOrderId = isUsed ? (int?)random.Next(1, 1001) : null;
+                var expiryDate = acquiredTime.AddDays(30); // 30天後過期
+
+                values.Add($"({i}, '{eVoucherCode}', {eVoucherTypeId}, {userId}, {(isUsed ? 1 : 0)}, '{acquiredTime:yyyy-MM-dd HH:mm:ss}', {(usedTime?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")}, {(usedInOrderId?.ToString() ?? "NULL")}, '{expiryDate:yyyy-MM-dd HH:mm:ss}')");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO EVoucher (EVoucherID, EVoucherCode, EVoucherTypeID, UserID, IsUsed, AcquiredTime, UsedTime, UsedInOrderID, ExpiryDate)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("電子禮券數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "EVoucher"));
+        }
+
+        private string GenerateCouponTypeName(Random random)
+        {
+            var prefixes = new[] { "新用戶", "會員專享", "限時", "節慶", "生日", "回饋", "推薦", "滿額" };
+            var suffixes = new[] { "折扣券", "優惠券", "特價券", "免運券", "現金券" };
+            return $"{prefixes[random.Next(prefixes.Length)]}{suffixes[random.Next(suffixes.Length)]}";
+        }
+
+        private string GenerateCouponDescription(Random random)
+        {
+            var descriptions = new[]
+            {
+                "限時優惠，數量有限",
+                "新用戶專享優惠",
+                "會員專屬優惠券",
+                "節慶特別優惠",
+                "生日專屬禮物",
+                "推薦好友獎勵",
+                "滿額贈送優惠券",
+                "限時特價優惠"
+            };
+            return descriptions[random.Next(descriptions.Length)];
+        }
+
+        private string GenerateCouponCode(Random random)
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var result = new string(Enumerable.Repeat(chars, 8)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+            return $"COUPON{result}";
+        }
+
+        private string GenerateEVoucherTypeName(Random random)
+        {
+            var prefixes = new[] { "現金", "購物", "美食", "娛樂", "旅遊", "數位", "實體", "通用" };
+            var suffixes = new[] { "禮券", "代金券", "現金券", "購物券", "優惠券" };
+            return $"{prefixes[random.Next(prefixes.Length)]}{suffixes[random.Next(suffixes.Length)]}";
+        }
+
+        private string GenerateEVoucherDescription(Random random)
+        {
+            var descriptions = new[]
+            {
+                "可在全站使用",
+                "限特定商品使用",
+                "無使用門檻",
+                "限時優惠禮券",
+                "會員專屬禮券",
+                "節慶特別禮券",
+                "生日專屬禮券",
+                "推薦獎勵禮券"
+            };
+            return descriptions[random.Next(descriptions.Length)];
+        }
+
+        private string GenerateEVoucherCode(Random random)
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var result = new string(Enumerable.Repeat(chars, 12)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+            return $"EV{result}";
         }
     }
 }
