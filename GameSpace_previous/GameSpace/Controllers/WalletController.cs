@@ -309,6 +309,108 @@ namespace GameSpace.Controllers
                 .Select(s => s[random.Next(s.Length)]).ToArray());
             return $"EV{result}";
         }
+
+        /// <summary>
+        /// 兌換優惠券
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExchangeForCoupon(ExchangeCouponViewModel model)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+            {
+                return Json(new { success = false, message = "請先登入" });
+            }
+
+            if (model.RequiredPoints <= 0)
+            {
+                return Json(new { success = false, message = "兌換點數必須大於0" });
+            }
+
+            try
+            {
+                var wallet = await _context.UserWallets.FirstOrDefaultAsync(w => w.UserId == userId);
+                if (wallet == null)
+                {
+                    return Json(new { success = false, message = "錢包不存在" });
+                }
+
+                if (wallet.UserPoint < model.RequiredPoints)
+                {
+                    return Json(new { success = false, message = "點數餘額不足" });
+                }
+
+                var couponType = await _context.CouponTypes.FirstOrDefaultAsync(ct => ct.CouponTypeId == model.CouponTypeId);
+                if (couponType == null || !couponType.IsActive)
+                {
+                    return Json(new { success = false, message = "優惠券類型不存在或已停用" });
+                }
+
+                using var transaction = await _context.Database.BeginTransactionAsync();
+
+                // 扣除點數
+                var balanceBefore = wallet.UserPoint;
+                wallet.UserPoint -= model.RequiredPoints;
+                wallet.UpdatedAt = DateTime.UtcNow;
+
+                // 記錄點數變動歷史
+                var spendHistory = new WalletHistory
+                {
+                    UserId = userId.Value,
+                    ChangeType = "兌換優惠券",
+                    PointsChanged = -model.RequiredPoints,
+                    BalanceBefore = balanceBefore,
+                    BalanceAfter = wallet.UserPoint,
+                    Description = $"兌換優惠券: {couponType.TypeName}",
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.WalletHistories.Add(spendHistory);
+
+                // 生成優惠券
+                var couponCode = GenerateCouponCode();
+                var coupon = new Coupon
+                {
+                    UserId = userId.Value,
+                    CouponCode = couponCode,
+                    CouponTypeId = model.CouponTypeId,
+                    IsUsed = false,
+                    AcquiredTime = DateTime.UtcNow,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+                _context.Coupons.Add(coupon);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                _logger.LogInformation("用戶 {UserId} 兌換優惠券成功: {CouponCode}", userId, couponCode);
+
+                return Json(new { 
+                    success = true, 
+                    message = $"成功兌換優惠券: {couponCode}", 
+                    couponCode = couponCode,
+                    couponType = couponType.TypeName
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "兌換優惠券時發生錯誤");
+                return Json(new { success = false, message = "兌換優惠券失敗，請稍後再試" });
+            }
+        }
+
+        /// <summary>
+        /// 生成優惠券代碼
+        /// </summary>
+        private string GenerateCouponCode()
+        {
+            var random = new Random();
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var result = new string(Enumerable.Repeat(chars, 12)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+            return $"CP{result}";
+        }
     }
 
     /// <summary>
@@ -335,6 +437,15 @@ namespace GameSpace.Controllers
     public class ExchangeEVoucherViewModel
     {
         public int EVoucherTypeId { get; set; }
+        public decimal RequiredPoints { get; set; }
+    }
+
+    /// <summary>
+    /// 兌換優惠券視圖模型
+    /// </summary>
+    public class ExchangeCouponViewModel
+    {
+        public int CouponTypeId { get; set; }
         public decimal RequiredPoints { get; set; }
     }
 }

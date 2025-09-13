@@ -104,6 +104,7 @@
                 <button class="btn-wallet btn-add" onclick="showAddForm()">+ 充值點數</button>
                 <button class="btn-wallet btn-spend" onclick="showSpendForm()">- 消費點數</button>
                 <button class="btn-wallet btn-exchange" onclick="showExchangeForm()">🎁 兌換禮券</button>
+                <button class="btn-wallet btn-exchange" onclick="showCouponExchangeForm()">🎫 兌換優惠券</button>
             </div>
         </div>
         
@@ -201,6 +202,33 @@
         </div>
     </div>
 
+    <!-- 兌換優惠券表單 -->
+    <div class="form-modal" id="couponExchangeForm">
+        <div class="form-content">
+            <h3 class="form-title">🎫 兌換優惠券</h3>
+            <form id="exchangeCouponForm">
+                <div class="form-group">
+                    <label class="form-label" for="couponType">優惠券類型</label>
+                    <select id="couponType" name="couponTypeId" class="form-control" required>
+                        <option value="">請選擇優惠券類型</option>
+                        <option value="1" data-points="50">9折優惠券 (50點)</option>
+                        <option value="2" data-points="100">8折優惠券 (100點)</option>
+                        <option value="3" data-points="200">7折優惠券 (200點)</option>
+                        <option value="4" data-points="500">5折優惠券 (500點)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="couponRequiredPoints">所需點數</label>
+                    <input type="number" id="couponRequiredPoints" name="requiredPoints" class="form-control" readonly>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="hideCouponExchangeForm()">取消</button>
+                    <button type="submit" class="btn-submit">確認兌換</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         function showAddForm() {
             document.getElementById('addForm').style.display = 'flex';
@@ -224,6 +252,14 @@
         
         function hideExchangeForm() {
             document.getElementById('exchangeForm').style.display = 'none';
+        }
+        
+        function showCouponExchangeForm() {
+            document.getElementById('couponExchangeForm').style.display = 'flex';
+        }
+        
+        function hideCouponExchangeForm() {
+            document.getElementById('couponExchangeForm').style.display = 'none';
         }
         
         // 充值表單提交
@@ -320,6 +356,44 @@
             const selectedOption = this.options[this.selectedIndex];
             const requiredPoints = selectedOption.getAttribute('data-points');
             document.getElementById('requiredPoints').value = requiredPoints || '';
+        });
+        
+        // 兌換優惠券表單提交
+        document.getElementById('exchangeCouponForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const couponTypeId = parseInt(document.getElementById('couponType').value);
+            const requiredPoints = parseFloat(document.getElementById('couponRequiredPoints').value);
+            
+            fetch('/Wallet/ExchangeForCoupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({ 
+                    couponTypeId: couponTypeId,
+                    requiredPoints: requiredPoints
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                alert('兌換失敗，請稍後再試');
+            });
+        });
+        
+        // 優惠券類型選擇變化時更新所需點數
+        document.getElementById('couponType').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const requiredPoints = selectedOption.getAttribute('data-points');
+            document.getElementById('couponRequiredPoints').value = requiredPoints || '';
         });
         
         // 添加請求驗證令牌
