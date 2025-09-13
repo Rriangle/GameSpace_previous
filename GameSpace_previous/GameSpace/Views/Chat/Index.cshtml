@@ -136,10 +136,10 @@
                     
                     <div class="chat-item" onclick="openConversation(@conversation.ConversationId)">
                         <div class="chat-avatar">
-                            @otherUser.Username.Substring(0, 1).ToUpper()
+                            @otherUser.UserName.Substring(0, 1).ToUpper()
                         </div>
                         <div class="chat-info">
-                            <div class="chat-name">@otherUser.Username</div>
+                            <div class="chat-name">@otherUser.UserName</div>
                             <div class="chat-last-message">
                                 @if (lastMessage != null)
                                 {
