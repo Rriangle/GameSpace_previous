@@ -1,42 +1,90 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.Collections.Generic;
 
-namespace GameSpace.Models
+namespace GameSpace.Models;
+
+/// <summary>
+/// 私聊對話表
+/// </summary>
+public partial class DM_Conversations
 {
     /// <summary>
-    /// 私聊對話模型
+    /// 對話ID
     /// </summary>
-    public partial class DM_Conversations
-    {
-        [Key]
-        [Column("conversation_id")]
-        public int ConversationId { get; set; }
+    public int ConversationId { get; set; }
 
-        [Column("is_manager_dm")]
-        public bool IsManagerDm { get; set; }
+    /// <summary>
+    /// 是否為管理員私聊
+    /// </summary>
+    public bool IsManagerDm { get; set; }
 
-        [Column("party1_id")]
-        public int Party1Id { get; set; }
+    /// <summary>
+    /// 參與者1 ID
+    /// </summary>
+    public int Party1Id { get; set; }
 
-        [Column("party2_id")]
-        public int Party2Id { get; set; }
+    /// <summary>
+    /// 參與者2 ID
+    /// </summary>
+    public int Party2Id { get; set; }
 
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+    /// <summary>
+    /// 最後訊息時間
+    /// </summary>
+    public DateTime? LastMessageAt { get; set; }
 
-        [Column("last_message_at")]
-        public DateTime? LastMessageAt { get; set; }
+    /// <summary>
+    /// 建立時間
+    /// </summary>
+    public DateTime CreatedAt { get; set; }
 
-        [Column("is_active")]
-        public bool IsActive { get; set; } = true;
+    /// <summary>
+    /// 更新時間
+    /// </summary>
+    public DateTime? UpdatedAt { get; set; }
 
-        // 導航屬性
-        [ForeignKey("Party1Id")]
-        public virtual Users Party1 { get; set; } = null!;
+    /// <summary>
+    /// 是否為私人對話
+    /// </summary>
+    public bool IsPrivate { get; set; }
 
-        [ForeignKey("Party2Id")]
-        public virtual Users Party2 { get; set; } = null!;
+    /// <summary>
+    /// 對話名稱
+    /// </summary>
+    public string? ConversationName { get; set; }
 
-        public virtual ICollection<DM_Messages> DM_Messages { get; set; } = new List<DM_Messages>();
-    }
+    /// <summary>
+    /// 對話描述
+    /// </summary>
+    public string? Description { get; set; }
+
+    /// <summary>
+    /// 發送者是否為參與者1
+    /// </summary>
+    public bool SenderIsParty1 { get; set; }
+
+    /// <summary>
+    /// 最後訊息ID
+    /// </summary>
+    public int? LastMessageId { get; set; }
+
+    /// <summary>
+    /// 訊息計數
+    /// </summary>
+    public int MessageCount { get; set; }
+
+    /// <summary>
+    /// 是否已封存
+    /// </summary>
+    public bool IsArchived { get; set; }
+
+    /// <summary>
+    /// 封存時間
+    /// </summary>
+    public DateTime? ArchivedAt { get; set; }
+
+    /// <summary>
+    /// 封存原因
+    /// </summary>
+    public string? ArchiveReason { get; set; }
 }

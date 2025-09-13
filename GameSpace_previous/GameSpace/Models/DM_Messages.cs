@@ -1,63 +1,120 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.Collections.Generic;
 
-namespace GameSpace.Models
+namespace GameSpace.Models;
+
+/// <summary>
+/// 私聊訊息表
+/// </summary>
+public partial class DM_Messages
 {
     /// <summary>
-    /// 私聊消息模型
+    /// 訊息ID
     /// </summary>
-    public partial class DM_Messages
-    {
-        [Key]
-        [Column("message_id")]
-        public int MessageId { get; set; }
+    public int MessageId { get; set; }
 
-        [Column("conversation_id")]
-        public int ConversationId { get; set; }
+    /// <summary>
+    /// 對話ID
+    /// </summary>
+    public int ConversationId { get; set; }
 
-        [Column("sender_user_id")]
-        public int SenderUserId { get; set; }
+    /// <summary>
+    /// 發送者用戶ID
+    /// </summary>
+    public int? SenderUserId { get; set; }
 
-        [Required]
-        [StringLength(2000)]
-        [Column("message_content")]
-        public string MessageContent { get; set; } = null!;
+    /// <summary>
+    /// 發送者管理員ID
+    /// </summary>
+    public int? SenderManagerId { get; set; }
 
-        [StringLength(50)]
-        [Column("message_type")]
-        public string MessageType { get; set; } = "Text"; // Text, Image, File, Voice, Video
+    /// <summary>
+    /// 訊息內容
+    /// </summary>
+    public string MessageText { get; set; } = null!;
 
-        [Column("sent_at")]
-        public DateTime SentAt { get; set; }
+    /// <summary>
+    /// 發送時間
+    /// </summary>
+    public DateTime SentAt { get; set; }
 
-        [Column("read_at")]
-        public DateTime? ReadAt { get; set; }
+    /// <summary>
+    /// 是否已讀
+    /// </summary>
+    public bool IsRead { get; set; }
 
-        [Column("is_deleted")]
-        public bool IsDeleted { get; set; }
+    /// <summary>
+    /// 已讀時間
+    /// </summary>
+    public DateTime? ReadAt { get; set; }
 
-        [Column("deleted_at")]
-        public DateTime? DeletedAt { get; set; }
+    /// <summary>
+    /// 已讀用戶ID
+    /// </summary>
+    public int? ReadByUserId { get; set; }
 
-        [StringLength(200)]
-        [Column("attachment_url")]
-        public string? AttachmentUrl { get; set; }
+    /// <summary>
+    /// 已讀管理員ID
+    /// </summary>
+    public int? ReadByManagerId { get; set; }
 
-        [StringLength(100)]
-        [Column("attachment_name")]
-        public string? AttachmentName { get; set; }
+    /// <summary>
+    /// 是否已編輯
+    /// </summary>
+    public bool IsEdited { get; set; }
 
-        [Column("is_edited")]
-        public bool IsEdited { get; set; }
+    /// <summary>
+    /// 編輯時間
+    /// </summary>
+    public DateTime? EditedAt { get; set; }
 
-        [Column("edited_at")]
-        public DateTime? EditedAt { get; set; }
+    /// <summary>
+    /// 是否已刪除
+    /// </summary>
+    public bool IsDeleted { get; set; }
 
-        // 導航屬性
-        [ForeignKey("ConversationId")]
-        public virtual DM_Conversations Conversation { get; set; } = null!;
+    /// <summary>
+    /// 刪除時間
+    /// </summary>
+    public DateTime? DeletedAt { get; set; }
 
-        [ForeignKey("SenderUserId")]
-        public virtual Users SenderUser { get; set; } = null!;
-    }
+    /// <summary>
+    /// 刪除者用戶ID
+    /// </summary>
+    public int? DeletedByUserId { get; set; }
+
+    /// <summary>
+    /// 刪除者管理員ID
+    /// </summary>
+    public int? DeletedByManagerId { get; set; }
+
+    /// <summary>
+    /// 訊息類型
+    /// </summary>
+    public string MessageType { get; set; } = "text";
+
+    /// <summary>
+    /// 附件URL
+    /// </summary>
+    public string? AttachmentUrl { get; set; }
+
+    /// <summary>
+    /// 附件類型
+    /// </summary>
+    public string? AttachmentType { get; set; }
+
+    /// <summary>
+    /// 回覆的訊息ID
+    /// </summary>
+    public int? ReplyToMessageId { get; set; }
+
+    /// <summary>
+    /// 訊息狀態
+    /// </summary>
+    public string Status { get; set; } = "sent";
+
+    /// <summary>
+    /// 額外資料（JSON格式）
+    /// </summary>
+    public string? Metadata { get; set; }
 }

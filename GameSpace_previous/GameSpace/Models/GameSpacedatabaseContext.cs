@@ -19,6 +19,10 @@ public partial class GameSpacedatabaseContext : DbContext
 
     public virtual DbSet<ChatMessage> ChatMessages { get; set; }
 
+    public virtual DbSet<DM_Conversations> DM_Conversations { get; set; }
+
+    public virtual DbSet<DM_Messages> DM_Messages { get; set; }
+
     public virtual DbSet<Coupon> Coupons { get; set; }
 
     public virtual DbSet<CouponType> CouponTypes { get; set; }
@@ -38,6 +42,8 @@ public partial class GameSpacedatabaseContext : DbContext
     public virtual DbSet<GameMetricDaily> GameMetricDailies { get; set; }
 
     public virtual DbSet<GameProductDetail> GameProductDetails { get; set; }
+
+    public virtual DbSet<GameProductDetails> GameProductDetailsNew { get; set; }
 
     public virtual DbSet<GameSourceMap> GameSourceMaps { get; set; }
 
@@ -1911,6 +1917,102 @@ public partial class GameSpacedatabaseContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__WalletHis__UserI__62E4AA3C");
         });
+        // 配置 DM_Conversations 模型
+        modelBuilder.Entity<DM_Conversations>(entity =>
+        {
+            entity.HasKey(e => e.ConversationId).HasName("PK_DM_Conversations");
+            entity.ToTable("DM_Conversations");
+            entity.Property(e => e.ConversationId).HasColumnName("conversation_id");
+            entity.Property(e => e.IsManagerDm).HasColumnName("is_manager_dm");
+            entity.Property(e => e.Party1Id).HasColumnName("party1_id");
+            entity.Property(e => e.Party2Id).HasColumnName("party2_id");
+            entity.Property(e => e.LastMessageAt).HasColumnName("last_message_at");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.IsPrivate).HasColumnName("is_private");
+            entity.Property(e => e.ConversationName).HasColumnName("conversation_name");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.SenderIsParty1).HasColumnName("sender_is_party1");
+            entity.Property(e => e.LastMessageId).HasColumnName("last_message_id");
+            entity.Property(e => e.MessageCount).HasColumnName("message_count");
+            entity.Property(e => e.IsArchived).HasColumnName("is_archived");
+            entity.Property(e => e.ArchivedAt).HasColumnName("archived_at");
+            entity.Property(e => e.ArchiveReason).HasColumnName("archive_reason");
+        });
+
+        // 配置 DM_Messages 模型
+        modelBuilder.Entity<DM_Messages>(entity =>
+        {
+            entity.HasKey(e => e.MessageId).HasName("PK_DM_Messages");
+            entity.ToTable("DM_Messages");
+            entity.Property(e => e.MessageId).HasColumnName("message_id");
+            entity.Property(e => e.ConversationId).HasColumnName("conversation_id");
+            entity.Property(e => e.SenderUserId).HasColumnName("sender_user_id");
+            entity.Property(e => e.SenderManagerId).HasColumnName("sender_manager_id");
+            entity.Property(e => e.MessageText).HasColumnName("message_text");
+            entity.Property(e => e.SentAt).HasColumnName("sent_at");
+            entity.Property(e => e.IsRead).HasColumnName("is_read");
+            entity.Property(e => e.ReadAt).HasColumnName("read_at");
+            entity.Property(e => e.ReadByUserId).HasColumnName("read_by_user_id");
+            entity.Property(e => e.ReadByManagerId).HasColumnName("read_by_manager_id");
+            entity.Property(e => e.IsEdited).HasColumnName("is_edited");
+            entity.Property(e => e.EditedAt).HasColumnName("edited_at");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedByUserId).HasColumnName("deleted_by_user_id");
+            entity.Property(e => e.DeletedByManagerId).HasColumnName("deleted_by_manager_id");
+            entity.Property(e => e.MessageType).HasColumnName("message_type");
+            entity.Property(e => e.AttachmentUrl).HasColumnName("attachment_url");
+            entity.Property(e => e.AttachmentType).HasColumnName("attachment_type");
+            entity.Property(e => e.ReplyToMessageId).HasColumnName("reply_to_message_id");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+        });
+
+        // 配置 GameProductDetails 模型
+        modelBuilder.Entity<GameProductDetails>(entity =>
+        {
+            entity.ToTable("GameProductDetails");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.ProductName).HasColumnName("product_name");
+            entity.Property(e => e.GameId).HasColumnName("game_id");
+            entity.Property(e => e.ProductType).HasColumnName("product_type");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Price).HasColumnName("price");
+            entity.Property(e => e.CurrencyCode).HasColumnName("currency_code");
+            entity.Property(e => e.ImageUrl).HasColumnName("image_url");
+            entity.Property(e => e.VideoUrl).HasColumnName("video_url");
+            entity.Property(e => e.Tags).HasColumnName("tags");
+            entity.Property(e => e.Category).HasColumnName("category");
+            entity.Property(e => e.SubCategory).HasColumnName("sub_category");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.PublishedAt).HasColumnName("published_at");
+            entity.Property(e => e.UnpublishedAt).HasColumnName("unpublished_at");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.Specifications).HasColumnName("specifications");
+            entity.Property(e => e.Features).HasColumnName("features");
+            entity.Property(e => e.Requirements).HasColumnName("requirements");
+            entity.Property(e => e.Rating).HasColumnName("rating");
+            entity.Property(e => e.RatingCount).HasColumnName("rating_count");
+            entity.Property(e => e.ViewCount).HasColumnName("view_count");
+            entity.Property(e => e.PurchaseCount).HasColumnName("purchase_count");
+            entity.Property(e => e.Weight).HasColumnName("weight");
+            entity.Property(e => e.Dimensions).HasColumnName("dimensions");
+            entity.Property(e => e.Material).HasColumnName("material");
+            entity.Property(e => e.Color).HasColumnName("color");
+            entity.Property(e => e.Brand).HasColumnName("brand");
+            entity.Property(e => e.Model).HasColumnName("model");
+            entity.Property(e => e.Barcode).HasColumnName("barcode");
+            entity.Property(e => e.Sku).HasColumnName("sku");
+            entity.Property(e => e.Stock).HasColumnName("stock");
+            entity.Property(e => e.MinStock).HasColumnName("min_stock");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+        });
+
         modelBuilder.HasSequence("SeqOrderCode")
             .StartsAt(100000000001L)
             .HasMin(100000000001L)
