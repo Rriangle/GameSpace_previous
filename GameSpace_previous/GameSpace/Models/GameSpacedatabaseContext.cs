@@ -79,7 +79,11 @@ public partial class GameSpacedatabaseContext : DbContext
 
     public virtual DbSet<Mute> Mutes { get; set; }
 
+    public virtual DbSet<Mutes> MutesNew { get; set; }
+
     public virtual DbSet<Notification> Notifications { get; set; }
+
+    public virtual DbSet<Notifications> NotificationsNew { get; set; }
 
     public virtual DbSet<NotificationAction> NotificationActions { get; set; }
 
@@ -90,6 +94,8 @@ public partial class GameSpacedatabaseContext : DbContext
     public virtual DbSet<OfficialStoreRanking> OfficialStoreRankings { get; set; }
 
     public virtual DbSet<OrderAddress> OrderAddresses { get; set; }
+
+    public virtual DbSet<OrderAddresses> OrderAddressesNew { get; set; }
 
     public virtual DbSet<OrderInfo> OrderInfos { get; set; }
 
@@ -2147,6 +2153,143 @@ public partial class GameSpacedatabaseContext : DbContext
             entity.Property(e => e.IdNumber).HasColumnName("Id_Number");
             entity.Property(e => e.BankAccountNumber).HasColumnName("Bank_Account_Number");
             entity.Property(e => e.BankCode).HasColumnName("Bank_Code");
+        });
+
+        // 配置 Mutes 模型
+        modelBuilder.Entity<Mutes>(entity =>
+        {
+            entity.HasKey(e => e.MuteId).HasName("PK_Mutes");
+            entity.ToTable("Mutes");
+            entity.Property(e => e.MuteId).HasColumnName("mute_id");
+            entity.Property(e => e.Word).HasColumnName("word");
+            entity.Property(e => e.MuteType).HasColumnName("mute_type");
+            entity.Property(e => e.Reason).HasColumnName("reason");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.CreatedByManagerId).HasColumnName("created_by_manager_id");
+            entity.Property(e => e.CreatedByUserId).HasColumnName("created_by_user_id");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.UpdatedByManagerId).HasColumnName("updated_by_manager_id");
+            entity.Property(e => e.UpdatedByUserId).HasColumnName("updated_by_user_id");
+            entity.Property(e => e.MuteStartAt).HasColumnName("mute_start_at");
+            entity.Property(e => e.MuteEndAt).HasColumnName("mute_end_at");
+            entity.Property(e => e.IsPermanent).HasColumnName("is_permanent");
+            entity.Property(e => e.Scope).HasColumnName("scope");
+            entity.Property(e => e.TargetType).HasColumnName("target_type");
+            entity.Property(e => e.TargetId).HasColumnName("target_id");
+            entity.Property(e => e.Severity).HasColumnName("severity");
+            entity.Property(e => e.MuteCount).HasColumnName("mute_count");
+            entity.Property(e => e.LastTriggeredAt).HasColumnName("last_triggered_at");
+            entity.Property(e => e.TriggerCount).HasColumnName("trigger_count");
+            entity.Property(e => e.IsAutoMute).HasColumnName("is_auto_mute");
+            entity.Property(e => e.AutoMuteCondition).HasColumnName("auto_mute_condition");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Tags).HasColumnName("tags");
+            entity.Property(e => e.Category).HasColumnName("category");
+            entity.Property(e => e.Priority).HasColumnName("priority");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+        });
+
+        // 配置 Notifications 模型
+        modelBuilder.Entity<Notifications>(entity =>
+        {
+            entity.HasKey(e => e.NotificationId).HasName("PK_Notifications");
+            entity.ToTable("Notifications");
+            entity.Property(e => e.NotificationId).HasColumnName("notification_id");
+            entity.Property(e => e.SourceId).HasColumnName("source_id");
+            entity.Property(e => e.Title).HasColumnName("title");
+            entity.Property(e => e.Content).HasColumnName("content");
+            entity.Property(e => e.NotificationType).HasColumnName("notification_type");
+            entity.Property(e => e.Priority).HasColumnName("priority");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.IsRead).HasColumnName("is_read");
+            entity.Property(e => e.ReadAt).HasColumnName("read_at");
+            entity.Property(e => e.ReadBy).HasColumnName("read_by");
+            entity.Property(e => e.SentAt).HasColumnName("sent_at");
+            entity.Property(e => e.SenderUserId).HasColumnName("sender_user_id");
+            entity.Property(e => e.SenderManagerId).HasColumnName("sender_manager_id");
+            entity.Property(e => e.TargetType).HasColumnName("target_type");
+            entity.Property(e => e.TargetId).HasColumnName("target_id");
+            entity.Property(e => e.Action).HasColumnName("action");
+            entity.Property(e => e.ActionUrl).HasColumnName("action_url");
+            entity.Property(e => e.Data).HasColumnName("data");
+            entity.Property(e => e.Tags).HasColumnName("tags");
+            entity.Property(e => e.Category).HasColumnName("category");
+            entity.Property(e => e.SubCategory).HasColumnName("sub_category");
+            entity.Property(e => e.Channel).HasColumnName("channel");
+            entity.Property(e => e.Platform).HasColumnName("platform");
+            entity.Property(e => e.Language).HasColumnName("language");
+            entity.Property(e => e.Timezone).HasColumnName("timezone");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.ExpiresAt).HasColumnName("expires_at");
+            entity.Property(e => e.IsExpired).HasColumnName("is_expired");
+            entity.Property(e => e.IsSent).HasColumnName("is_sent");
+            entity.Property(e => e.SendFailureCount).HasColumnName("send_failure_count");
+            entity.Property(e => e.LastSendAttemptAt).HasColumnName("last_send_attempt_at");
+            entity.Property(e => e.SendErrorMessage).HasColumnName("send_error_message");
+            entity.Property(e => e.IsCancelled).HasColumnName("is_cancelled");
+            entity.Property(e => e.CancelledAt).HasColumnName("cancelled_at");
+            entity.Property(e => e.CancelledBy).HasColumnName("cancelled_by");
+            entity.Property(e => e.CancelReason).HasColumnName("cancel_reason");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+        });
+
+        // 配置 OrderAddresses 模型
+        modelBuilder.Entity<OrderAddresses>(entity =>
+        {
+            entity.HasKey(e => e.OrderId).HasName("PK_OrderAddresses");
+            entity.ToTable("OrderAddresses");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.Recipient).HasColumnName("recipient");
+            entity.Property(e => e.Phone).HasColumnName("phone");
+            entity.Property(e => e.Email).HasColumnName("email");
+            entity.Property(e => e.AddressType).HasColumnName("address_type");
+            entity.Property(e => e.Country).HasColumnName("country");
+            entity.Property(e => e.City).HasColumnName("city");
+            entity.Property(e => e.District).HasColumnName("district");
+            entity.Property(e => e.ZipCode).HasColumnName("zipcode");
+            entity.Property(e => e.Address1).HasColumnName("address1");
+            entity.Property(e => e.Address2).HasColumnName("address2");
+            entity.Property(e => e.FullAddress).HasColumnName("full_address");
+            entity.Property(e => e.Latitude).HasColumnName("latitude");
+            entity.Property(e => e.Longitude).HasColumnName("longitude");
+            entity.Property(e => e.ValidationStatus).HasColumnName("validation_status");
+            entity.Property(e => e.ValidatedAt).HasColumnName("validated_at");
+            entity.Property(e => e.ValidatedBy).HasColumnName("validated_by");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.IsDefault).HasColumnName("is_default");
+            entity.Property(e => e.IsBillingAddress).HasColumnName("is_billing_address");
+            entity.Property(e => e.IsShippingAddress).HasColumnName("is_shipping_address");
+            entity.Property(e => e.DeliveryTimePreference).HasColumnName("delivery_time_preference");
+            entity.Property(e => e.DeliveryNotes).HasColumnName("delivery_notes");
+            entity.Property(e => e.SpecialInstructions).HasColumnName("special_instructions");
+            entity.Property(e => e.DeliveryFee).HasColumnName("delivery_fee");
+            entity.Property(e => e.DeliveryMethod).HasColumnName("delivery_method");
+            entity.Property(e => e.DeliveryCompany).HasColumnName("delivery_company");
+            entity.Property(e => e.TrackingNumber).HasColumnName("tracking_number");
+            entity.Property(e => e.DeliveryStatus).HasColumnName("delivery_status");
+            entity.Property(e => e.DeliveredAt).HasColumnName("delivered_at");
+            entity.Property(e => e.DeliveredTo).HasColumnName("delivered_to");
+            entity.Property(e => e.SignedAt).HasColumnName("signed_at");
+            entity.Property(e => e.SignatureNotes).HasColumnName("signature_notes");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.Settings).HasColumnName("settings");
         });
 
         modelBuilder.HasSequence("SeqOrderCode")
