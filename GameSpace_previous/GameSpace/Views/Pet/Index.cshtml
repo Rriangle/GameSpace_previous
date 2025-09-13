@@ -1,0 +1,197 @@
+@model Pet
+@{
+    ViewData["Title"] = "我的史萊姆 - GameSpace";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>我的史萊姆 - GameSpace</title>
+    <style>
+        :root{
+            --bg:#eef3f8; --bg2:#ffffff; --ink:#1f2937; --muted:#64748b; --line:#e5e7eb;
+            --surface:rgba(255,255,255,.75); --glass:rgba(255,255,255,.45);
+            --accent:#7557ff; --accent-2:#34d2ff; --accent-3:#22c55e;
+            --radius:18px; --radius-sm:12px; --shadow:0 18px 40px rgba(17,24,39,.12);
+            --blur:14px;
+        }
+        body.dark{
+            --bg:#0c111b; --bg2:#0a0f18; --ink:#e5edff; --muted:#9fb1c9; --line:#1e2b43;
+            --surface:rgba(22,30,48,.65); --glass:rgba(18,24,39,.50);
+            --shadow:0 18px 42px rgba(0,0,0,.35);
+        }
+        *{box-sizing:border-box} html,body{height:100%}
+        body{
+            margin:0; color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+            background:
+                radial-gradient(900px 500px at -10% -10%, rgba(117,87,255,.10), transparent 60%),
+                radial-gradient(800px 460px at 110% 10%, rgba(52,210,255,.10), transparent 50%),
+                linear-gradient(180deg, var(--bg), var(--bg2));
+        }
+        .wrap{max-width:1200px; margin:0 auto; padding:0 16px}
+        
+        /* 寵物卡片 */
+        .pet-card{
+            background:var(--glass); border:1px solid var(--line); border-radius:20px; 
+            padding:30px; backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow);
+            text-align:center; margin:20px 0;
+        }
+        .pet-avatar{
+            width:120px; height:120px; border-radius:50%; 
+            background:linear-gradient(135deg,var(--accent),var(--accent-2));
+            margin:0 auto 20px; display:flex; align-items:center; justify-content:center;
+            font-size:48px; color:#fff; box-shadow:var(--shadow);
+        }
+        .pet-name{font-size:24px; font-weight:900; margin-bottom:10px; color:var(--ink)}
+        .pet-level{background:var(--accent); color:#fff; padding:4px 12px; border-radius:20px; font-size:14px; font-weight:700}
+        
+        /* 屬性條 */
+        .stats{display:grid; gap:15px; margin:30px 0}
+        .stat-item{display:flex; align-items:center; gap:10px}
+        .stat-label{min-width:80px; font-weight:700; color:var(--ink)}
+        .stat-bar{flex:1; height:20px; background:var(--line); border-radius:10px; overflow:hidden; position:relative}
+        .stat-fill{height:100%; border-radius:10px; transition:width 0.3s ease}
+        .stat-value{min-width:40px; text-align:right; font-weight:700; color:var(--ink)}
+        
+        /* 按鈕 */
+        .action-buttons{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:15px; margin:30px 0}
+        .action-btn{
+            padding:15px 20px; border:none; border-radius:12px; font-weight:700; cursor:pointer;
+            transition:all 0.3s ease; box-shadow:var(--shadow)
+        }
+        .action-btn:hover{transform:translateY(-2px); box-shadow:0 8px 25px rgba(0,0,0,0.15)}
+        .btn-feed{background:linear-gradient(135deg,#f59e0b,#f97316); color:#fff}
+        .btn-clean{background:linear-gradient(135deg,#06b6d4,#0891b2); color:#fff}
+        .btn-play{background:linear-gradient(135deg,#8b5cf6,#a855f7); color:#fff}
+        .btn-rest{background:linear-gradient(135deg,#10b981,#059669); color:#fff}
+        
+        /* 響應式 */
+        @media (max-width:768px){
+            .action-buttons{grid-template-columns:1fr 1fr}
+            .pet-avatar{width:100px; height:100px; font-size:40px}
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="pet-card">
+            <div class="pet-avatar">🐱</div>
+            <h1 class="pet-name">@Model.PetName</h1>
+            <div class="pet-level">等級 @Model.Level</div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">飢餓</span>
+                    <div class="stat-bar">
+                        <div class="stat-fill" style="width:@(Model.Hunger)%; background:linear-gradient(90deg,#f59e0b,#f97316)"></div>
+                    </div>
+                    <span class="stat-value">@Model.Hunger%</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">心情</span>
+                    <div class="stat-bar">
+                        <div class="stat-fill" style="width:@(Model.Mood)%; background:linear-gradient(90deg,#8b5cf6,#a855f7)"></div>
+                    </div>
+                    <span class="stat-value">@Model.Mood%</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">體力</span>
+                    <div class="stat-bar">
+                        <div class="stat-fill" style="width:@(Model.Energy)%; background:linear-gradient(90deg,#06b6d4,#0891b2)"></div>
+                    </div>
+                    <span class="stat-value">@Model.Energy%</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">清潔</span>
+                    <div class="stat-bar">
+                        <div class="stat-fill" style="width:@(Model.Cleanliness)%; background:linear-gradient(90deg,#10b981,#059669)"></div>
+                    </div>
+                    <span class="stat-value">@Model.Cleanliness%</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">健康</span>
+                    <div class="stat-bar">
+                        <div class="stat-fill" style="width:@(Model.Health)%; background:linear-gradient(90deg,#ef4444,#dc2626)"></div>
+                    </div>
+                    <span class="stat-value">@Model.Health%</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn btn-feed" onclick="feedPet()">🍎 餵食</button>
+                <button class="action-btn btn-clean" onclick="cleanPet()">🧼 清潔</button>
+                <button class="action-btn btn-play" onclick="playWithPet()">🎮 玩耍</button>
+                <button class="action-btn btn-rest" onclick="restPet()">😴 休息</button>
+            </div>
+            
+            <div class="text-center mt-4">
+                <p class="text-muted">經驗值: @Model.Experience / @((Model.Level * 100))</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function feedPet() {
+            performAction('/Pet/Feed', '餵食');
+        }
+        
+        function cleanPet() {
+            performAction('/Pet/Clean', '清潔');
+        }
+        
+        function playWithPet() {
+            performAction('/Pet/Play', '玩耍');
+        }
+        
+        function restPet() {
+            performAction('/Pet/Rest', '休息');
+        }
+        
+        function performAction(url, action) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    // 重新載入頁面以更新數據
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('操作失敗，請稍後再試', 'error');
+            });
+        }
+        
+        function showMessage(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            const alert = document.createElement('div');
+            alert.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

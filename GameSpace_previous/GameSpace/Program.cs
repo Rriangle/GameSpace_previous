@@ -18,7 +18,15 @@ builder.Host.UseSerilog();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // 添加控制器
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+
+// 添加Session支持
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 // 添加 API 探索器
 builder.Services.AddEndpointsApiExplorer();
@@ -61,6 +69,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
+
+// 添加Session中介軟體
+app.UseSession();
+
 app.UseAuthorization();
 
 app.MapControllers();
