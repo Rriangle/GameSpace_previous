@@ -33,14 +33,14 @@ namespace GameSpace.Controllers
             // 獲取用戶的遊戲記錄
             var gameRecords = await _context.MiniGame
                 .Where(m => m.UserId == userId)
-                .OrderByDescending(m => m.CreatedAt)
+                .OrderByDescending(m => m.StartTime)
                 .Take(10)
                 .ToListAsync();
 
             // 獲取今日遊戲次數
             var today = DateTime.UtcNow.Date;
             var todayGames = await _context.MiniGame
-                .CountAsync(m => m.UserId == userId && m.CreatedAt.Date == today);
+                .CountAsync(m => m.UserId == userId && m.StartTime.Date == today);
 
             ViewBag.TodayGames = todayGames;
             ViewBag.MaxGames = 3;
@@ -65,29 +65,50 @@ namespace GameSpace.Controllers
             // 檢查今日遊戲次數
             var today = DateTime.UtcNow.Date;
             var todayGames = await _context.MiniGame
-                .CountAsync(m => m.UserId == userId && m.CreatedAt.Date == today);
+                .CountAsync(m => m.UserId == userId && m.StartTime.Date == today);
 
             if (todayGames >= 3)
             {
                 return Json(new { success = false, message = "今日遊戲次數已用完，明天再來吧！" });
             }
 
+            // 獲取用戶的寵物
+            var pet = await _context.Pet
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (pet == null)
+            {
+                return Json(new { success = false, message = "請先創建寵物" });
+            }
+
             // 創建遊戲記錄
             var gameRecord = new MiniGame
             {
                 UserId = userId.Value,
-                GameType = "冒險挑戰",
-                Score = 0,
-                Duration = 0,
-                IsCompleted = false,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                PetId = pet.PetId,
+                Level = 1,
+                MonsterCount = 5,
+                SpeedMultiplier = 1.0m,
+                Result = "進行中",
+                ExpGained = 0,
+                ExpGainedTime = DateTime.UtcNow,
+                PointsGained = 0,
+                PointsGainedTime = DateTime.UtcNow,
+                CouponGained = "",
+                CouponGainedTime = DateTime.UtcNow,
+                HungerDelta = 0,
+                MoodDelta = 0,
+                StaminaDelta = 0,
+                CleanlinessDelta = 0,
+                StartTime = DateTime.UtcNow,
+                EndTime = null,
+                Aborted = false
             };
 
             _context.MiniGame.Add(gameRecord);
             await _context.SaveChangesAsync();
 
-            return Json(new { success = true, gameId = gameRecord.GameId, message = "遊戲開始！" });
+            return Json(new { success = true, gameId = gameRecord.PlayId, message = "遊戲開始！" });
         }
 
         /// <summary>
@@ -104,40 +125,84 @@ namespace GameSpace.Controllers
             }
 
             var gameRecord = await _context.MiniGame
-                .FirstOrDefaultAsync(m => m.GameId == gameId && m.UserId == userId);
+                .FirstOrDefaultAsync(m => m.PlayId == gameId && m.UserId == userId);
 
             if (gameRecord == null)
             {
                 return Json(new { success = false, message = "找不到遊戲記錄" });
             }
 
-            // 更新遊戲記錄
-            gameRecord.Score = score;
-            gameRecord.Duration = duration;
-            gameRecord.IsCompleted = true;
-            gameRecord.UpdatedAt = DateTime.UtcNow;
+            // 計算獎勵
+            var expGained = score / 10;
+            var pointsGained = score / 5;
+            var hungerDelta = -Math.Max(1, score / 50);
+            var moodDelta = Math.Max(1, score / 20);
+            var staminaDelta = -Math.Max(1, score / 30);
+            var cleanlinessDelta = -Math.Max(1, score / 40);
 
-            // 更新寵物經驗值
+            // 更新遊戲記錄
+            gameRecord.Result = "勝利";
+            gameRecord.ExpGained = expGained;
+            gameRecord.ExpGainedTime = DateTime.UtcNow;
+            gameRecord.PointsGained = pointsGained;
+            gameRecord.PointsGainedTime = DateTime.UtcNow;
+            gameRecord.HungerDelta = hungerDelta;
+            gameRecord.MoodDelta = moodDelta;
+            gameRecord.StaminaDelta = staminaDelta;
+            gameRecord.CleanlinessDelta = cleanlinessDelta;
+            gameRecord.EndTime = DateTime.UtcNow;
+
+            // 更新寵物屬性
             var pet = await _context.Pet
-                .FirstOrDefaultAsync(p => p.UserId == userId);
+                .FirstOrDefaultAsync(p => p.PetId == gameRecord.PetId);
 
             if (pet != null)
             {
-                pet.Experience += score / 10; // 每10分獲得1經驗
-                pet.UpdatedAt = DateTime.UtcNow;
+                pet.Experience += expGained;
+                pet.Hunger = Math.Max(0, Math.Min(100, pet.Hunger + hungerDelta));
+                pet.Mood = Math.Max(0, Math.Min(100, pet.Mood + moodDelta));
+                pet.Stamina = Math.Max(0, Math.Min(100, pet.Stamina + staminaDelta));
+                pet.Cleanliness = Math.Max(0, Math.Min(100, pet.Cleanliness + cleanlinessDelta));
+            }
+
+            // 更新用戶錢包
+            var wallet = await _context.UserWallets
+                .FirstOrDefaultAsync(w => w.UserId == userId);
+
+            if (wallet != null)
+            {
+                wallet.UserPoint += pointsGained;
+                wallet.UpdatedAt = DateTime.UtcNow;
+
+                // 記錄錢包歷史
+                var walletHistory = new WalletHistory
+                {
+                    UserId = userId.Value,
+                    TransactionType = "遊戲獎勵",
+                    Amount = pointsGained,
+                    BalanceBefore = wallet.UserPoint - pointsGained,
+                    BalanceAfter = wallet.UserPoint,
+                    Description = $"小遊戲獲得 {pointsGained} 點",
+                    ReferenceId = gameRecord.PlayId.ToString(),
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.WalletHistories.Add(walletHistory);
             }
 
             await _context.SaveChangesAsync();
 
-            // 計算排名
+            // 計算排名（基於經驗值）
             var rank = await _context.MiniGame
-                .CountAsync(m => m.Score > score) + 1;
+                .CountAsync(m => m.ExpGained > expGained) + 1;
 
             return Json(new { 
                 success = true, 
-                message = $"遊戲結束！您的分數是 {score} 分，排名第 {rank} 名！",
+                message = $"遊戲結束！您的分數是 {score} 分，獲得 {expGained} 經驗和 {pointsGained} 點數！",
                 score = score,
-                rank = rank
+                rank = rank,
+                expGained = expGained,
+                pointsGained = pointsGained
             });
         }
 
@@ -147,14 +212,14 @@ namespace GameSpace.Controllers
         public async Task<IActionResult> Leaderboard()
         {
             var leaderboard = await _context.MiniGame
-                .Where(m => m.IsCompleted)
-                .OrderByDescending(m => m.Score)
+                .Where(m => m.Result == "勝利")
+                .OrderByDescending(m => m.ExpGained)
                 .Take(20)
                 .Select(m => new {
                     UserName = m.User.UserName,
-                    Score = m.Score,
-                    Duration = m.Duration,
-                    CreatedAt = m.CreatedAt
+                    Score = m.ExpGained,
+                    PointsGained = m.PointsGained,
+                    StartTime = m.StartTime
                 })
                 .ToListAsync();
 
