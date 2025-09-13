@@ -62,7 +62,7 @@ namespace GameSpace.Controllers
         {
             var orders = await _context.OrderInfos
                 .Include(o => o.User)
-                .OrderByDescending(o => o.OrderDate)
+                .OrderByDescending(o => o.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

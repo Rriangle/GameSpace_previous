@@ -1,0 +1,208 @@
+@model IEnumerable<GameSpace.Models.Coupon>
+@{
+    ViewData["Title"] = "優惠券管理";
+    Layout = "_AdminLayout";
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">優惠券管理</h1>
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-sm btn-primary" onclick="createCoupon()">
+            <i class="fas fa-plus fa-sm text-white-50"></i> 新增優惠券
+        </button>
+        <button type="button" class="btn btn-sm btn-success" onclick="bulkCreateCoupons()">
+            <i class="fas fa-copy fa-sm text-white-50"></i> 批量生成
+        </button>
+    </div>
+</div>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">優惠券列表</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>優惠券ID</th>
+                        <th>優惠券代碼</th>
+                        <th>類型</th>
+                        <th>用戶</th>
+                        <th>折扣類型</th>
+                        <th>折扣值</th>
+                        <th>獲得時間</th>
+                        <th>使用狀態</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>優惠券ID</th>
+                        <th>優惠券代碼</th>
+                        <th>類型</th>
+                        <th>用戶</th>
+                        <th>折扣類型</th>
+                        <th>折扣值</th>
+                        <th>獲得時間</th>
+                        <th>使用狀態</th>
+                        <th>操作</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var coupon in Model)
+                    {
+                        <tr>
+                            <td>@coupon.CouponId</td>
+                            <td>
+                                <code>@coupon.CouponCode</code>
+                                <button type="button" class="btn btn-sm btn-outline-secondary ml-2" onclick="copyCode('@coupon.CouponCode')">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </td>
+                            <td>@coupon.CouponType.TypeName</td>
+                            <td>@coupon.User.UserName</td>
+                            <td>@coupon.CouponType.DiscountType</td>
+                            <td>
+                                @if (coupon.CouponType.DiscountType == "Percentage")
+                                {
+                                    @($"{coupon.CouponType.DiscountValue}%")
+                                }
+                                else
+                                {
+                                    @($"NT$ {coupon.CouponType.DiscountValue:N0}")
+                                }
+                            </td>
+                            <td>@coupon.AcquiredTime.ToString("yyyy/MM/dd HH:mm")</td>
+                            <td>
+                                @if (coupon.IsUsed)
+                                {
+                                    <span class="badge badge-success">已使用</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-warning">未使用</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="viewCoupon(@coupon.CouponId)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning" onclick="editCoupon(@coupon.CouponId)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    @if (!coupon.IsUsed)
+                                    {
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteCoupon(@coupon.CouponId)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 分頁 -->
+@if (ViewBag.TotalPages > 1)
+{
+    <nav aria-label="優惠券列表分頁">
+        <ul class="pagination justify-content-center">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?page=@(ViewBag.CurrentPage - 1)">上一頁</a>
+                </li>
+            }
+            
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="?page=@i">@i</a>
+                </li>
+            }
+            
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?page=@(ViewBag.CurrentPage + 1)">下一頁</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/zh-HANT.json"
+                },
+                "pageLength": 25,
+                "order": [[ 6, "desc" ]]
+            });
+        });
+
+        function viewCoupon(couponId) {
+            // 查看優惠券詳情
+            window.location.href = '/Admin/CouponDetails/' + couponId;
+        }
+
+        function editCoupon(couponId) {
+            // 編輯優惠券
+            window.location.href = '/Admin/EditCoupon/' + couponId;
+        }
+
+        function deleteCoupon(couponId) {
+            if (confirm('確定要刪除此優惠券嗎？此操作無法復原。')) {
+                // 刪除優惠券
+                fetch('/Admin/DeleteCoupon/' + couponId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('優惠券已刪除');
+                        location.reload();
+                    } else {
+                        alert('操作失敗：' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('操作失敗，請稍後再試');
+                });
+            }
+        }
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(function() {
+                alert('優惠券代碼已複製到剪貼板！');
+            }, function(err) {
+                console.error('複製失敗: ', err);
+                alert('複製失敗，請手動複製：' + code);
+            });
+        }
+
+        function createCoupon() {
+            // 新增優惠券
+            window.location.href = '/Admin/CreateCoupon';
+        }
+
+        function bulkCreateCoupons() {
+            // 批量生成優惠券
+            window.location.href = '/Admin/BulkCreateCoupons';
+        }
+    </script>
+}
