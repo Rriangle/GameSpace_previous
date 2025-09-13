@@ -129,6 +129,24 @@ app.MapGet("/health", () => new { Status = "Healthy", Service = "GameSpace", Tim
 // 添加簡單的 /healthz 端點
 app.MapGet("/healthz", () => "healthy");
 
+// 添加資料庫健康檢查端點 /healthz/db
+app.MapGet("/healthz/db", async (GameSpace.Data.GameSpaceDbContext db) =>
+{
+    try
+    {
+        var canConnect = await db.Database.CanConnectAsync();
+        if (canConnect)
+        {
+            return Results.Ok(new { status = "ok" });
+        }
+        return Results.Problem("database connection failed");
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"database error: {ex.Message}");
+    }
+});
+
 // 添加種子數據端點
 app.MapPost("/seed", async (ISeedDataRunner seedRunner) =>
 {

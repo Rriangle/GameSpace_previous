@@ -29,7 +29,7 @@
 - Required State: 依 CONTRIBUTING_AGENT.txt，需提供 `/healthz/db` 端點，連線成功回 `{ status: "ok" }`；失敗應具體回報。  
 - Current State: 僅有 `/health` 與 `/healthz`；未提供 `/healthz/db`。  
 - Resolution Plan: 於 `Program.cs` 新增 `GET /healthz/db`，使用 `GameSpaceDbContext.Database.CanConnectAsync()` 檢測連線。  
-- Status: Open
+- Status: Fixed（本次修復）
 
 3) AUDIT 文件位置不符約定（已矯正）  
 - Location: 目前存在 `GameSpace/docs/AUDIT.md`；常數要求 `docs/AUDIT.md`（專案根目錄）。  
