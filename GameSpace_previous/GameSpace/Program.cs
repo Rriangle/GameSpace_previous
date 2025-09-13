@@ -31,6 +31,10 @@ builder.Services.AddScoped<RBACService>();
 // 添加錢包服務
 builder.Services.AddScoped<WalletService>();
 
+// 添加遊戲熱度追蹤服務
+builder.Services.AddScoped<GameHeatTrackingService>();
+builder.Services.AddHttpClient<GameHeatTrackingService>();
+
 // 添加控制器
 builder.Services.AddControllersWithViews();
 

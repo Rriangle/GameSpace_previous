@@ -1,23 +1,28 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace GameSpace.Models;
-
-public partial class LeaderboardSnapshot
+namespace GameSpace.Models
 {
-    public int SnapshotId { get; set; }
+    /// <summary>
+    /// 排行榜快照資料表
+    /// </summary>
+    public partial class LeaderboardSnapshot
+    {
+        public int SnapshotId { get; set; }
+        public int GameId { get; set; }
+        public string SnapshotType { get; set; } = null!; // Daily, Weekly, Monthly, AllTime
+        public int Rank { get; set; }
+        public decimal HeatScore { get; set; }
+        public decimal PlayerCount { get; set; }
+        public decimal ViewCount { get; set; }
+        public decimal LikeCount { get; set; }
+        public decimal ShareCount { get; set; }
+        public decimal CommentCount { get; set; }
+        public decimal PlayTime { get; set; }
+        public decimal Revenue { get; set; }
+        public DateTime SnapshotDate { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-    public string? Period { get; set; }
-
-    public DateTime? Ts { get; set; }
-
-    public int? Rank { get; set; }
-
-    public int? GameId { get; set; }
-
-    public decimal? IndexValue { get; set; }
-
-    public DateTime? CreatedAt { get; set; }
-
-    public virtual Game? Game { get; set; }
+        public virtual Game Game { get; set; } = null!;
+    }
 }
