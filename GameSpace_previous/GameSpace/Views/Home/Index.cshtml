@@ -1,138 +1,315 @@
 @{
-    ViewData["Title"] = "GameSpace - 遊戲論壇平台";
+    ViewData["Title"] = "首頁";
     Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>GameSpace｜合併最終版 v2.3（玻璃風＋彩色看板＋強化排行＋置頂＋查看更多＋我的史萊姆）</title>
-    <style>
-        :root{
-            --bg:#eef3f8; --bg2:#ffffff; --ink:#1f2937; --muted:#64748b; --line:#e5e7eb;
-            --surface:rgba(255,255,255,.75); --glass:rgba(255,255,255,.45);
-            --accent:#7557ff; --accent-2:#34d2ff; --accent-3:#22c55e;
-            --radius:18px; --radius-sm:12px; --shadow:0 18px 40px rgba(17,24,39,.12);
-            --blur:14px;
-        }
-        body.dark{
-            --bg:#0c111b; --bg2:#0a0f18; --ink:#e5edff; --muted:#9fb1c9; --line:#1e2b43;
-            --surface:rgba(22,30,48,.65); --glass:rgba(18,24,39,.50);
-            --shadow:0 18px 42px rgba(0,0,0,.35);
-        }
-        *{box-sizing:border-box} html,body{height:100%}
-        body{
-            margin:0; color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-            background:
-                radial-gradient(900px 500px at -10% -10%, rgba(117,87,255,.10), transparent 60%),
-                radial-gradient(800px 460px at 110% 10%, rgba(52,210,255,.10), transparent 50%),
-                linear-gradient(180deg, var(--bg), var(--bg2));
-        }
-        .wrap{max-width:1380px; margin:0 auto; padding:0 16px}
-        
-        /* AppBar */
-        header.appbar{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(var(--blur)); background:var(--glass); border-bottom:1px solid var(--line)}
-        .bar{display:flex; align-items:center; gap:12px; padding:10px 0}
-        .logo{display:flex; align-items:center; gap:10px; font-weight:900}
-        .logo-badge{width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,var(--accent), var(--accent-2)); color:#fff; display:grid; place-items:center; box-shadow:var(--shadow)}
-        .search{flex:1; display:flex; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:8px 10px}
-        .search input{flex:1; background:transparent; border:0; outline:0; color:inherit}
-        .main-nav{display:flex; gap:8px; flex-wrap:wrap}
-        .pill{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); background:var(--surface); padding:8px 12px; border-radius:999px; font-weight:700}
-        .pill.on{background:linear-gradient(90deg,#3b82f6,#a78bfa); color:#fff; border-color:transparent}
-        .top-actions{display:flex; gap:8px; align-items:center}
-        .btn{border:1px solid var(--line); background:var(--surface); padding:8px 12px; border-radius:12px; cursor:pointer}
-        .btn.primary{border:0; background:linear-gradient(135deg,var(--accent),#3b82f6); color:#fff; box-shadow:var(--shadow)}
-        .btn.link{background:transparent; border:1px dashed var(--line)}
-        
-        /* Tiles（彩色看板） */
-        .tiles{padding:16px 0}
-        .grid-tiles{display:grid; gap:12px; grid-template-columns:repeat(6, minmax(0,1fr))}
-        @media (max-width:1100px){.grid-tiles{grid-template-columns:repeat(4, minmax(0,1fr))}}
-        @media (max-width:740px){.grid-tiles{grid-template-columns:repeat(2, minmax(0,1fr))}}
-        .tile{position:relative; min-height:120px; border-radius:16px; padding:14px; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; background:var(--glass); border:1px solid var(--line); backdrop-filter:blur(var(--blur)); transition:transform .16s ease, box-shadow .16s ease, filter .2s ease; box-shadow:var(--shadow)}
-        .tile:hover{transform:translateY(-3px) scale(1.01)}
-        .tile .name{font-weight:900}
-        .tile .meta{color:var(--muted); font-size:12px}
-        .mini{background:rgba(255,255,255,.65); padding:2px 8px; border-radius:999px; font-size:12px; border:1px solid var(--line)}
-        body.dark .mini{background:rgba(0,0,0,.25); color:#e5edff}
-        /* 彩色漸層（看板） */
-        .tile.colorful:nth-child(1){background:linear-gradient(135deg,#4f46e5,#22d3ee)}
-        .tile.colorful:nth-child(2){background:linear-gradient(135deg,#f43f5e,#f59e0b)}
-        .tile.colorful:nth-child(3){background:linear-gradient(135deg,#22c55e,#16a34a)}
-        .tile.colorful:nth-child(4){background:linear-gradient(135deg,#8b5cf6,#06b6d4)}
-        .tile.colorful:nth-child(5){background:linear-gradient(135deg,#f97316,#ef4444)}
-        .tile.colorful:nth-child(6){background:linear-gradient(135deg,#06b6d4,#3b82f6)}
-        .tile.colorful .name,.tile.colorful .meta,.tile.colorful .mini{color:#fff}
-        .tile.colorful .mini{background:rgba(255,255,255,.25); border-color:rgba(255,255,255,.35)}
-    </style>
-</head>
-<body>
-    <!-- AppBar -->
-    <header class="appbar">
-        <div class="wrap">
-            <div class="bar">
-                <div class="logo">
-                    <div class="logo-badge">G</div>
-                    <span>GameSpace</span>
-                </div>
-                <div class="search">
-                    <input type="text" placeholder="搜尋遊戲、文章、用戶..." />
-                    <button class="btn">🔍</button>
-                </div>
-                <nav class="main-nav">
-                    <a href="/" class="pill on">首頁</a>
-                    <a href="/Forum" class="pill">論壇</a>
-                    <a href="/OnlineStore" class="pill">商城</a>
-                    <a href="/Game" class="pill">小遊戲</a>
-                    <a href="/Pet" class="pill">我的史萊姆</a>
-                </nav>
-                <div class="top-actions">
-                    <a href="/Auth/Login" class="btn link">登入</a>
-                    <a href="/Auth/Register" class="btn primary">註冊</a>
+<!-- Hero Section -->
+<section class="hero-section mb-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-4">
+                歡迎來到 <span class="text-gradient">GameSpace</span>
+            </h1>
+            <p class="lead mb-4">
+                一個充滿樂趣的遊戲平台，讓你在遊戲中獲得更多驚喜！<br>
+                探索小遊戲、養成寵物、參與論壇討論，享受無限樂趣。
+            </p>
+            <div class="d-flex gap-3">
+                <a href="/Game" class="btn btn-primary btn-lg">
+                    <i class="fas fa-gamepad me-2"></i>開始遊戲
+                </a>
+                <a href="/Pet" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-paw me-2"></i>我的寵物
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="hero-image text-center">
+                <div class="card p-5">
+                    <i class="fas fa-gamepad display-1 text-gradient mb-3"></i>
+                    <h3>遊戲世界</h3>
+                    <p class="text-muted">探索無限可能</p>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</section>
 
-    <div class="wrap">
-        <!-- 彩色看板 -->
-        <section class="tiles">
-            <div class="grid-tiles">
-                <div class="tile colorful">
-                    <div class="name">熱門遊戲</div>
-                    <div class="meta">今日最受歡迎</div>
-                    <div class="mini">+12%</div>
-                </div>
-                <div class="tile colorful">
-                    <div class="name">最新文章</div>
-                    <div class="meta">論壇動態</div>
-                    <div class="mini">+8</div>
-                </div>
-                <div class="tile colorful">
-                    <div class="name">我的史萊姆</div>
-                    <div class="meta">寵物狀態</div>
-                    <div class="mini">Lv.15</div>
-                </div>
-                <div class="tile colorful">
-                    <div class="name">小遊戲</div>
-                    <div class="meta">冒險挑戰</div>
-                    <div class="mini">3/3</div>
-                </div>
-                <div class="tile colorful">
-                    <div class="name">商城</div>
-                    <div class="meta">限時優惠</div>
-                    <div class="mini">-20%</div>
-                </div>
-                <div class="tile colorful">
-                    <div class="name">排行榜</div>
-                    <div class="meta">玩家排名</div>
-                    <div class="mini">#1</div>
+<!-- 彩色看板 -->
+<section class="tiles-section mb-5">
+    <h2 class="h3 mb-4 text-center">快速導航</h2>
+    <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-1 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">熱門遊戲</h5>
+                        <p class="card-text text-white-50">今日最受歡迎</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">+12%</span>
+                        <a href="/Game" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-2 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">最新文章</h5>
+                        <p class="card-text text-white-50">論壇動態</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">+8</span>
+                        <a href="/Forum" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-3 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">我的史萊姆</h5>
+                        <p class="card-text text-white-50">寵物狀態</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">Lv.15</span>
+                        <a href="/Pet" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-4 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">小遊戲</h5>
+                        <p class="card-text text-white-50">冒險挑戰</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">3/3</span>
+                        <a href="/Game" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-5 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">商城</h5>
+                        <p class="card-text text-white-50">限時優惠</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">-20%</span>
+                        <a href="/Shop" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-6 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">排行榜</h5>
+                        <p class="card-text text-white-50">玩家排名</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">#1</span>
+                        <a href="/Game" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</section>
+
+<!-- 功能特色 -->
+<section class="features-section mb-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="h3 mb-4">為什麼選擇 GameSpace？</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-gamepad fa-3x text-gradient"></i>
+                            </div>
+                            <h5 class="card-title">豐富小遊戲</h5>
+                            <p class="card-text">多種有趣的迷你遊戲，每日挑戰獲得獎勵</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-paw fa-3x text-gradient"></i>
+                            </div>
+                            <h5 class="card-title">可愛寵物</h5>
+                            <p class="card-text">養成專屬的史萊姆寵物，陪伴你的遊戲時光</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-users fa-3x text-gradient"></i>
+                            </div>
+                            <h5 class="card-title">社群互動</h5>
+                            <p class="card-text">與其他玩家交流，分享遊戲心得</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 最新動態 -->
+<section class="news-section mb-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <h2 class="h3 mb-4">最新動態</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar me-3">
+                            <i class="fas fa-user-circle fa-2x text-gradient"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">系統更新</h6>
+                            <small class="text-muted">2小時前</small>
+                        </div>
+                    </div>
+                    <p class="mb-3">歡迎來到 GameSpace！我們已經準備好為您提供最佳的遊戲體驗。快來探索各種功能吧！</p>
+                    <div class="d-flex gap-2">
+                        <span class="badge bg-primary">公告</span>
+                        <span class="badge bg-secondary">更新</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <h2 class="h3 mb-4">快速統計</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <div class="h4 mb-0 text-gradient">1,234</div>
+                                <small class="text-muted">活躍用戶</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <div class="h4 mb-0 text-gradient">5,678</div>
+                                <small class="text-muted">遊戲次數</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <style>
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-section {
+            padding: 4rem 0;
+        }
+
+        .tile-card {
+            transition: all 0.3s ease;
+            border: none;
+            overflow: hidden;
+        }
+
+        .tile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tile-card.colorful-1 {
+            background: linear-gradient(135deg, #4f46e5, #22d3ee);
+            color: white;
+        }
+
+        .tile-card.colorful-2 {
+            background: linear-gradient(135deg, #f43f5e, #f59e0b);
+            color: white;
+        }
+
+        .tile-card.colorful-3 {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .tile-card.colorful-4 {
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            color: white;
+        }
+
+        .tile-card.colorful-5 {
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            color: white;
+        }
+
+        .tile-card.colorful-6 {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            color: white;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border-radius: 50%;
+            border: 1px solid var(--line);
+        }
+
+        .stat-item {
+            padding: 1rem 0;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+}

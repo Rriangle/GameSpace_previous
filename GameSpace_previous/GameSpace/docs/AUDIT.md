@@ -404,7 +404,7 @@
 | 商城系統 | In-Progress | Medium | 3小時 | 主要功能已實現，需要完善優惠券使用和庫存管理 |
 | 優惠券/禮券系統 | Completed | N/A | 0小時 | 功能完整實現，無需修復 |
 | 管理後台系統 | Completed | N/A | 0小時 | 功能完整實現，無需修復 |
-| 前台UI設計 | In-Progress | High | 8小時 | 部分實現，需要按規範完善 |
+| 前台UI設計 | Completed | N/A | 0小時 | 已按index.txt規範完善，無需修復 |
 | 後台UI設計 | Completed | N/A | 0小時 | 已使用SB Admin模板實現，無需修復 |
 | 論壇系統 | In-Progress | Medium | 8小時 | 基本模型存在，需要完善功能 |
 | 社群功能 | Open | Medium | 12小時 | 完全缺失，需要從零開始 |
