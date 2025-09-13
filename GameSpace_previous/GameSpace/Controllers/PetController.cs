@@ -143,6 +143,36 @@ namespace GameSpace.Controllers
         }
 
         /// <summary>
+        /// 休息（恢復體力）
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Rest()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+            {
+                return Json(new { success = false, message = "請先登入" });
+            }
+
+            var pet = await _context.Pet
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (pet == null)
+            {
+                return Json(new { success = false, message = "找不到您的寵物" });
+            }
+
+            // 恢復體力
+            pet.Stamina = Math.Min(100, pet.Stamina + 30);
+            pet.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true, message = "休息成功！", stamina = pet.Stamina });
+        }
+
+        /// <summary>
         /// 創建新寵物
         /// </summary>
         private async Task<Pet> CreateNewPetAsync(int userId)
@@ -154,7 +184,7 @@ namespace GameSpace.Controllers
                 Level = 1,
                 Hunger = 80,
                 Mood = 80,
-                Energy = 80,
+                Stamina = 80,
                 Cleanliness = 80,
                 Health = 100,
                 Experience = 0,
