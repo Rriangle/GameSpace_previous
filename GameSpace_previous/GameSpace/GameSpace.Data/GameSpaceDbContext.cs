@@ -66,6 +66,11 @@ namespace GameSpace.Data
         public DbSet<EVoucherType> EVoucherTypes { get; set; }
         public DbSet<EVoucherRedeemLog> EVoucherRedeemLogs { get; set; }
         public DbSet<EVoucherToken> EVoucherTokens { get; set; }
+        
+        // 管理員相關模型
+        public DbSet<ManagerData> ManagerData { get; set; }
+        public DbSet<ManagerRole> ManagerRoles { get; set; }
+        public DbSet<ManagerRolePermission> ManagerRolePermissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

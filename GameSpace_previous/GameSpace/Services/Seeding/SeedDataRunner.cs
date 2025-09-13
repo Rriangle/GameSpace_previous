@@ -57,6 +57,8 @@ namespace GameSpace.Services.Seeding
             await CreateEVoucherTypeDataAsync(connection);
             // 創建電子禮券數據（200行）
             await CreateEVoucherDataAsync(connection);
+            // 創建管理員數據（200行）
+            await CreateManagerDataAsync(connection);
 
                 _logger.LogInformation("種子數據創建完成");
                 return true;
@@ -844,6 +846,77 @@ namespace GameSpace.Services.Seeding
             var result = new string(Enumerable.Repeat(chars, 12)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
             return $"EV{result}";
+        }
+
+        private async Task CreateManagerDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建管理員數據 (目標: 200 行)");
+            
+            var existingCount = await GetTableRowCount(connection, "ManagerData");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("管理員數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42); // 固定種子確保可重複性
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var managerName = GenerateManagerName(random);
+                var managerAccount = GenerateManagerAccount(random);
+                var managerPassword = GenerateManagerPassword(random);
+                var registrationDate = DateTime.Now.AddDays(-random.Next(0, 365));
+                var managerEmail = GenerateManagerEmail(random);
+                var emailConfirmed = random.Next(4) != 0; // 75%機率已確認
+                var accessFailedCount = random.Next(0, 3);
+                var lockoutEnabled = random.Next(10) == 0; // 10%機率啟用鎖定
+                var lockoutEnd = lockoutEnabled && random.Next(2) == 0 ? 
+                    (DateTime?)DateTime.Now.AddMinutes(-random.Next(1, 60)) : null;
+
+                values.Add($"({i}, '{managerName}', '{managerAccount}', '{managerPassword}', '{registrationDate:yyyy-MM-dd HH:mm:ss}', '{managerEmail}', {(emailConfirmed ? 1 : 0)}, {accessFailedCount}, {(lockoutEnabled ? 1 : 0)}, {(lockoutEnd?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")})");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO ManagerData (Manager_Id, Manager_Name, Manager_Account, Manager_Password, Administrator_registration_date, Manager_Email, Manager_EmailConfirmed, Manager_AccessFailedCount, Manager_LockoutEnabled, Manager_LockoutEnd)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("管理員數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "ManagerData"));
+        }
+
+        private string GenerateManagerName(Random random)
+        {
+            var firstNames = new[] { "王", "李", "張", "劉", "陳", "楊", "黃", "趙", "周", "吳", "徐", "孫", "胡", "朱", "高", "林", "何", "郭", "馬", "羅" };
+            var lastNames = new[] { "明", "華", "強", "偉", "軍", "勇", "磊", "濤", "超", "傑", "峰", "鵬", "斌", "輝", "亮", "剛", "健", "建", "文", "武" };
+            return $"{firstNames[random.Next(firstNames.Length)]}{lastNames[random.Next(lastNames.Length)]}";
+        }
+
+        private string GenerateManagerAccount(Random random)
+        {
+            var prefixes = new[] { "admin", "manager", "supervisor", "director", "coordinator" };
+            var numbers = random.Next(1000, 9999);
+            return $"{prefixes[random.Next(prefixes.Length)]}{numbers}";
+        }
+
+        private string GenerateManagerPassword(Random random)
+        {
+            // 生成簡單的密碼哈希（實際應用中應使用更安全的方法）
+            var password = $"Admin{random.Next(1000, 9999)}!";
+            return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(password));
+        }
+
+        private string GenerateManagerEmail(Random random)
+        {
+            var domains = new[] { "gamespace.com", "admin.gamespace.com", "management.gamespace.com" };
+            var username = GenerateManagerAccount(random);
+            return $"{username}@{domains[random.Next(domains.Length)]}";
         }
     }
 }

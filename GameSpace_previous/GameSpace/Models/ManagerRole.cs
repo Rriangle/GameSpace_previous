@@ -1,13 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameSpace.Models;
-
-public partial class ManagerRole
+namespace GameSpace.Models
 {
-    public int ManagerId { get; set; }
+    /// <summary>
+    /// 管理員角色模型
+    /// </summary>
+    public partial class ManagerRole
+    {
+        [Key]
+        [Column("Manager_Id")]
+        public int ManagerId { get; set; }
 
-    public int ManagerRoleId { get; set; }
+        [Key]
+        [Column("ManagerRole_Id")]
+        public int ManagerRoleId { get; set; }
 
-    public string? ManagerRole1 { get; set; }
+        // 導航屬性
+        [ForeignKey("ManagerId")]
+        public virtual ManagerData Manager { get; set; } = null!;
+
+        [ForeignKey("ManagerRoleId")]
+        public virtual ManagerRolePermission ManagerRolePermission { get; set; } = null!;
+    }
 }
