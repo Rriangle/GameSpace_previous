@@ -27,7 +27,7 @@ namespace GameSpace.Controllers
             var friendships = await _context.Friendships
                 .Include(f => f.Friend)
                 .Where(f => f.UserId == userId && f.Status == "Accepted" && f.IsActive)
-                .OrderBy(f => f.Friend.Username)
+                .OrderBy(f => f.Friend.UserName)
                 .ToListAsync();
 
             return View(friendships);

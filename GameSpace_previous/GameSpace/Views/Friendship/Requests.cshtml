@@ -1,6 +1,6 @@
 @model IEnumerable<GameSpace.Models.Friendship>
 @{
-    ViewData["Title"] = "我的好友 - GameSpace";
+    ViewData["Title"] = "好友請求 - GameSpace";
     Layout = "_Layout";
 }
 
@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>我的好友 - GameSpace</title>
+    <title>好友請求 - GameSpace</title>
     <style>
         :root{
             --bg:#eef3f8; --bg2:#ffffff; --ink:#1f2937; --muted:#64748b; --line:#e5e7eb;
@@ -80,39 +80,42 @@
         }
         .btn-danger:hover{background:#dc2626; transform:translateY(-2px)}
         
-        /* 好友列表 */
-        .friends-container{
+        /* 請求列表 */
+        .requests-container{
             background:var(--glass); border:1px solid var(--line); border-radius:20px; 
             backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow); overflow:hidden;
         }
-        .friend-item{
+        .request-item{
             padding:20px; border-bottom:1px solid var(--line); transition:all 0.3s ease;
             display:flex; align-items:center; gap:15px;
         }
-        .friend-item:hover{
+        .request-item:hover{
             background:var(--surface);
         }
-        .friend-item:last-child{
+        .request-item:last-child{
             border-bottom:none;
         }
         
-        .friend-avatar{
+        .request-avatar{
             width:50px; height:50px; border-radius:50%; background:var(--accent);
             display:flex; align-items:center; justify-content:center; color:#fff;
             font-size:20px; font-weight:700;
         }
         
-        .friend-info{
+        .request-info{
             flex:1;
         }
-        .friend-name{
+        .request-name{
             font-size:18px; font-weight:700; color:var(--ink); margin-bottom:5px;
         }
-        .friend-email{
+        .request-email{
             font-size:14px; color:var(--muted);
         }
+        .request-time{
+            font-size:12px; color:var(--muted); margin-top:5px;
+        }
         
-        .friend-actions{
+        .request-actions{
             display:flex; gap:10px;
         }
         .btn-sm{
@@ -126,80 +129,62 @@
         .empty-icon{font-size:64px; margin-bottom:20px}
         .empty-title{font-size:24px; font-weight:700; margin-bottom:10px; color:var(--ink)}
         .empty-desc{font-size:16px}
-        
-        /* 搜索框 */
-        .search-container{
-            background:var(--glass); border:1px solid var(--line); border-radius:20px; 
-            padding:20px; margin-bottom:20px; backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow);
-        }
-        .search-box{
-            width:100%; padding:12px 16px; border:1px solid var(--line); border-radius:12px;
-            background:var(--bg2); color:var(--ink); font-size:16px;
-        }
-        .search-box:focus{
-            outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(117,87,255,.1);
-        }
     </style>
 </head>
 <body>
     <div class="wrap">
         <h1 class="page-title">
-            <span>👥</span>
-            我的好友
+            <span>📨</span>
+            好友請求
         </h1>
         
         <!-- 統計數據 -->
         <div class="stats-row">
             <div class="stat-card">
-                <div class="stat-value" id="totalFriends">@Model.Count()</div>
-                <div class="stat-label">總好友數</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="pendingRequests">0</div>
+                <div class="stat-value">@Model.Count()</div>
                 <div class="stat-label">待處理請求</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value" id="onlineFriends">0</div>
-                <div class="stat-label">在線好友</div>
+                <div class="stat-value">0</div>
+                <div class="stat-label">已接受</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0</div>
+                <div class="stat-label">已拒絕</div>
             </div>
         </div>
         
         <!-- 操作按鈕 -->
         <div class="actions">
-            <button class="btn btn-primary" onclick="showAddFriendModal()">添加好友</button>
-            <a href="/Friendship/Requests" class="btn btn-secondary">好友請求</a>
+            <a href="/Friendship" class="btn btn-secondary">返回好友列表</a>
             <a href="/Friendship/Groups" class="btn btn-success">我的群組</a>
-            <button class="btn btn-secondary" onclick="refreshFriends()">刷新列表</button>
+            <button class="btn btn-secondary" onclick="refreshRequests()">刷新列表</button>
         </div>
         
-        <!-- 搜索框 -->
-        <div class="search-container">
-            <input type="text" class="search-box" placeholder="搜索好友..." id="searchInput" onkeyup="filterFriends()">
-        </div>
-        
-        <!-- 好友列表 -->
-        <div class="friends-container">
+        <!-- 請求列表 -->
+        <div class="requests-container">
             @if (Model.Any())
             {
-                @foreach (var friendship in Model)
+                @foreach (var request in Model)
                 {
-                    <div class="friend-item" data-friend-id="@friendship.FriendId">
-                        <div class="friend-avatar">
-                            @friendship.Friend.UserName.Substring(0, 1).ToUpper()
+                    <div class="request-item" data-request-id="@request.FriendshipId">
+                        <div class="request-avatar">
+                            @request.User.UserName.Substring(0, 1).ToUpper()
                         </div>
-                        <div class="friend-info">
-                            <div class="friend-name">@friendship.Friend.UserName</div>
-                            <div class="friend-email">@friendship.Friend.UserAccount</div>
+                        <div class="request-info">
+                            <div class="request-name">@request.User.UserName</div>
+                            <div class="request-email">@request.User.UserAccount</div>
+                            <div class="request-time">@request.CreatedAt.ToString("yyyy/MM/dd HH:mm")</div>
                         </div>
-                        <div class="friend-actions">
-                            <button class="btn btn-primary btn-sm" onclick="startChat(@friendship.FriendId)">
-                                聊天
+                        <div class="request-actions">
+                            <button class="btn btn-success btn-sm" onclick="acceptRequest(@request.FriendshipId)">
+                                接受
                             </button>
-                            <button class="btn btn-secondary btn-sm" onclick="viewProfile(@friendship.FriendId)">
-                                資料
+                            <button class="btn btn-danger btn-sm" onclick="declineRequest(@request.FriendshipId)">
+                                拒絕
                             </button>
-                            <button class="btn btn-danger btn-sm" onclick="removeFriend(@friendship.FriendId)">
-                                刪除
+                            <button class="btn btn-secondary btn-sm" onclick="viewProfile(@request.User.UserId)">
+                                查看資料
                             </button>
                         </div>
                     </div>
@@ -208,68 +193,29 @@
             else
             {
                 <div class="empty-state">
-                    <div class="empty-icon">👥</div>
-                    <div class="empty-title">暫無好友</div>
-                    <div class="empty-desc">開始添加好友，建立您的社交網絡吧！</div>
+                    <div class="empty-icon">📭</div>
+                    <div class="empty-title">暫無好友請求</div>
+                    <div class="empty-desc">目前沒有待處理的好友請求</div>
                 </div>
             }
         </div>
     </div>
 
-    <!-- 添加好友模態框 -->
-    <div id="addFriendModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.5); z-index:1000; display:flex; align-items:center; justify-content:center;">
-        <div style="background:var(--bg2); border-radius:20px; padding:30px; max-width:400px; width:90%; box-shadow:var(--shadow);">
-            <h3 style="margin:0 0 20px; color:var(--ink);">添加好友</h3>
-            <input type="text" id="friendSearchInput" placeholder="輸入用戶名或郵箱..." style="width:100%; padding:12px; border:1px solid var(--line); border-radius:8px; margin-bottom:20px;">
-            <div style="display:flex; gap:10px; justify-content:flex-end;">
-                <button class="btn btn-secondary" onclick="closeAddFriendModal()">取消</button>
-                <button class="btn btn-primary" onclick="sendFriendRequest()">發送請求</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        function showAddFriendModal() {
-            document.getElementById('addFriendModal').style.display = 'flex';
-        }
-        
-        function closeAddFriendModal() {
-            document.getElementById('addFriendModal').style.display = 'none';
-        }
-        
-        function sendFriendRequest() {
-            const friendInput = document.getElementById('friendSearchInput').value;
-            if (!friendInput.trim()) {
-                alert('請輸入用戶名或郵箱');
-                return;
-            }
-            
-            // 這裡應該實現搜索用戶和發送好友請求的邏輯
-            alert('發送好友請求功能開發中...');
-            closeAddFriendModal();
-        }
-        
-        function startChat(friendId) {
-            alert('開始與好友 ' + friendId + ' 聊天');
-        }
-        
-        function viewProfile(friendId) {
-            alert('查看好友 ' + friendId + ' 的資料');
-        }
-        
-        function removeFriend(friendId) {
-            if (confirm('確定要刪除這個好友嗎？')) {
-                fetch('/Friendship/RemoveFriend', {
+        function acceptRequest(friendshipId) {
+            if (confirm('確定要接受這個好友請求嗎？')) {
+                fetch('/Friendship/AcceptFriendRequest', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                     },
-                    body: JSON.stringify({ friendId: friendId })
+                    body: JSON.stringify({ friendshipId: friendshipId })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        alert(data.message);
                         location.reload();
                     } else {
                         alert(data.message);
@@ -281,23 +227,36 @@
             }
         }
         
-        function filterFriends() {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const friendItems = document.querySelectorAll('.friend-item');
-            
-            friendItems.forEach(item => {
-                const friendName = item.querySelector('.friend-name').textContent.toLowerCase();
-                const friendEmail = item.querySelector('.friend-email').textContent.toLowerCase();
-                
-                if (friendName.includes(searchInput) || friendEmail.includes(searchInput)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+        function declineRequest(friendshipId) {
+            if (confirm('確定要拒絕這個好友請求嗎？')) {
+                fetch('/Friendship/DeclineFriendRequest', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify({ friendshipId: friendshipId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('操作失敗，請稍後再試');
+                });
+            }
         }
         
-        function refreshFriends() {
+        function viewProfile(userId) {
+            alert('查看用戶 ' + userId + ' 的資料');
+        }
+        
+        function refreshRequests() {
             location.reload();
         }
         
