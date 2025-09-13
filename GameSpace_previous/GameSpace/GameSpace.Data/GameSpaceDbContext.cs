@@ -85,6 +85,10 @@ namespace GameSpace.Data
         public DbSet<GroupChat> GroupChats { get; set; }
         public DbSet<GroupBlock> GroupBlocks { get; set; }
         public DbSet<GroupReadState> GroupReadStates { get; set; }
+        
+        // 聊天相關模型
+        public DbSet<DM_Conversations> DM_Conversations { get; set; }
+        public DbSet<DM_Messages> DM_Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

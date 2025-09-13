@@ -1,0 +1,258 @@
+@model IEnumerable<GameSpace.Models.DM_Conversations>
+@{
+    ViewData["Title"] = "聊天 - GameSpace";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>聊天 - GameSpace</title>
+    <style>
+        :root{
+            --bg:#eef3f8; --bg2:#ffffff; --ink:#1f2937; --muted:#64748b; --line:#e5e7eb;
+            --surface:rgba(255,255,255,.75); --glass:rgba(255,255,255,.45);
+            --accent:#7557ff; --accent-2:#34d2ff; --accent-3:#22c55e; --accent-4:#ef4444;
+            --radius:18px; --radius-sm:12px; --shadow:0 18px 40px rgba(17,24,39,.12);
+            --blur:14px;
+        }
+        body.dark{
+            --bg:#0c111b; --bg2:#0a0f18; --ink:#e5edff; --muted:#9fb1c9; --line:#1e2b43;
+            --surface:rgba(22,30,48,.65); --glass:rgba(18,24,39,.50);
+            --shadow:0 18px 42px rgba(0,0,0,.35);
+        }
+        *{box-sizing:border-box} html,body{height:100%}
+        body{
+            margin:0; color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+            background:
+                radial-gradient(900px 500px at -10% -10%, rgba(117,87,255,.10), transparent 60%),
+                radial-gradient(800px 460px at 110% 10%, rgba(52,210,255,.10), transparent 50%),
+                linear-gradient(180deg, var(--bg), var(--bg2));
+        }
+        .wrap{max-width:1200px; margin:0 auto; padding:0 16px}
+        
+        /* 標題 */
+        .page-title{
+            font-size:32px; font-weight:900; color:var(--ink); margin:40px 0 30px; text-align:center;
+            display:flex; align-items:center; justify-content:center; gap:15px;
+        }
+        
+        /* 聊天列表 */
+        .chat-container{
+            background:var(--glass); border:1px solid var(--line); border-radius:20px; 
+            backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow); overflow:hidden;
+        }
+        .chat-item{
+            padding:20px; border-bottom:1px solid var(--line); transition:all 0.3s ease;
+            display:flex; align-items:center; gap:15px; cursor:pointer;
+        }
+        .chat-item:hover{
+            background:var(--surface);
+        }
+        .chat-item:last-child{
+            border-bottom:none;
+        }
+        
+        .chat-avatar{
+            width:50px; height:50px; border-radius:50%; background:var(--accent);
+            display:flex; align-items:center; justify-content:center; color:#fff;
+            font-size:20px; font-weight:700;
+        }
+        
+        .chat-info{
+            flex:1;
+        }
+        .chat-name{
+            font-size:18px; font-weight:700; color:var(--ink); margin-bottom:5px;
+        }
+        .chat-last-message{
+            font-size:14px; color:var(--muted); line-height:1.4;
+            display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+            overflow:hidden;
+        }
+        
+        .chat-meta{
+            text-align:right;
+        }
+        .chat-time{
+            font-size:12px; color:var(--muted); margin-bottom:5px;
+        }
+        .chat-unread{
+            background:var(--accent); color:#fff; border-radius:50%;
+            width:20px; height:20px; display:flex; align-items:center; justify-content:center;
+            font-size:12px; font-weight:700; margin-left:auto;
+        }
+        
+        /* 空狀態 */
+        .empty-state{
+            text-align:center; padding:80px 20px; color:var(--muted);
+        }
+        .empty-icon{font-size:64px; margin-bottom:20px}
+        .empty-title{font-size:24px; font-weight:700; margin-bottom:10px; color:var(--ink)}
+        .empty-desc{font-size:16px}
+        
+        /* 操作按鈕 */
+        .actions{
+            display:flex; gap:15px; margin-bottom:30px; justify-content:center; flex-wrap:wrap;
+        }
+        .btn{
+            padding:12px 24px; border:none; border-radius:12px; font-weight:700;
+            cursor:pointer; transition:all 0.3s ease; text-decoration:none; display:inline-block;
+        }
+        .btn-primary{
+            background:var(--accent); color:#fff;
+        }
+        .btn-primary:hover{background:#6d28d9; transform:translateY(-2px)}
+        .btn-secondary{
+            background:var(--surface); color:var(--ink); border:1px solid var(--line);
+        }
+        .btn-secondary:hover{background:var(--line)}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1 class="page-title">
+            <span>💬</span>
+            聊天
+        </h1>
+        
+        <!-- 操作按鈕 -->
+        <div class="actions">
+            <button class="btn btn-primary" onclick="showNewChatModal()">開始新對話</button>
+            <button class="btn btn-secondary" onclick="refreshChats()">刷新列表</button>
+        </div>
+        
+        <!-- 聊天列表 -->
+        <div class="chat-container">
+            @if (Model.Any())
+            {
+                @foreach (var conversation in Model)
+                {
+                    var otherUser = conversation.Party1Id == 1 ? conversation.Party2 : conversation.Party1;
+                    var lastMessage = conversation.DM_Messages.FirstOrDefault();
+                    var unreadCount = conversation.DM_Messages.Count(m => m.SenderUserId != 1 && m.ReadAt == null);
+                    
+                    <div class="chat-item" onclick="openConversation(@conversation.ConversationId)">
+                        <div class="chat-avatar">
+                            @otherUser.Username.Substring(0, 1).ToUpper()
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-name">@otherUser.Username</div>
+                            <div class="chat-last-message">
+                                @if (lastMessage != null)
+                                {
+                                    @if (lastMessage.MessageType == "Text")
+                                    {
+                                        @lastMessage.MessageContent
+                                    }
+                                    else
+                                    {
+                                        @($"[{lastMessage.MessageType}]")
+                                    }
+                                }
+                                else
+                                {
+                                    <span style="color:var(--muted); font-style:italic;">開始對話...</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="chat-meta">
+                            @if (conversation.LastMessageAt.HasValue)
+                            {
+                                <div class="chat-time">
+                                    @conversation.LastMessageAt.Value.ToString("HH:mm")
+                                </div>
+                            }
+                            @if (unreadCount > 0)
+                            {
+                                <div class="chat-unread">@unreadCount</div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-state">
+                    <div class="empty-icon">💬</div>
+                    <div class="empty-title">暫無對話</div>
+                    <div class="empty-desc">開始與好友聊天吧！</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- 新對話模態框 -->
+    <div id="newChatModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.5); z-index:1000; display:flex; align-items:center; justify-content:center;">
+        <div style="background:var(--bg2); border-radius:20px; padding:30px; max-width:400px; width:90%; box-shadow:var(--shadow);">
+            <h3 style="margin:0 0 20px; color:var(--ink);">開始新對話</h3>
+            <input type="text" id="userSearchInput" placeholder="輸入用戶名或郵箱..." style="width:100%; padding:12px; border:1px solid var(--line); border-radius:8px; margin-bottom:20px;">
+            <div id="searchResults" style="max-height:200px; overflow-y:auto; margin-bottom:20px;"></div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button class="btn btn-secondary" onclick="closeNewChatModal()">取消</button>
+                <button class="btn btn-primary" onclick="startNewChat()">開始對話</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showNewChatModal() {
+            document.getElementById('newChatModal').style.display = 'flex';
+        }
+        
+        function closeNewChatModal() {
+            document.getElementById('newChatModal').style.display = 'none';
+            document.getElementById('searchResults').innerHTML = '';
+        }
+        
+        function openConversation(conversationId) {
+            window.location.href = '/Chat/Conversation/' + conversationId;
+        }
+        
+        function startNewChat() {
+            const userInput = document.getElementById('userSearchInput').value;
+            if (!userInput.trim()) {
+                alert('請輸入用戶名或郵箱');
+                return;
+            }
+            
+            // 這裡應該實現搜索用戶和開始新對話的邏輯
+            alert('開始新對話功能開發中...');
+            closeNewChatModal();
+        }
+        
+        function refreshChats() {
+            location.reload();
+        }
+        
+        // 搜索用戶
+        document.getElementById('userSearchInput').addEventListener('input', function() {
+            const query = this.value;
+            if (query.length < 2) {
+                document.getElementById('searchResults').innerHTML = '';
+                return;
+            }
+            
+            // 這裡應該實現搜索用戶的API調用
+            // 暫時顯示模擬結果
+            document.getElementById('searchResults').innerHTML = `
+                <div style="padding:10px; border-bottom:1px solid var(--line); cursor:pointer;" onclick="selectUser('user1', 'User1')">
+                    <div style="font-weight:600; color:var(--ink);">User1</div>
+                    <div style="font-size:12px; color:var(--muted);">user1@example.com</div>
+                </div>
+                <div style="padding:10px; border-bottom:1px solid var(--line); cursor:pointer;" onclick="selectUser('user2', 'User2')">
+                    <div style="font-weight:600; color:var(--ink);">User2</div>
+                    <div style="font-size:12px; color:var(--muted);">user2@example.com</div>
+                </div>
+            `;
+        });
+        
+        function selectUser(userId, username) {
+            document.getElementById('userSearchInput').value = username;
+            document.getElementById('searchResults').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

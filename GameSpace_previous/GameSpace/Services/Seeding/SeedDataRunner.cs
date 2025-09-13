@@ -63,6 +63,8 @@ namespace GameSpace.Services.Seeding
             await CreateNotificationDataAsync(connection);
             // 創建好友和群組數據（200行）
             await CreateFriendshipAndGroupDataAsync(connection);
+            // 創建聊天數據（200行）
+            await CreateChatDataAsync(connection);
 
                 _logger.LogInformation("種子數據創建完成");
                 return true;
@@ -1311,6 +1313,143 @@ namespace GameSpace.Services.Seeding
                 "遊戲王", "大神", "菜鳥", "老鳥", "新星", "明星", "偶像", "偶像", "偶像", "偶像"
             };
             return nicknames[random.Next(nicknames.Length)];
+        }
+
+        private async Task CreateChatDataAsync(SqlConnection connection)
+        {
+            _logger.LogInformation("創建聊天數據 (目標: 200 行)");
+            
+            // 先創建對話數據
+            await CreateConversationsDataAsync(connection);
+            
+            // 創建消息數據
+            await CreateMessagesDataAsync(connection);
+            
+            _logger.LogInformation("聊天數據創建完成");
+        }
+
+        private async Task CreateConversationsDataAsync(SqlConnection connection)
+        {
+            var existingCount = await GetTableRowCount(connection, "DM_Conversations");
+            if (existingCount >= 100)
+            {
+                _logger.LogInformation("對話數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42);
+
+            for (int i = existingCount + 1; i <= 100; i++)
+            {
+                var party1Id = random.Next(1, 201); // 假設有200個用戶
+                var party2Id = random.Next(1, 201);
+                
+                // 確保不會自己和自己對話
+                if (party1Id == party2Id)
+                {
+                    party2Id = (party2Id % 200) + 1;
+                }
+                
+                var isManagerDm = random.Next(10) == 0; // 10%機率是管理員對話
+                var createdAt = DateTime.Now.AddDays(-random.Next(0, 90));
+                var lastMessageAt = random.Next(2) == 0 ? (DateTime?)createdAt.AddMinutes(random.Next(1, 1440)) : null;
+
+                values.Add($"({i}, {(isManagerDm ? 1 : 0)}, {party1Id}, {party2Id}, '{createdAt:yyyy-MM-dd HH:mm:ss}', {(lastMessageAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")})");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO DM_Conversations (conversation_id, is_manager_dm, party1_id, party2_id, created_at, last_message_at)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("對話數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "DM_Conversations"));
+        }
+
+        private async Task CreateMessagesDataAsync(SqlConnection connection)
+        {
+            var existingCount = await GetTableRowCount(connection, "DM_Messages");
+            if (existingCount >= 200)
+            {
+                _logger.LogInformation("消息數據已存在 {Count} 行，跳過創建", existingCount);
+                return;
+            }
+
+            var values = new List<string>();
+            var random = new Random(42);
+
+            for (int i = existingCount + 1; i <= 200; i++)
+            {
+                var conversationId = random.Next(1, 101); // 假設有100個對話
+                var senderUserId = random.Next(1, 201); // 假設有200個用戶
+                var messageContent = GenerateMessageContent(random);
+                var messageType = new[] { "Text", "Image", "File", "Voice", "Video" }[random.Next(5)];
+                var sentAt = DateTime.Now.AddDays(-random.Next(0, 90)).AddMinutes(random.Next(0, 1440));
+                var readAt = random.Next(3) == 0 ? (DateTime?)sentAt.AddMinutes(random.Next(1, 60)) : null;
+                var isDeleted = random.Next(20) == 0; // 5%機率已刪除
+                var deletedAt = isDeleted ? (DateTime?)sentAt.AddMinutes(random.Next(1, 60)) : null;
+                var isEdited = random.Next(10) == 0; // 10%機率已編輯
+                var editedAt = isEdited ? (DateTime?)sentAt.AddMinutes(random.Next(1, 30)) : null;
+                var attachmentUrl = random.Next(5) == 0 ? $"attachment_{random.Next(1, 10)}.jpg" : null;
+                var attachmentName = attachmentUrl != null ? $"附件_{random.Next(1, 100)}" : null;
+
+                values.Add($"({i}, {conversationId}, {senderUserId}, '{messageContent}', '{messageType}', '{sentAt:yyyy-MM-dd HH:mm:ss}', {(readAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")}, {(isDeleted ? 1 : 0)}, {(deletedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")}, {(attachmentUrl != null ? $"'{attachmentUrl}'" : "NULL")}, {(attachmentName != null ? $"'{attachmentName}'" : "NULL")}, {(isEdited ? 1 : 0)}, {(editedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")})");
+            }
+
+            if (values.Any())
+            {
+                var sql = $@"
+                    INSERT INTO DM_Messages (message_id, conversation_id, sender_user_id, message_content, message_type, sent_at, read_at, is_deleted, deleted_at, attachment_url, attachment_name, is_edited, edited_at)
+                    VALUES {string.Join(", ", values)}";
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _logger.LogInformation("消息數據創建完成，當前行數: {Count}", await GetTableRowCount(connection, "DM_Messages"));
+        }
+
+        private string GenerateMessageContent(Random random)
+        {
+            var messages = new[]
+            {
+                "你好！",
+                "最近怎麼樣？",
+                "在玩什麼遊戲？",
+                "有空一起玩嗎？",
+                "謝謝你的幫助！",
+                "這個功能很好用",
+                "我同意你的觀點",
+                "明天見！",
+                "晚安",
+                "早上好",
+                "今天天氣不錯",
+                "你覺得這個怎麼樣？",
+                "我明白了",
+                "好的，沒問題",
+                "太棒了！",
+                "哈哈，有趣",
+                "我也這麼想",
+                "確實如此",
+                "你說得對",
+                "我不同意",
+                "讓我考慮一下",
+                "稍等一下",
+                "我馬上回來",
+                "抱歉，我遲到了",
+                "沒關係",
+                "不客氣",
+                "再見！",
+                "保持聯繫",
+                "下次聊",
+                "期待下次見面"
+            };
+            return messages[random.Next(messages.Length)];
         }
     }
 }
