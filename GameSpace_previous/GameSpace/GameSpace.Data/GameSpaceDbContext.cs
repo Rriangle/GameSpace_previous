@@ -72,6 +72,19 @@ namespace GameSpace.Data
         public DbSet<ManagerData> ManagerData { get; set; }
         public DbSet<ManagerRole> ManagerRoles { get; set; }
         public DbSet<ManagerRolePermission> ManagerRolePermissions { get; set; }
+
+        // 系統相關模型
+        public DbSet<SystemConfig> SystemConfigs { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<SystemLog> SystemLogs { get; set; }
+        public DbSet<EmailTemplate> EmailTemplates { get; set; }
+        public DbSet<EmailQueue> EmailQueues { get; set; }
+        public DbSet<FileUpload> FileUploads { get; set; }
+        public DbSet<UserActivity> UserActivities { get; set; }
+        public DbSet<UserSession> UserSessions { get; set; }
+        public DbSet<UserPreference> UserPreferences { get; set; }
+        public DbSet<UserBlock> UserBlocks { get; set; }
+        public DbSet<UserReport> UserReports { get; set; }
         
         // 通知相關模型
         public DbSet<Notification> Notifications { get; set; }
@@ -258,6 +271,252 @@ namespace GameSpace.Data
                     .WithMany(g => g.LeaderboardSnapshots)
                     .HasForeignKey(e => e.GameId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // 配置 SystemConfig 表
+            modelBuilder.Entity<SystemConfig>(entity =>
+            {
+                entity.ToTable("System_Configs");
+                entity.HasKey(e => e.ConfigId);
+                entity.Property(e => e.ConfigId).HasColumnName("Config_Id");
+                entity.Property(e => e.ConfigKey).HasColumnName("Config_Key");
+                entity.Property(e => e.ConfigValue).HasColumnName("Config_Value");
+                entity.Property(e => e.Description).HasColumnName("Description");
+                entity.Property(e => e.ConfigType).HasColumnName("Config_Type");
+                entity.Property(e => e.IsActive).HasColumnName("Is_Active");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                entity.Property(e => e.UpdatedAt).HasColumnName("Updated_At");
+            });
+
+            // 配置 AuditLog 表
+            modelBuilder.Entity<AuditLog>(entity =>
+            {
+                entity.ToTable("Audit_Logs");
+                entity.HasKey(e => e.LogId);
+                entity.Property(e => e.LogId).HasColumnName("Log_Id");
+                entity.Property(e => e.UserId).HasColumnName("User_Id");
+                entity.Property(e => e.Action).HasColumnName("Action");
+                entity.Property(e => e.EntityType).HasColumnName("Entity_Type");
+                entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
+                entity.Property(e => e.OldValues).HasColumnName("Old_Values");
+                entity.Property(e => e.NewValues).HasColumnName("New_Values");
+                entity.Property(e => e.IpAddress).HasColumnName("Ip_Address");
+                entity.Property(e => e.UserAgent).HasColumnName("User_Agent");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // 配置 SystemLog 表
+            modelBuilder.Entity<SystemLog>(entity =>
+            {
+                entity.ToTable("System_Logs");
+                entity.HasKey(e => e.LogId);
+                entity.Property(e => e.LogId).HasColumnName("Log_Id");
+                entity.Property(e => e.LogLevel).HasColumnName("Log_Level");
+                entity.Property(e => e.Message).HasColumnName("Message");
+                entity.Property(e => e.Exception).HasColumnName("Exception");
+                entity.Property(e => e.Source).HasColumnName("Source");
+                entity.Property(e => e.UserId).HasColumnName("User_Id");
+                entity.Property(e => e.IpAddress).HasColumnName("Ip_Address");
+                entity.Property(e => e.UserAgent).HasColumnName("User_Agent");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // 配置 EmailTemplate 表
+            modelBuilder.Entity<EmailTemplate>(entity =>
+            {
+                entity.ToTable("Email_Templates");
+                entity.HasKey(e => e.TemplateId);
+                entity.Property(e => e.TemplateId).HasColumnName("Template_Id");
+                entity.Property(e => e.TemplateName).HasColumnName("Template_Name");
+                entity.Property(e => e.Subject).HasColumnName("Subject");
+                entity.Property(e => e.Body).HasColumnName("Body");
+                entity.Property(e => e.TemplateType).HasColumnName("Template_Type");
+                entity.Property(e => e.IsActive).HasColumnName("Is_Active");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                entity.Property(e => e.UpdatedAt).HasColumnName("Updated_At");
+            });
+
+            // 配置 EmailQueue 表
+            modelBuilder.Entity<EmailQueue>(entity =>
+            {
+                entity.ToTable("Email_Queues");
+                entity.HasKey(e => e.QueueId);
+                entity.Property(e => e.QueueId).HasColumnName("Queue_Id");
+                entity.Property(e => e.UserId).HasColumnName("User_Id");
+                entity.Property(e => e.ToEmail).HasColumnName("To_Email");
+                entity.Property(e => e.Subject).HasColumnName("Subject");
+                entity.Property(e => e.Body).HasColumnName("Body");
+                entity.Property(e => e.Status).HasColumnName("Status");
+                entity.Property(e => e.TemplateId).HasColumnName("Template_Id");
+                entity.Property(e => e.RetryCount).HasColumnName("Retry_Count");
+                entity.Property(e => e.SentAt).HasColumnName("Sent_At");
+                entity.Property(e => e.ErrorMessage).HasColumnName("Error_Message");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                entity.Property(e => e.ScheduledAt).HasColumnName("Scheduled_At");
+                
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.SetNull);
+                
+                entity.HasOne(e => e.Template)
+                    .WithMany()
+                    .HasForeignKey(e => e.TemplateId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // 配置 FileUpload 表
+            modelBuilder.Entity<FileUpload>(entity =>
+            {
+                entity.ToTable("File_Uploads");
+                entity.HasKey(e => e.FileId);
+                entity.Property(e => e.FileId).HasColumnName("File_Id");
+                entity.Property(e => e.UserId).HasColumnName("User_Id");
+                entity.Property(e => e.FileName).HasColumnName("File_Name");
+                entity.Property(e => e.OriginalFileName).HasColumnName("Original_File_Name");
+                entity.Property(e => e.FilePath).HasColumnName("File_Path");
+                entity.Property(e => e.FileType).HasColumnName("File_Type");
+                entity.Property(e => e.FileSize).HasColumnName("File_Size");
+                entity.Property(e => e.Description).HasColumnName("Description");
+                entity.Property(e => e.UploadType).HasColumnName("Upload_Type");
+                entity.Property(e => e.IsPublic).HasColumnName("Is_Public");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // 配置 UserActivity 表
+            modelBuilder.Entity<UserActivity>(entity =>
+            {
+                entity.ToTable("User_Activities");
+                entity.HasKey(e => e.ActivityId);
+                entity.Property(e => e.ActivityId).HasColumnName("Activity_Id");
+                entity.Property(e => e.UserId).HasColumnName("User_Id");
+                entity.Property(e => e.ActivityType).HasColumnName("Activity_Type");
+                entity.Property(e => e.Description).HasColumnName("Description");
+                entity.Property(e => e.EntityType).HasColumnName("Entity_Type");
+                entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
+                entity.Property(e => e.IpAddress).HasColumnName("Ip_Address");
+                entity.Property(e => e.UserAgent).HasColumnName("User_Agent");
+                entity.Property(e => e.Location).HasColumnName("Location");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // 配置 UserSession 表
+            modelBuilder.Entity<UserSession>(entity =>
+            {
+                entity.ToTable("User_Sessions");
+                entity.HasKey(e => e.SessionId);
+                entity.Property(e => e.SessionId).HasColumnName("Session_Id");
+                entity.Property(e => e.UserId).HasColumnName("User_Id");
+                entity.Property(e => e.SessionToken).HasColumnName("Session_Token");
+                entity.Property(e => e.DeviceInfo).HasColumnName("Device_Info");
+                entity.Property(e => e.IpAddress).HasColumnName("Ip_Address");
+                entity.Property(e => e.Location).HasColumnName("Location");
+                entity.Property(e => e.IsActive).HasColumnName("Is_Active");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                entity.Property(e => e.LastActivity).HasColumnName("Last_Activity");
+                entity.Property(e => e.ExpiresAt).HasColumnName("Expires_At");
+                
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // 配置 UserPreference 表
+            modelBuilder.Entity<UserPreference>(entity =>
+            {
+                entity.ToTable("User_Preferences");
+                entity.HasKey(e => e.PreferenceId);
+                entity.Property(e => e.PreferenceId).HasColumnName("Preference_Id");
+                entity.Property(e => e.UserId).HasColumnName("User_Id");
+                entity.Property(e => e.PreferenceKey).HasColumnName("Preference_Key");
+                entity.Property(e => e.PreferenceValue).HasColumnName("Preference_Value");
+                entity.Property(e => e.Description).HasColumnName("Description");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                entity.Property(e => e.UpdatedAt).HasColumnName("Updated_At");
+                
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // 配置 UserBlock 表
+            modelBuilder.Entity<UserBlock>(entity =>
+            {
+                entity.ToTable("User_Blocks");
+                entity.HasKey(e => e.BlockId);
+                entity.Property(e => e.BlockId).HasColumnName("Block_Id");
+                entity.Property(e => e.BlockerId).HasColumnName("Blocker_Id");
+                entity.Property(e => e.BlockedId).HasColumnName("Blocked_Id");
+                entity.Property(e => e.Reason).HasColumnName("Reason");
+                entity.Property(e => e.IsActive).HasColumnName("Is_Active");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                entity.Property(e => e.UnblockedAt).HasColumnName("Unblocked_At");
+                
+                entity.HasOne(e => e.Blocker)
+                    .WithMany()
+                    .HasForeignKey(e => e.BlockerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                
+                entity.HasOne(e => e.Blocked)
+                    .WithMany()
+                    .HasForeignKey(e => e.BlockedId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // 配置 UserReport 表
+            modelBuilder.Entity<UserReport>(entity =>
+            {
+                entity.ToTable("User_Reports");
+                entity.HasKey(e => e.ReportId);
+                entity.Property(e => e.ReportId).HasColumnName("Report_Id");
+                entity.Property(e => e.ReporterId).HasColumnName("Reporter_Id");
+                entity.Property(e => e.ReportedUserId).HasColumnName("Reported_User_Id");
+                entity.Property(e => e.ReportedEntityType).HasColumnName("Reported_Entity_Type");
+                entity.Property(e => e.ReportedEntityId).HasColumnName("Reported_Entity_Id");
+                entity.Property(e => e.ReportType).HasColumnName("Report_Type");
+                entity.Property(e => e.Description).HasColumnName("Description");
+                entity.Property(e => e.Status).HasColumnName("Status");
+                entity.Property(e => e.ReviewedBy).HasColumnName("Reviewed_By");
+                entity.Property(e => e.ReviewNotes).HasColumnName("Review_Notes");
+                entity.Property(e => e.CreatedAt).HasColumnName("Created_At");
+                entity.Property(e => e.ReviewedAt).HasColumnName("Reviewed_At");
+                
+                entity.HasOne(e => e.Reporter)
+                    .WithMany()
+                    .HasForeignKey(e => e.ReporterId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                
+                entity.HasOne(e => e.ReportedUser)
+                    .WithMany()
+                    .HasForeignKey(e => e.ReportedUserId)
+                    .OnDelete(DeleteBehavior.SetNull);
+                
+                entity.HasOne(e => e.Reviewer)
+                    .WithMany()
+                    .HasForeignKey(e => e.ReviewedBy)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
         }
     }
