@@ -102,6 +102,9 @@ public partial class GameSpacedatabaseContext : DbContext
         public virtual DbSet<PlayerMarketProductImgs> PlayerMarketProductImgsNew { get; set; }
         public virtual DbSet<ProductImages> ProductImagesNew { get; set; }
         public virtual DbSet<Shipments> ShipmentsNew { get; set; }
+        public virtual DbSet<StockMovements> StockMovementsNew { get; set; }
+        public virtual DbSet<Support_Ticket_Assignments> SupportTicketAssignmentsNew { get; set; }
+        public virtual DbSet<Support_Ticket_Messages> SupportTicketMessagesNew { get; set; }
 
     public virtual DbSet<OrderInfo> OrderInfos { get; set; }
 
@@ -2603,6 +2606,112 @@ public partial class GameSpacedatabaseContext : DbContext
             entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
             entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
             entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+        });
+
+        // 配置 StockMovements 模型
+        modelBuilder.Entity<StockMovements>(entity =>
+        {
+            entity.HasKey(e => e.MovementId).HasName("PK_StockMovements");
+            entity.ToTable("StockMovements");
+            entity.Property(e => e.MovementId).HasColumnName("movement_id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.MovementType).HasColumnName("movement_type");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.PreviousStock).HasColumnName("previous_stock");
+            entity.Property(e => e.NewStock).HasColumnName("new_stock");
+            entity.Property(e => e.Reason).HasColumnName("reason");
+            entity.Property(e => e.Reference).HasColumnName("reference");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.ManagerId).HasColumnName("manager_id");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+        });
+
+        // 配置 Support_Ticket_Assignments 模型
+        modelBuilder.Entity<Support_Ticket_Assignments>(entity =>
+        {
+            entity.HasKey(e => e.AssignmentId).HasName("PK_Support_Ticket_Assignments");
+            entity.ToTable("Support_Ticket_Assignments");
+            entity.Property(e => e.AssignmentId).HasColumnName("assignment_id");
+            entity.Property(e => e.TicketId).HasColumnName("ticket_id");
+            entity.Property(e => e.ManagerId).HasColumnName("manager_id");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.AssignedAt).HasColumnName("assigned_at");
+            entity.Property(e => e.UnassignedAt).HasColumnName("unassigned_at");
+            entity.Property(e => e.AssignedBy).HasColumnName("assigned_by");
+            entity.Property(e => e.UnassignedBy).HasColumnName("unassigned_by");
+            entity.Property(e => e.AssignmentReason).HasColumnName("assignment_reason");
+            entity.Property(e => e.UnassignmentReason).HasColumnName("unassignment_reason");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
+            entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.Settings).HasColumnName("settings");
+        });
+
+        // 配置 Support_Ticket_Messages 模型
+        modelBuilder.Entity<Support_Ticket_Messages>(entity =>
+        {
+            entity.HasKey(e => e.MessageId).HasName("PK_Support_Ticket_Messages");
+            entity.ToTable("Support_Ticket_Messages");
+            entity.Property(e => e.MessageId).HasColumnName("message_id");
+            entity.Property(e => e.TicketId).HasColumnName("ticket_id");
+            entity.Property(e => e.SenderUserId).HasColumnName("sender_user_id");
+            entity.Property(e => e.SenderManagerId).HasColumnName("sender_manager_id");
+            entity.Property(e => e.MessageText).HasColumnName("message_text");
+            entity.Property(e => e.SentAt).HasColumnName("sent_at");
+            entity.Property(e => e.IsRead).HasColumnName("is_read");
+            entity.Property(e => e.ReadAt).HasColumnName("read_at");
+            entity.Property(e => e.ReadByUserId).HasColumnName("read_by_user_id");
+            entity.Property(e => e.ReadByManagerId).HasColumnName("read_by_manager_id");
+            entity.Property(e => e.IsEdited).HasColumnName("is_edited");
+            entity.Property(e => e.EditedAt).HasColumnName("edited_at");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+            entity.Property(e => e.DeletedByUserId).HasColumnName("deleted_by_user_id");
+            entity.Property(e => e.DeletedByManagerId).HasColumnName("deleted_by_manager_id");
+            entity.Property(e => e.MessageType).HasColumnName("message_type");
+            entity.Property(e => e.AttachmentUrl).HasColumnName("attachment_url");
+            entity.Property(e => e.AttachmentType).HasColumnName("attachment_type");
+            entity.Property(e => e.ReplyToMessageId).HasColumnName("reply_to_message_id");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Tags).HasColumnName("tags");
+            entity.Property(e => e.Category).HasColumnName("category");
+            entity.Property(e => e.SubCategory).HasColumnName("sub_category");
+            entity.Property(e => e.Priority).HasColumnName("priority");
+            entity.Property(e => e.IsInternal).HasColumnName("is_internal");
+            entity.Property(e => e.IsPublic).HasColumnName("is_public");
+            entity.Property(e => e.IsPinned).HasColumnName("is_pinned");
+            entity.Property(e => e.PinnedAt).HasColumnName("pinned_at");
+            entity.Property(e => e.PinOrder).HasColumnName("pin_order");
+            entity.Property(e => e.PinnedBy).HasColumnName("pinned_by");
+            entity.Property(e => e.PinReason).HasColumnName("pin_reason");
+            entity.Property(e => e.IsArchived).HasColumnName("is_archived");
+            entity.Property(e => e.ArchivedAt).HasColumnName("archived_at");
+            entity.Property(e => e.ArchivedBy).HasColumnName("archived_by");
+            entity.Property(e => e.ArchiveReason).HasColumnName("archive_reason");
+            entity.Property(e => e.Settings).HasColumnName("settings");
         });
 
         modelBuilder.HasSequence("SeqOrderCode")
