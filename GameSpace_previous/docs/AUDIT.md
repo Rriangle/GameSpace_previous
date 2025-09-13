@@ -22,7 +22,7 @@
 - Required State: 後台使用 SB Admin 靜態資產，路徑應指向 `~/lib/sb-admin/...`（或實際 vendor 安裝位置）；不得混用 Public 的樣式資產。  
 - Current State: 版型引用 `~/vendor/sb-admin/...` 与 `~/vendor/...`；專案實際存在的路徑為 `GameSpace/wwwroot/lib/sb-admin/...`。  
 - Resolution Plan: 將 `_Layout.cshtml` 的資產引用由 `~/vendor/sb-admin/...` 調整為 `~/lib/sb-admin/...`，並確認 FontAwesome、jQuery、Bootstrap 等對應來源一致。  
-- Status: Open
+- Status: Fixed（本次修復）
 
 2) 缺少資料庫健康檢查端點  
 - Location: `GameSpace/Program.cs`  
