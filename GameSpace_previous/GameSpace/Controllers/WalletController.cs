@@ -201,6 +201,114 @@ namespace GameSpace.Controllers
             var userIdStr = HttpContext.Session.GetString("UserId");
             return int.TryParse(userIdStr, out var userId) ? userId : null;
         }
+
+        /// <summary>
+        /// 點數兌換電子禮券
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExchangeForEVoucher(ExchangeEVoucherViewModel model)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+            {
+                return Json(new { success = false, message = "請先登入" });
+            }
+
+            if (model.RequiredPoints <= 0)
+            {
+                return Json(new { success = false, message = "兌換點數必須大於0" });
+            }
+
+            try
+            {
+                var wallet = await _context.UserWallets
+                    .FirstOrDefaultAsync(w => w.UserId == userId);
+
+                if (wallet == null)
+                {
+                    return Json(new { success = false, message = "錢包不存在" });
+                }
+
+                // 檢查點數餘額
+                if (wallet.UserPoint < model.RequiredPoints)
+                {
+                    return Json(new { success = false, message = "點數餘額不足" });
+                }
+
+                // 獲取電子禮券類型
+                var eVoucherType = await _context.EVoucherTypes
+                    .FirstOrDefaultAsync(et => et.EVoucherTypeId == model.EVoucherTypeId);
+
+                if (eVoucherType == null || !eVoucherType.IsActive)
+                {
+                    return Json(new { success = false, message = "電子禮券類型不存在或已停用" });
+                }
+
+                using var transaction = await _context.Database.BeginTransactionAsync();
+
+                // 扣除點數
+                var balanceBefore = wallet.UserPoint;
+                wallet.UserPoint -= model.RequiredPoints;
+                wallet.UpdatedAt = DateTime.UtcNow;
+
+                // 記錄點數消費歷史
+                var spendHistory = new WalletHistory
+                {
+                    UserId = userId.Value,
+                    TransactionType = "兌換電子禮券",
+                    Amount = -model.RequiredPoints,
+                    BalanceBefore = balanceBefore,
+                    BalanceAfter = wallet.UserPoint,
+                    Description = $"兌換電子禮券: {eVoucherType.TypeName}",
+                    ReferenceId = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.WalletHistories.Add(spendHistory);
+
+                // 生成電子禮券
+                var eVoucherCode = GenerateEVoucherCode();
+                var eVoucher = new EVoucher
+                {
+                    EVoucherCode = eVoucherCode,
+                    EVoucherTypeId = model.EVoucherTypeId,
+                    UserId = userId.Value,
+                    IsUsed = false,
+                    AcquiredTime = DateTime.UtcNow,
+                    ExpiryDate = DateTime.UtcNow.AddDays(30) // 30天後過期
+                };
+
+                _context.EVouchers.Add(eVoucher);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Json(new { 
+                    success = true, 
+                    message = $"成功兌換電子禮券: {eVoucherCode}",
+                    eVoucherCode = eVoucherCode,
+                    eVoucherType = eVoucherType.TypeName
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "兌換電子禮券時發生錯誤");
+                return Json(new { success = false, message = "兌換電子禮券失敗，請稍後再試" });
+            }
+        }
+
+        /// <summary>
+        /// 生成電子禮券代碼
+        /// </summary>
+        private string GenerateEVoucherCode()
+        {
+            var random = new Random();
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var result = new string(Enumerable.Repeat(chars, 12)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+            return $"EV{result}";
+        }
     }
 
     /// <summary>
@@ -219,5 +327,14 @@ namespace GameSpace.Controllers
         public decimal Amount { get; set; }
         public string? Description { get; set; }
         public string? ReferenceId { get; set; }
+    }
+
+    /// <summary>
+    /// 兌換電子禮券視圖模型
+    /// </summary>
+    public class ExchangeEVoucherViewModel
+    {
+        public int EVoucherTypeId { get; set; }
+        public decimal RequiredPoints { get; set; }
     }
 }

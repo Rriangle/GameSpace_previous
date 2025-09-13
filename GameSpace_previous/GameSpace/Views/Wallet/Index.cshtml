@@ -51,6 +51,7 @@
         }
         .btn-add{background:linear-gradient(135deg,var(--accent-3),#16a34a); color:#fff}
         .btn-spend{background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff}
+        .btn-exchange{background:linear-gradient(135deg,var(--accent),#8b5cf6); color:#fff}
         .btn-wallet:hover{transform:translateY(-2px); box-shadow:0 8px 25px rgba(0,0,0,0.15)}
         
         /* 交易歷史 */
@@ -102,6 +103,7 @@
             <div class="wallet-actions">
                 <button class="btn-wallet btn-add" onclick="showAddForm()">+ 充值點數</button>
                 <button class="btn-wallet btn-spend" onclick="showSpendForm()">- 消費點數</button>
+                <button class="btn-wallet btn-exchange" onclick="showExchangeForm()">🎁 兌換禮券</button>
             </div>
         </div>
         
@@ -172,6 +174,33 @@
         </div>
     </div>
 
+    <!-- 兌換表單 -->
+    <div class="form-modal" id="exchangeForm">
+        <div class="form-content">
+            <h3 class="form-title">🎁 兌換電子禮券</h3>
+            <form id="exchangeEVoucherForm">
+                <div class="form-group">
+                    <label class="form-label" for="eVoucherType">禮券類型</label>
+                    <select id="eVoucherType" name="eVoucherTypeId" class="form-control" required>
+                        <option value="">請選擇禮券類型</option>
+                        <option value="1" data-points="100">遊戲點數券 (100點)</option>
+                        <option value="2" data-points="500">遊戲點數券 (500點)</option>
+                        <option value="3" data-points="1000">遊戲點數券 (1000點)</option>
+                        <option value="4" data-points="2000">遊戲點數券 (2000點)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="requiredPoints">所需點數</label>
+                    <input type="number" id="requiredPoints" name="requiredPoints" class="form-control" readonly>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="hideExchangeForm()">取消</button>
+                    <button type="submit" class="btn-submit">確認兌換</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         function showAddForm() {
             document.getElementById('addForm').style.display = 'flex';
@@ -187,6 +216,14 @@
         
         function hideSpendForm() {
             document.getElementById('spendForm').style.display = 'none';
+        }
+        
+        function showExchangeForm() {
+            document.getElementById('exchangeForm').style.display = 'flex';
+        }
+        
+        function hideExchangeForm() {
+            document.getElementById('exchangeForm').style.display = 'none';
         }
         
         // 充值表單提交
@@ -245,6 +282,44 @@
             .catch(error => {
                 alert('操作失敗，請稍後再試');
             });
+        });
+        
+        // 兌換表單提交
+        document.getElementById('exchangeEVoucherForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const eVoucherTypeId = parseInt(document.getElementById('eVoucherType').value);
+            const requiredPoints = parseFloat(document.getElementById('requiredPoints').value);
+            
+            fetch('/Wallet/ExchangeForEVoucher', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({ 
+                    eVoucherTypeId: eVoucherTypeId,
+                    requiredPoints: requiredPoints
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                alert('兌換失敗，請稍後再試');
+            });
+        });
+        
+        // 禮券類型選擇變化時更新所需點數
+        document.getElementById('eVoucherType').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const requiredPoints = selectedOption.getAttribute('data-points');
+            document.getElementById('requiredPoints').value = requiredPoints || '';
         });
         
         // 添加請求驗證令牌
