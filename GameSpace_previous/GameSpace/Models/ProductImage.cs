@@ -1,17 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameSpace.Models;
-
-public partial class ProductImage
+namespace GameSpace.Models
 {
-    public int ProductimgId { get; set; }
+    /// <summary>
+    /// 產品圖片模型
+    /// </summary>
+    [Table("ProductImages")]
+    public class ProductImage
+    {
+        [Key]
+        [Column("ImageID")]
+        public int ImageId { get; set; }
 
-    public int ProductId { get; set; }
+        [Required]
+        [Column("ProductID")]
+        public int ProductId { get; set; }
 
-    public string ProductimgUrl { get; set; } = null!;
+        [Required]
+        [StringLength(500)]
+        [Column("ImageUrl")]
+        public string ImageUrl { get; set; } = string.Empty;
 
-    public string? ProductimgAltText { get; set; }
+        [StringLength(200)]
+        [Column("AltText")]
+        public string? AltText { get; set; }
 
-    public DateTime ProductimgUpdatedAt { get; set; }
+        [Column("SortOrder")]
+        public int SortOrder { get; set; }
+
+        [Column("IsPrimary")]
+        public bool IsPrimary { get; set; }
+
+        [Column("CreatedAt")]
+        public DateTime CreatedAt { get; set; }
+
+        // 導航屬性
+        [ForeignKey("ProductId")]
+        public virtual ProductInfo Product { get; set; } = null!;
+    }
 }

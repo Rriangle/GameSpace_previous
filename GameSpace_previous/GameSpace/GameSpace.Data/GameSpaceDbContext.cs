@@ -20,13 +20,6 @@ namespace GameSpace.Data
         public DbSet<Pet> Pets { get; set; }
         public DbSet<UserSignInStat> UserSignInStats { get; set; }
         public DbSet<MiniGame> MiniGames { get; set; }
-        public DbSet<Coupon> Coupons { get; set; }
-        public DbSet<CouponType> CouponTypes { get; set; }
-        public DbSet<EVoucher> EVouchers { get; set; }
-        public DbSet<EVoucherType> EVoucherTypes { get; set; }
-        public DbSet<WalletHistory> WalletHistories { get; set; }
-        public DbSet<EVoucherToken> EVoucherTokens { get; set; }
-        public DbSet<EVoucherRedeemLog> EVoucherRedeemLogs { get; set; }
 
         // 社群相關模型
         public DbSet<Post> Posts { get; set; }
@@ -38,8 +31,15 @@ namespace GameSpace.Data
 
         // 商務相關模型
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductInfo> ProductInfos { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<StockMovement> StockMovements { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderInfo> OrderInfos { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OrderAddress> OrderAddresses { get; set; }
+        public DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
+        public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
         public DbSet<PlayerMarketProductInfo> PlayerMarketProducts { get; set; }
         public DbSet<PlayerMarketOrderInfo> PlayerMarketOrders { get; set; }
 
@@ -48,11 +48,6 @@ namespace GameSpace.Data
         public DbSet<GameMetricDaily> GameMetricDailies { get; set; }
         public DbSet<GameProductDetail> GameProductDetails { get; set; }
         public DbSet<GameSourceMap> GameSourceMaps { get; set; }
-        public DbSet<Forum> Forums { get; set; }
-
-        // 錢包相關模型
-        public DbSet<UserWallet> UserWallets { get; set; }
-        public DbSet<WalletHistory> WalletHistories { get; set; }
 
         // 簽到相關模型
         public DbSet<DailyCheckIn> DailyCheckIns { get; set; }
@@ -66,6 +61,9 @@ namespace GameSpace.Data
         public DbSet<EVoucherType> EVoucherTypes { get; set; }
         public DbSet<EVoucherRedeemLog> EVoucherRedeemLogs { get; set; }
         public DbSet<EVoucherToken> EVoucherTokens { get; set; }
+        
+        // 錢包相關模型
+        public DbSet<WalletHistory> WalletHistories { get; set; }
         
         // 管理員相關模型
         public DbSet<ManagerData> ManagerData { get; set; }
@@ -89,6 +87,15 @@ namespace GameSpace.Data
         // 聊天相關模型
         public DbSet<DM_Conversations> DM_Conversations { get; set; }
         public DbSet<DM_Messages> DM_Messages { get; set; }
+        
+        // 供應商和服務提供商模型
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Provider> Providers { get; set; }
+        
+        // 客服工單模型
+        public DbSet<SupportTicket> SupportTickets { get; set; }
+        public DbSet<SupportTicketMessage> SupportTicketMessages { get; set; }
+        public DbSet<SupportTicketAssignment> SupportTicketAssignments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

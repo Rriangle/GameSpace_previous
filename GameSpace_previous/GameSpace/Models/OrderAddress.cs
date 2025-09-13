@@ -1,23 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameSpace.Models;
-
-public partial class OrderAddress
+namespace GameSpace.Models
 {
-    public int OrderId { get; set; }
+    /// <summary>
+    /// 訂單地址模型
+    /// </summary>
+    [Table("OrderAddresses")]
+    public class OrderAddress
+    {
+        [Key]
+        [Column("AddressID")]
+        public int AddressId { get; set; }
 
-    public string Recipient { get; set; } = null!;
+        [Required]
+        [Column("OrderID")]
+        public int OrderId { get; set; }
 
-    public string Phone { get; set; } = null!;
+        [Required]
+        [StringLength(100)]
+        [Column("RecipientName")]
+        public string RecipientName { get; set; } = string.Empty;
 
-    public string Zipcode { get; set; } = null!;
+        [Required]
+        [StringLength(20)]
+        [Column("PhoneNumber")]
+        public string PhoneNumber { get; set; } = string.Empty;
 
-    public string Address1 { get; set; } = null!;
+        [Required]
+        [StringLength(200)]
+        [Column("Address")]
+        public string Address { get; set; } = string.Empty;
 
-    public string? Address2 { get; set; }
+        [StringLength(20)]
+        [Column("City")]
+        public string? City { get; set; }
 
-    public string City { get; set; } = null!;
+        [StringLength(20)]
+        [Column("District")]
+        public string? District { get; set; }
 
-    public string Country { get; set; } = null!;
+        [StringLength(10)]
+        [Column("PostalCode")]
+        public string? PostalCode { get; set; }
+
+        [Column("IsDefault")]
+        public bool IsDefault { get; set; }
+
+        [Column("CreatedAt")]
+        public DateTime CreatedAt { get; set; }
+
+        // 導航屬性
+        [ForeignKey("OrderId")]
+        public virtual OrderInfo Order { get; set; } = null!;
+    }
 }

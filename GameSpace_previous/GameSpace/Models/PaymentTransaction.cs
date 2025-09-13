@@ -1,29 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameSpace.Models;
-
-public partial class PaymentTransaction
+namespace GameSpace.Models
 {
-    public long PaymentId { get; set; }
+    /// <summary>
+    /// 支付交易模型
+    /// </summary>
+    [Table("PaymentTransactions")]
+    public class PaymentTransaction
+    {
+        [Key]
+        [Column("TransactionID")]
+        public int TransactionId { get; set; }
 
-    public long PaymentCode { get; set; }
+        [Required]
+        [Column("OrderID")]
+        public int OrderId { get; set; }
 
-    public int OrderId { get; set; }
+        [Required]
+        [StringLength(50)]
+        [Column("TransactionCode")]
+        public string TransactionCode { get; set; } = string.Empty;
 
-    public string TxnType { get; set; } = null!;
+        [Required]
+        [StringLength(20)]
+        [Column("PaymentMethod")]
+        public string PaymentMethod { get; set; } = string.Empty;
 
-    public decimal Amount { get; set; }
+        [Column("Amount", TypeName = "decimal(18,2)")]
+        public decimal Amount { get; set; }
 
-    public string Provider { get; set; } = null!;
+        [Required]
+        [StringLength(20)]
+        [Column("Status")]
+        public string Status { get; set; } = string.Empty;
 
-    public string? ProviderTxn { get; set; }
+        [StringLength(100)]
+        [Column("Provider")]
+        public string? Provider { get; set; }
 
-    public string Status { get; set; } = null!;
+        [StringLength(200)]
+        [Column("ProviderTransactionId")]
+        public string? ProviderTransactionId { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+        [Column("CreatedAt")]
+        public DateTime CreatedAt { get; set; }
 
-    public DateTime? ConfirmedAt { get; set; }
+        [Column("CompletedAt")]
+        public DateTime? CompletedAt { get; set; }
 
-    public string? Meta { get; set; }
+        [StringLength(500)]
+        [Column("Note")]
+        public string? Note { get; set; }
+
+        // 導航屬性
+        [ForeignKey("OrderId")]
+        public virtual OrderInfo Order { get; set; } = null!;
+    }
 }

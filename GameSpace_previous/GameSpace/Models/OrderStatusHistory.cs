@@ -1,21 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameSpace.Models;
-
-public partial class OrderStatusHistory
+namespace GameSpace.Models
 {
-    public long HistoryId { get; set; }
+    /// <summary>
+    /// 訂單狀態歷史模型
+    /// </summary>
+    [Table("OrderStatusHistory")]
+    public class OrderStatusHistory
+    {
+        [Key]
+        [Column("HistoryID")]
+        public int HistoryId { get; set; }
 
-    public int OrderId { get; set; }
+        [Required]
+        [Column("OrderID")]
+        public int OrderId { get; set; }
 
-    public string? FromStatus { get; set; }
+        [Required]
+        [StringLength(20)]
+        [Column("Status")]
+        public string Status { get; set; } = string.Empty;
 
-    public string ToStatus { get; set; } = null!;
+        [StringLength(500)]
+        [Column("Note")]
+        public string? Note { get; set; }
 
-    public int? ChangedBy { get; set; }
+        [Column("CreatedAt")]
+        public DateTime CreatedAt { get; set; }
 
-    public DateTime ChangedAt { get; set; }
+        [Column("CreatedBy")]
+        public int? CreatedBy { get; set; }
 
-    public string? Note { get; set; }
+        // 導航屬性
+        [ForeignKey("OrderId")]
+        public virtual OrderInfo Order { get; set; } = null!;
+    }
 }

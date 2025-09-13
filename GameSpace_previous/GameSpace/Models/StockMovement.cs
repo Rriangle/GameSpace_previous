@@ -1,21 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameSpace.Models;
-
-public partial class StockMovement
+namespace GameSpace.Models
 {
-    public long MovementId { get; set; }
+    /// <summary>
+    /// 庫存變動模型
+    /// </summary>
+    [Table("StockMovements")]
+    public class StockMovement
+    {
+        [Key]
+        [Column("MovementID")]
+        public int MovementId { get; set; }
 
-    public int ProductId { get; set; }
+        [Required]
+        [Column("ProductID")]
+        public int ProductId { get; set; }
 
-    public int? OrderId { get; set; }
+        [Required]
+        [StringLength(20)]
+        [Column("MovementType")]
+        public string MovementType { get; set; } = string.Empty; // IN, OUT, ADJUSTMENT
 
-    public int ChangeQty { get; set; }
+        [Column("Quantity")]
+        public int Quantity { get; set; }
 
-    public string Reason { get; set; } = null!;
+        [Column("PreviousStock")]
+        public int PreviousStock { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+        [Column("NewStock")]
+        public int NewStock { get; set; }
 
-    public string? Note { get; set; }
+        [StringLength(200)]
+        [Column("Reason")]
+        public string? Reason { get; set; }
+
+        [StringLength(50)]
+        [Column("Reference")]
+        public string? Reference { get; set; } // 訂單號、調撥單號等
+
+        [Column("CreatedAt")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("CreatedBy")]
+        public int? CreatedBy { get; set; }
+
+        // 導航屬性
+        [ForeignKey("ProductId")]
+        public virtual ProductInfo Product { get; set; } = null!;
+    }
 }
