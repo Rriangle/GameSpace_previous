@@ -55,3 +55,4 @@
 - 2025-09-14T21:37:18Z 新增 docs/ADMIN_TEMPLATE_STYLE.md（SB Admin 使用規範，禁止改 vendor）
 - 2025-09-14T21:40:20Z 新增 docs/MODULES.md 與 docs/DATABASE.md（以 database.json 為最終權威）
 - 2025-09-14T21:43:29Z 新增 docs/DEPLOYMENT.md、docs/OPERATIONS.md 並更新 README 導航
+- 2025-09-14T21:45:40Z 產生 reports/_latest/SCAN_SUMMARY.md 並更新 AUDIT

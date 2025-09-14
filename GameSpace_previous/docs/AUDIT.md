@@ -41,3 +41,4 @@
 ## 後續批次（Branch 2 路徑）
 - 不觸及四大不可變（Wallet / Sign-in / Pet / MiniGame）邏輯的前提下，先處理「註釋編碼/跳脫」等非邏輯修復。
 - 每批 ≤ 3 檔或 ≤ 400 行，更新 `docs/WIP.md` 與本檔狀態，並提交推送至 main。
+\n## Scan Snapshot @ 2025-09-14T21:45:40Z\n- 見 reports/_latest/SCAN_SUMMARY.md
