@@ -10,9 +10,9 @@
 /workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/Debug/net8.0/GameSpace.Data.AssemblyInfo.cs
 /workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/Debug/net8.0/GameSpace.Data.csproj.CoreCompileInputs.cache
 /workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/Debug/net8.0/GameSpace.Data.sourcelink.json
-/workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/Debug/net8.0/GameSpac.A7CECE0C.Up2Date
 /workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/Debug/net8.0/GameSpace.Data.dll
 /workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/Debug/net8.0/refint/GameSpace.Data.dll
 /workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/Debug/net8.0/GameSpace.Data.pdb
 /workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/Debug/net8.0/GameSpace.Data.genruntimeconfig.cache
 /workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/Debug/net8.0/ref/GameSpace.Data.dll
+/workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/Debug/net8.0/GameSpace.Data.csproj.CopyComplete

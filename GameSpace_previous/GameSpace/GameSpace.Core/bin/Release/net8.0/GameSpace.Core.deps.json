@@ -980,18 +980,12 @@
           "Microsoft.EntityFrameworkCore.Tools": "8.0.0"
         },
         "runtime": {
-          "GameSpace.Data.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "GameSpace.Data.dll": {}
         }
       },
       "GameSpace.Models/1.0.0": {
         "runtime": {
-          "GameSpace.Models.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "GameSpace.Models.dll": {}
         }
       }
     }

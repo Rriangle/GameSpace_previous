@@ -11,8 +11,8 @@
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Release/net8.0/GameSpace.Core.AssemblyInfo.cs
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Release/net8.0/GameSpace.Core.csproj.CoreCompileInputs.cache
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Release/net8.0/GameSpace.Core.sourcelink.json
-/workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Release/net8.0/GameSpac.E93DE101.Up2Date
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Release/net8.0/GameSpace.Core.dll
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Release/net8.0/refint/GameSpace.Core.dll
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Release/net8.0/GameSpace.Core.pdb
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Release/net8.0/ref/GameSpace.Core.dll
+/workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Release/net8.0/GameSpace.Core.csproj.CopyComplete
