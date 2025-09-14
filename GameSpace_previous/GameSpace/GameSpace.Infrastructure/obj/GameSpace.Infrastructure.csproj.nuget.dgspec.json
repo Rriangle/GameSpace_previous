@@ -1,43 +1,36 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GameSpace_previous\\GameSpace\\GameSpace.Infrastructure\\GameSpace.Infrastructure.csproj": {}
+    "/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj": {}
   },
   "projects": {
-    "D:\\GameSpace_previous\\GameSpace\\GameSpace.Core\\GameSpace.Core.csproj": {
+    "/workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Core\\GameSpace.Core.csproj",
+        "projectUniqueName": "/workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj",
         "projectName": "GameSpace.Core",
-        "projectPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Core\\GameSpace.Core.csproj",
-        "packagesPath": "C:\\Users\\ispan\\.nuget\\packages\\",
-        "outputPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Core\\obj\\",
+        "projectPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj",
+        "packagesPath": "/home/ubuntu/.nuget/packages/",
+        "outputPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\ispan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/ubuntu/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\GameSpace_previous\\GameSpace\\GameSpace.Data\\GameSpace.Data.csproj": {
-                "projectPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Data\\GameSpace.Data.csproj"
+              "/workspace/GameSpace_previous/GameSpace/GameSpace.Data/GameSpace.Data.csproj": {
+                "projectPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Data/GameSpace.Data.csproj"
               },
-              "D:\\GameSpace_previous\\GameSpace\\GameSpace.Models\\GameSpace.Models.csproj": {
-                "projectPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Models\\GameSpace.Models.csproj"
+              "/workspace/GameSpace_previous/GameSpace/GameSpace.Models/GameSpace.Models.csproj": {
+                "projectPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Models/GameSpace.Models.csproj"
               }
             }
           }
@@ -51,8 +44,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -87,41 +79,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/ubuntu/.dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\GameSpace_previous\\GameSpace\\GameSpace.Data\\GameSpace.Data.csproj": {
+    "/workspace/GameSpace_previous/GameSpace/GameSpace.Data/GameSpace.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Data\\GameSpace.Data.csproj",
+        "projectUniqueName": "/workspace/GameSpace_previous/GameSpace/GameSpace.Data/GameSpace.Data.csproj",
         "projectName": "GameSpace.Data",
-        "projectPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Data\\GameSpace.Data.csproj",
-        "packagesPath": "C:\\Users\\ispan\\.nuget\\packages\\",
-        "outputPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Data\\obj\\",
+        "projectPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Data/GameSpace.Data.csproj",
+        "packagesPath": "/home/ubuntu/.nuget/packages/",
+        "outputPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Data/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\ispan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/ubuntu/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\GameSpace_previous\\GameSpace\\GameSpace.Models\\GameSpace.Models.csproj": {
-                "projectPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Models\\GameSpace.Models.csproj"
+              "/workspace/GameSpace_previous/GameSpace/GameSpace.Models/GameSpace.Models.csproj": {
+                "projectPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Models/GameSpace.Models.csproj"
               }
             }
           }
@@ -135,8 +120,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -175,47 +159,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/ubuntu/.dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\GameSpace_previous\\GameSpace\\GameSpace.Infrastructure\\GameSpace.Infrastructure.csproj": {
+    "/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Infrastructure\\GameSpace.Infrastructure.csproj",
+        "projectUniqueName": "/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj",
         "projectName": "GameSpace.Infrastructure",
-        "projectPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Infrastructure\\GameSpace.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\ispan\\.nuget\\packages\\",
-        "outputPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Infrastructure\\obj\\",
+        "projectPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj",
+        "packagesPath": "/home/ubuntu/.nuget/packages/",
+        "outputPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\ispan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/ubuntu/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\GameSpace_previous\\GameSpace\\GameSpace.Core\\GameSpace.Core.csproj": {
-                "projectPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Core\\GameSpace.Core.csproj"
+              "/workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj": {
+                "projectPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj"
               },
-              "D:\\GameSpace_previous\\GameSpace\\GameSpace.Data\\GameSpace.Data.csproj": {
-                "projectPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Data\\GameSpace.Data.csproj"
+              "/workspace/GameSpace_previous/GameSpace/GameSpace.Data/GameSpace.Data.csproj": {
+                "projectPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Data/GameSpace.Data.csproj"
               },
-              "D:\\GameSpace_previous\\GameSpace\\GameSpace.Models\\GameSpace.Models.csproj": {
-                "projectPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Models\\GameSpace.Models.csproj"
+              "/workspace/GameSpace_previous/GameSpace/GameSpace.Models/GameSpace.Models.csproj": {
+                "projectPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Models/GameSpace.Models.csproj"
               }
             }
           }
@@ -229,8 +206,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -269,33 +245,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/ubuntu/.dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\GameSpace_previous\\GameSpace\\GameSpace.Models\\GameSpace.Models.csproj": {
+    "/workspace/GameSpace_previous/GameSpace/GameSpace.Models/GameSpace.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Models\\GameSpace.Models.csproj",
+        "projectUniqueName": "/workspace/GameSpace_previous/GameSpace/GameSpace.Models/GameSpace.Models.csproj",
         "projectName": "GameSpace.Models",
-        "projectPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Models\\GameSpace.Models.csproj",
-        "packagesPath": "C:\\Users\\ispan\\.nuget\\packages\\",
-        "outputPath": "D:\\GameSpace_previous\\GameSpace\\GameSpace.Models\\obj\\",
+        "projectPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Models/GameSpace.Models.csproj",
+        "packagesPath": "/home/ubuntu/.nuget/packages/",
+        "outputPath": "/workspace/GameSpace_previous/GameSpace/GameSpace.Models/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\ispan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/ubuntu/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -313,8 +282,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -335,7 +303,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/ubuntu/.dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
