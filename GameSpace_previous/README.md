@@ -14,6 +14,10 @@
 - **PERFORMANCE_BUDGET.md**: 效能預算與優化指南
 - **OPERATIONS.md**: 營運相關文件
 
+### GameSpace.Api / GameSpace.* 專案內 docs/ (技術/模組說明)
+- **API 文檔**: 各專案內的技術規格與模組說明
+- **交叉連結**: 與根目錄和專案文檔互相引用
+
 ## 專案結構
 
 ```
