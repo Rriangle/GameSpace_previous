@@ -36,6 +36,11 @@ GameSpace_previous/
 ```
 
 ## 快速導航
+- [模組總覽](docs/MODULES.md)
+- [資料庫概要](docs/DATABASE.md)
+- [Admin 樣式規範](docs/ADMIN_TEMPLATE_STYLE.md)
+- [部署指南](docs/DEPLOYMENT.md)
+- [營運手冊](docs/OPERATIONS.md)
 
 - [審計報告](../GameSpace/docs/AUDIT.md)
 - [工作進展](../GameSpace/docs/WIP.md)
