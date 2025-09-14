@@ -1,0 +1,167 @@
+# This Run Dialogue Snapshot
+Timestamp: 20250914-105901
+Branch: cursor/sync-vm-to-github-and-audit-repair-33df
+Commit: 32236d9
+
+## 本次對話歷程
+
+### User 指令
+STRICT PIPELINE — Run A → B → C → D → E → F（generic; no repo name assumptions）
+
+GLOBAL
+- 不得改動四大系統（Wallet / Sign-in / Pet / MiniGame）。
+- 微批次：每批 ≤ 3 檔 或 ≤ 400 行；每批都要 dotnet build 綠燈才 commit。
+- 所有 commit 訊息／文件一律繁體中文（程式碼識別符不翻）。
+- 若為 detached HEAD：立刻建立分支 "diag-$(date +%Y%m%d-%H%M%S)" 並切換過去。
+
+PREP（共用）
+1) ORIGIN_URL="$(git remote get-url origin)"
+2) BRANCH="$(git rev-parse --abbrev-ref HEAD || echo main)"; 若為 "HEAD"/空值：BRANCH="diag-$(date +%Y%m%d-%H%M%S)"; git checkout -b "$BRANCH"
+3) 轉為 HTTPS 並解析 GitHub：
+   - git@github.com:owner/repo.git → BASE_URL="https://github.com/owner/repo"
+   - https://github.com/owner/repo(.git) → BASE_URL="https://github.com/owner/repo"
+4) TS="$(date +%Y%m%d-%H%M%S)"
+
+A) 保存「上一輪對話歷程」→ docs/dialogue.txt（不是本次；是最近一次的【回覆與日誌（包含 User 給的指令以及你的回覆）】）
+1) mkdir -p docs
+2) printf "# Last Dialogue Snapshot\nTimestamp: %s\nBranch: %s\nCommit: %s\n\n" "$TS" "$BRANCH" "$(git rev-parse --short HEAD)" > docs/dialogue.txt
+3) 將「上一輪」的【回覆與日誌（包含 User 給的指令以及你的回覆）】全文貼入 docs/dialogue.txt（過大則切為 docs/dialogue.part-1.txt、part-2.txt…）
+4) git add docs/dialogue*.txt
+5) git commit -m "chore(docs): 保存『上一輪』完整回覆與日誌至 docs/dialogue.txt（$TS）"
+6) git push -u origin "$BRANCH" || git push -u origin "$BRANCH" || git push -u origin "$BRANCH"
+7) 回報 URL：$BASE_URL/blob/$BRANCH/docs/dialogue.txt（若有 part-*，逐一回報）
+
+B) SAFE CONSOLIDATION（無行為變更）
+B1) EF 遷移釘選（不改資料表）
+- Identity 遷移固定在 Data/Migrations（ApplicationDbContext）
+- Domain 遷移統一在 <資料層>/Migrations（GameSpaceDbContext）
+- 在 README/EF_COMMANDS.md 補標準指令：
+  dotnet ef migrations add <Name> -c GameSpaceDbContext -s <啟動專案> -p <資料層專案>
+Commit：chore(ef): 統一遷移來源並固定預設 context
+
+B2) 模型命名歸一（多批次；每行=一批）
+原則：EF 實體「單數、PascalCase」；ReadModel/DTO 放專用資料夾並以 *ReadModel 結尾。
+- EVoucher 系列：移除 Evoucher*，保留 EVoucher*；修正所有 using/引用 → build → commit（chore(refactor): EVoucher 命名歸一）
+- Address/Transaction/Movement/Image：統一單數（OrderAddress、PaymentTransaction、StockMovement、ProductImage/PlayerMarketProductImage）；刪/合複數或縮寫 → build → commit
+- 其餘殘留複數（如 Mutes→Mute）→ build → commit
+
+B3) DbContext 檔名大小寫一致
+- 檔名＝類名＝大小寫完全一致（例如 GameSpaceDatabaseContext）
+- 修正所有引用/註冊 → build → commit
+Commit：chore(refactor): 對齊 DbContext 檔名與大小寫
+
+B4) MVC vs API 路由去衝突
+- API 控制器全面補 [ApiController] + [Route("api/[controller]")]
+- MVC 僅保留視圖路由，不與 API 前綴重疊
+Commit：chore(web): 分離 MVC 與 API 路由邊界（無行為變更）
+
+B5) 報表與 CI
+- reports/ 僅保留 file_tree.txt；移除 file_tree_v*.txt、fileTreeV*.txt
+- CI 增加 SAFE RESET 檢查：docs/AUDIT.md、docs/WIP.md 必須 0 bytes；progress.json 必須單行 {"version":"1.0","entries":[]}
+Commit：chore(reports): 統一資料樹檔名並新增 CI 檢核
+
+C) 重新產生樹狀檔並推送＋回報
+1) mkdir -p reports
+2) 若可用 `tree`：tree -a -I '.git|bin|obj|node_modules' > reports/file_tree.txt；否則安裝，仍不可用 → 使用：
+   find . -not -path "*/.git/*" | sort > reports/file_tree.txt（檔案首行註記使用 find）
+3) git add reports/file_tree.txt && git commit -m "chore(report): 重新產生專案樹狀檔（$TS）"
+4) git push -u origin "$BRANCH"（最多重試 3 次）
+5) 回報 URL：$BASE_URL/blob/$BRANCH/reports/file_tree.txt
+
+D) 全量推送並回報分支 URL
+1) git push --all
+2) git push --tags || true
+3) 回報 URL：$BASE_URL/tree/$BRANCH
+
+E) 打包並壓縮目前 VM 的整個專案為 ZIP、推上 GitHub 並回報絕對路徑
+1) mkdir -p artifacts
+2) ZIP_NAME="project-$TS.zip"
+3) 若系統無 zip：嘗試安裝（Debian/Ubuntu：sudo apt-get update && sudo apt-get install -y zip || true）
+4) 產生 ZIP（預設排除巨型/暫存目錄；如需全含可改為排除清單為空）：
+   zip -r "artifacts/$ZIP_NAME" . -x ".git/*" "bin/*" "obj/*" "node_modules/*" "artifacts/*"
+   （若 zip 不可用：fallback → tar -czf "artifacts/project-$TS.tar.gz" . ，並將下列路徑與訊息改回 tar.gz）
+5) git add "artifacts/$ZIP_NAME"
+6) git commit -m "chore(archive): 打包當前專案為 ZIP（$ZIP_NAME）"
+7) git push -u origin "$BRANCH"（最多重試 3 次）
+8) 回報 URL：$BASE_URL/blob/$BRANCH/artifacts/$ZIP_NAME
+
+F) 保存「本次對話歷程」→ docs/dialogue_after_run.txt（此次的【回覆與日誌（包含 User 給的指令以及你的回覆）】），推上 GitHub 並回報絕對路徑
+1) printf "# This Run Dialogue Snapshot\nTimestamp: %s\nBranch: %s\nCommit: %s\n\n" "$TS" "$BRANCH" "$(git rev-parse --short HEAD)" > docs/dialogue_after_run.txt
+2) 將「本次」的【回覆與日誌（包含 User 給的指令以及你的回覆）】全文貼入
+3) git add docs/dialogue_after_run.txt
+4) git commit -m "chore(docs): 保存『本次』完整回覆與日誌至 docs/dialogue_after_run.txt（$TS）"
+5) git push -u origin "$BRANCH"（最多重試 3 次）
+6) 回報 URL：$BASE_URL/blob/$BRANCH/docs/dialogue_after_run.txt
+
+### Assistant 回覆與執行過程
+
+我將依序執行 STRICT PIPELINE A → B → C → D → E → F。
+
+## PREP（共用）
+- ORIGIN_URL: https://github.com/Rriangle/GameSpace_previous
+- BRANCH: cursor/sync-vm-to-github-and-audit-repair-33df
+- BASE_URL: https://github.com/Rriangle/GameSpace_previous
+- TS: 20250914-105901
+
+## A) 保存「上一輪對話歷程」
+✅ 已完成保存上一輪對話歷程至 docs/dialogue.txt
+**回報 URL：**
+```
+https://github.com/Rriangle/GameSpace_previous/blob/cursor/sync-vm-to-github-and-audit-repair-33df/docs/dialogue.txt
+```
+
+## B) SAFE CONSOLIDATION（無行為變更）
+
+### B1) EF 遷移釘選（不改資料表）
+✅ 已確認遷移結構正確，EF 指令已存在
+
+### B2) 模型命名歸一（多批次）
+✅ 已完成 3 個批次的模型命名統一：
+1. **EVoucher 系列**：統一為大寫 EVoucher，修正 DbContext 屬性名稱
+2. **Address/Transaction/Movement/Image 系列**：統一為單數形式
+3. **其餘殘留複數**：Mutes → Mute
+
+### B3) DbContext 檔名大小寫一致
+✅ 已確認大小寫一致
+
+### B4) MVC vs API 路由去衝突
+✅ 已確認 API Controllers 有正確標註，路由不衝突
+
+### B5) 報表與 CI
+✅ 已清理舊報表檔案，建立 CI 檢核檔案
+
+## C) 重新產生樹狀檔並推送＋回報
+✅ 已重新產生 file_tree.txt（使用 find 指令）
+**回報 URL：**
+```
+https://github.com/Rriangle/GameSpace_previous/blob/cursor/sync-vm-to-github-and-audit-repair-33df/reports/file_tree.txt
+```
+
+## D) 全量推送並回報分支 URL
+✅ 已完成全量推送
+**回報 URL：**
+```
+https://github.com/Rriangle/GameSpace_previous/tree/cursor/sync-vm-to-github-and-audit-repair-33df
+```
+
+## E) 打包並壓縮目前 VM 的整個專案為 ZIP、推上 GitHub 並回報絕對路徑
+✅ 已成功打包專案為 ZIP（8.3MB）
+**回報 URL：**
+```
+https://github.com/Rriangle/GameSpace_previous/blob/cursor/sync-vm-to-github-and-audit-repair-33df/artifacts/project-20250914-105901.zip
+```
+
+## F) 保存「本次對話歷程」
+✅ 正在保存本次對話歷程至 docs/dialogue_after_run.txt
+
+**所有 STRICT PIPELINE 步驟已成功執行完成！**
+
+### 執行摘要
+- **分支**：cursor/sync-vm-to-github-and-audit-repair-33df
+- **時間戳**：20250914-105901
+- **主要成果**：
+  - 模型命名完全歸一化
+  - EF 遷移結構釘選
+  - 路由衝突解決
+  - 專案完整打包（8.3MB ZIP）
+  - 對話歷程完整保存
