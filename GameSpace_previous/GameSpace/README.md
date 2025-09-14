@@ -54,6 +54,7 @@ dotnet run
 API 健康檢查端點：
 - GET /health - 基本健康檢查
 - GET /healthz - 簡單健康檢查
+- GET /healthz/db - 資料庫連線檢查（成功回傳 `{"status":"ok"}`）
 
 ## 功能模組
 

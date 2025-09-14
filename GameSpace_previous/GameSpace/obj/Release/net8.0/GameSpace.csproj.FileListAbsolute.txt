@@ -1,0 +1,10 @@
+/workspace/GameSpace_previous/GameSpace/obj/Release/net8.0/GameSpace.csproj.AssemblyReference.cache
+/workspace/GameSpace_previous/GameSpace/obj/Release/net8.0/GameSpace.GeneratedMSBuildEditorConfig.editorconfig
+/workspace/GameSpace_previous/GameSpace/obj/Release/net8.0/GameSpace.AssemblyInfoInputs.cache
+/workspace/GameSpace_previous/GameSpace/obj/Release/net8.0/GameSpace.AssemblyInfo.cs
+/workspace/GameSpace_previous/GameSpace/obj/Release/net8.0/GameSpace.csproj.CoreCompileInputs.cache
+/workspace/GameSpace_previous/GameSpace/obj/Release/net8.0/GameSpace.MvcApplicationPartsAssemblyInfo.cs
+/workspace/GameSpace_previous/GameSpace/obj/Release/net8.0/GameSpace.MvcApplicationPartsAssemblyInfo.cache
+/workspace/GameSpace_previous/GameSpace/obj/Release/net8.0/GameSpace.RazorAssemblyInfo.cache
+/workspace/GameSpace_previous/GameSpace/obj/Release/net8.0/GameSpace.RazorAssemblyInfo.cs
+/workspace/GameSpace_previous/GameSpace/obj/Release/net8.0/GameSpace.sourcelink.json
