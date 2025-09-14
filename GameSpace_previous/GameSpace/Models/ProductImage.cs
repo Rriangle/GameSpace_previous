@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameSpace.Models;
 
-public partial class ProductImages
+public partial class ProductImage
 {
     public int ImageId { get; set; }
     public int ProductId { get; set; }
