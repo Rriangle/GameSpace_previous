@@ -6,7 +6,7 @@ namespace GameSpace.Models;
 /// <summary>
 /// 禁言表
 /// </summary>
-public partial class Mutes
+public partial class Mute
 {
     /// <summary>
     /// 禁言ID
