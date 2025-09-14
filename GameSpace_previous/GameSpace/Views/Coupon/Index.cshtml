@@ -1,0 +1,248 @@
+@model IEnumerable<GameSpace.Models.Coupon>
+@{
+    ViewData["Title"] = "我的優惠券 - GameSpace";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>我的優惠券 - GameSpace</title>
+    <style>
+        :root{
+            --bg:#eef3f8; --bg2:#ffffff; --ink:#1f2937; --muted:#64748b; --line:#e5e7eb;
+            --surface:rgba(255,255,255,.75); --glass:rgba(255,255,255,.45);
+            --accent:#7557ff; --accent-2:#34d2ff; --accent-3:#22c55e;
+            --radius:18px; --radius-sm:12px; --shadow:0 18px 40px rgba(17,24,39,.12);
+            --blur:14px;
+        }
+        body.dark{
+            --bg:#0c111b; --bg2:#0a0f18; --ink:#e5edff; --muted:#9fb1c9; --line:#1e2b43;
+            --surface:rgba(22,30,48,.65); --glass:rgba(18,24,39,.50);
+            --shadow:0 18px 42px rgba(0,0,0,.35);
+        }
+        *{box-sizing:border-box} html,body{height:100%}
+        body{
+            margin:0; color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+            background:
+                radial-gradient(900px 500px at -10% -10%, rgba(117,87,255,.10), transparent 60%),
+                radial-gradient(800px 460px at 110% 10%, rgba(52,210,255,.10), transparent 50%),
+                linear-gradient(180deg, var(--bg), var(--bg2));
+        }
+        .wrap{max-width:1200px; margin:0 auto; padding:0 16px}
+        
+        /* 標題 */
+        .page-title{
+            font-size:32px; font-weight:900; color:var(--ink); margin:40px 0 30px; text-align:center;
+        }
+        
+        /* 優惠券卡片 */
+        .coupon-card{
+            background:var(--glass); border:1px solid var(--line); border-radius:20px; 
+            padding:30px; backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow);
+            margin:20px 0; position:relative; overflow:hidden;
+        }
+        .coupon-card.used{
+            opacity:0.6; background:var(--surface);
+        }
+        .coupon-card.expired{
+            opacity:0.4; background:var(--surface);
+        }
+        
+        /* 優惠券代碼 */
+        .coupon-code{
+            font-size:24px; font-weight:900; color:var(--accent); margin-bottom:15px;
+            font-family: 'Courier New', monospace; letter-spacing:2px;
+        }
+        
+        /* 優惠券類型 */
+        .coupon-type{
+            font-size:20px; font-weight:700; color:var(--ink); margin-bottom:10px;
+        }
+        
+        /* 折扣信息 */
+        .discount-info{
+            display:flex; align-items:center; gap:15px; margin:15px 0;
+        }
+        .discount-value{
+            font-size:28px; font-weight:900; color:var(--accent-3);
+        }
+        .discount-type{
+            font-size:16px; color:var(--muted);
+        }
+        
+        /* 使用條件 */
+        .usage-conditions{
+            background:var(--surface); border-radius:12px; padding:15px; margin:15px 0;
+        }
+        .condition-item{
+            display:flex; justify-content:space-between; margin:8px 0; font-size:14px;
+        }
+        .condition-label{color:var(--muted)}
+        .condition-value{color:var(--ink); font-weight:600}
+        
+        /* 狀態標籤 */
+        .status-badge{
+            position:absolute; top:20px; right:20px; padding:8px 16px; border-radius:20px;
+            font-size:12px; font-weight:700; text-transform:uppercase;
+        }
+        .status-badge.available{
+            background:var(--accent-3); color:#fff;
+        }
+        .status-badge.used{
+            background:#6b7280; color:#fff;
+        }
+        .status-badge.expired{
+            background:#ef4444; color:#fff;
+        }
+        
+        /* 時間信息 */
+        .time-info{
+            display:flex; justify-content:space-between; margin-top:20px; padding-top:20px;
+            border-top:1px solid var(--line); font-size:14px; color:var(--muted);
+        }
+        
+        /* 空狀態 */
+        .empty-state{
+            text-align:center; padding:80px 20px; color:var(--muted);
+        }
+        .empty-icon{font-size:64px; margin-bottom:20px}
+        .empty-title{font-size:24px; font-weight:700; margin-bottom:10px; color:var(--ink)}
+        .empty-desc{font-size:16px}
+        
+        /* 操作按鈕 */
+        .action-buttons{
+            display:flex; gap:10px; margin-top:20px;
+        }
+        .btn{
+            padding:12px 24px; border:none; border-radius:12px; font-weight:700;
+            cursor:pointer; transition:all 0.3s ease; text-decoration:none; display:inline-block;
+        }
+        .btn-primary{
+            background:var(--accent); color:#fff;
+        }
+        .btn-primary:hover{background:#6d28d9; transform:translateY(-2px)}
+        .btn-secondary{
+            background:var(--surface); color:var(--ink); border:1px solid var(--line);
+        }
+        .btn-secondary:hover{background:var(--line)}
+        .btn:disabled{
+            opacity:0.5; cursor:not-allowed; transform:none;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1 class="page-title">🎫 我的優惠券</h1>
+        
+        @if (Model.Any())
+        {
+            @foreach (var coupon in Model)
+            {
+                var isExpired = coupon.CouponType.ValidTo < DateTime.Now;
+                var isUsed = coupon.IsUsed;
+                var statusClass = isUsed ? "used" : (isExpired ? "expired" : "");
+                var statusText = isUsed ? "已使用" : (isExpired ? "已過期" : "可使用");
+                var statusBadgeClass = isUsed ? "used" : (isExpired ? "expired" : "available");
+                
+                <div class="coupon-card @statusClass">
+                    <div class="status-badge @statusBadgeClass">@statusText</div>
+                    
+                    <div class="coupon-code">@coupon.CouponCode</div>
+                    <div class="coupon-type">@coupon.CouponType.TypeName</div>
+                    
+                    @if (!string.IsNullOrEmpty(coupon.CouponType.Description))
+                    {
+                        <div style="color:var(--muted); margin-bottom:15px;">@coupon.CouponType.Description</div>
+                    }
+                    
+                    <div class="discount-info">
+                        <div class="discount-value">
+                            @if (coupon.CouponType.DiscountType == "Percentage")
+                            {
+                                @($"{coupon.CouponType.DiscountValue}%")
+                            }
+                            else
+                            {
+                                @($"NT$ {coupon.CouponType.DiscountValue:N0}")
+                            }
+                        </div>
+                        <div class="discount-type">
+                            @(coupon.CouponType.DiscountType == "Percentage" ? "折扣" : "折抵")
+                        </div>
+                    </div>
+                    
+                    <div class="usage-conditions">
+                        @if (coupon.CouponType.MinOrderAmount.HasValue)
+                        {
+                            <div class="condition-item">
+                                <span class="condition-label">最低消費</span>
+                                <span class="condition-value">NT$ @coupon.CouponType.MinOrderAmount.Value:N0</span>
+                            </div>
+                        }
+                        @if (coupon.CouponType.MaxDiscountAmount.HasValue)
+                        {
+                            <div class="condition-item">
+                                <span class="condition-label">最高折抵</span>
+                                <span class="condition-value">NT$ @coupon.CouponType.MaxDiscountAmount.Value:N0</span>
+                            </div>
+                        }
+                        <div class="condition-item">
+                            <span class="condition-label">有效期限</span>
+                            <span class="condition-value">@coupon.CouponType.ValidTo.ToString("yyyy/MM/dd")</span>
+                        </div>
+                    </div>
+                    
+                    <div class="time-info">
+                        <div>獲得時間: @coupon.AcquiredTime.ToString("yyyy/MM/dd HH:mm")</div>
+                        @if (coupon.UsedTime.HasValue)
+                        {
+                            <div>使用時間: @coupon.UsedTime.Value.ToString("yyyy/MM/dd HH:mm")</div>
+                        }
+                    </div>
+                    
+                    @if (!isUsed && !isExpired)
+                    {
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="useCoupon(@coupon.CouponId)">
+                                立即使用
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyCouponCode('@coupon.CouponCode')">
+                                複製代碼
+                            </button>
+                        </div>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">🎫</div>
+                <div class="empty-title">暫無優惠券</div>
+                <div class="empty-desc">您還沒有任何優惠券，快去參加活動獲得吧！</div>
+            </div>
+        }
+    </div>
+
+    <script>
+        function useCoupon(couponId) {
+            if (confirm('確定要使用這張優惠券嗎？')) {
+                // 這裡應該跳轉到結帳頁面或處理使用邏輯
+                alert('優惠券使用功能開發中...');
+            }
+        }
+        
+        function copyCouponCode(code) {
+            navigator.clipboard.writeText(code).then(function() {
+                alert('優惠券代碼已複製到剪貼板！');
+            }, function(err) {
+                console.error('複製失敗: ', err);
+                alert('複製失敗，請手動複製：' + code);
+            });
+        }
+    </script>
+</body>
+</html>

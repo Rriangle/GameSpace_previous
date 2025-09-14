@@ -1,0 +1,362 @@
+@model GameSpace.Models.DM_Conversations
+@{
+    ViewData["Title"] = "聊天對話 - GameSpace";
+    Layout = "_Layout";
+    var otherUser = Model.Party1Id == 1 ? Model.Party2 : Model.Party1;
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>與 @otherUser.UserName 的對話 - GameSpace</title>
+    <style>
+        :root{
+            --bg:#eef3f8; --bg2:#ffffff; --ink:#1f2937; --muted:#64748b; --line:#e5e7eb;
+            --surface:rgba(255,255,255,.75); --glass:rgba(255,255,255,.45);
+            --accent:#7557ff; --accent-2:#34d2ff; --accent-3:#22c55e; --accent-4:#ef4444;
+            --radius:18px; --radius-sm:12px; --shadow:0 18px 40px rgba(17,24,39,.12);
+            --blur:14px;
+        }
+        body.dark{
+            --bg:#0c111b; --bg2:#0a0f18; --ink:#e5edff; --muted:#9fb1c9; --line:#1e2b43;
+            --surface:rgba(22,30,48,.65); --glass:rgba(18,24,39,.50);
+            --shadow:0 18px 42px rgba(0,0,0,.35);
+        }
+        *{box-sizing:border-box} html,body{height:100%}
+        body{
+            margin:0; color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+            background:
+                radial-gradient(900px 500px at -10% -10%, rgba(117,87,255,.10), transparent 60%),
+                radial-gradient(800px 460px at 110% 10%, rgba(52,210,255,.10), transparent 50%),
+                linear-gradient(180deg, var(--bg), var(--bg2));
+        }
+        .wrap{max-width:1200px; margin:0 auto; padding:0 16px; height:100vh; display:flex; flex-direction:column;}
+        
+        /* 聊天頭部 */
+        .chat-header{
+            background:var(--glass); border:1px solid var(--line); border-radius:20px 20px 0 0;
+            padding:20px; backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow);
+            display:flex; align-items:center; gap:15px;
+        }
+        .chat-avatar{
+            width:50px; height:50px; border-radius:50%; background:var(--accent);
+            display:flex; align-items:center; justify-content:center; color:#fff;
+            font-size:20px; font-weight:700;
+        }
+        .chat-user-info{
+            flex:1;
+        }
+        .chat-user-name{
+            font-size:18px; font-weight:700; color:var(--ink); margin-bottom:5px;
+        }
+        .chat-user-status{
+            font-size:14px; color:var(--muted);
+        }
+        .chat-actions{
+            display:flex; gap:10px;
+        }
+        .btn{
+            padding:8px 16px; border:none; border-radius:8px; font-weight:600;
+            cursor:pointer; transition:all 0.3s ease; text-decoration:none; display:inline-block;
+        }
+        .btn-secondary{
+            background:var(--surface); color:var(--ink); border:1px solid var(--line);
+        }
+        .btn-secondary:hover{background:var(--line)}
+        
+        /* 消息區域 */
+        .chat-messages{
+            flex:1; background:var(--bg2); border-left:1px solid var(--line); border-right:1px solid var(--line);
+            padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:15px;
+        }
+        .message{
+            display:flex; gap:10px; max-width:70%;
+        }
+        .message.sent{
+            align-self:flex-end; flex-direction:row-reverse;
+        }
+        .message.received{
+            align-self:flex-start;
+        }
+        .message-avatar{
+            width:40px; height:40px; border-radius:50%; background:var(--accent);
+            display:flex; align-items:center; justify-content:center; color:#fff;
+            font-size:14px; font-weight:700; flex-shrink:0;
+        }
+        .message-content{
+            background:var(--surface); border:1px solid var(--line); border-radius:15px;
+            padding:12px 16px; position:relative;
+        }
+        .message.sent .message-content{
+            background:var(--accent); color:#fff; border-color:var(--accent);
+        }
+        .message-text{
+            margin:0; line-height:1.4;
+        }
+        .message-meta{
+            display:flex; justify-content:space-between; align-items:center; margin-top:5px;
+            font-size:12px; color:var(--muted);
+        }
+        .message.sent .message-meta{
+            color:rgba(255,255,255,.7);
+        }
+        .message-time{
+            margin:0;
+        }
+        .message-status{
+            margin:0; margin-left:10px;
+        }
+        
+        /* 輸入區域 */
+        .chat-input{
+            background:var(--glass); border:1px solid var(--line); border-radius:0 0 20px 20px;
+            padding:20px; backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow);
+        }
+        .input-container{
+            display:flex; gap:10px; align-items:flex-end;
+        }
+        .message-input{
+            flex:1; padding:12px 16px; border:1px solid var(--line); border-radius:12px;
+            background:var(--bg2); color:var(--ink); font-size:16px; resize:none;
+            min-height:50px; max-height:120px;
+        }
+        .message-input:focus{
+            outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(117,87,255,.1);
+        }
+        .send-btn{
+            padding:12px 24px; border:none; border-radius:12px; font-weight:700;
+            background:var(--accent); color:#fff; cursor:pointer; transition:all 0.3s ease;
+        }
+        .send-btn:hover{
+            background:#6d28d9; transform:translateY(-1px);
+        }
+        .send-btn:disabled{
+            opacity:0.5; cursor:not-allowed; transform:none;
+        }
+        
+        /* 空狀態 */
+        .empty-messages{
+            text-align:center; padding:60px 20px; color:var(--muted);
+        }
+        .empty-icon{font-size:48px; margin-bottom:20px}
+        .empty-title{font-size:18px; font-weight:700; margin-bottom:10px; color:var(--ink)}
+        .empty-desc{font-size:14px}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <!-- 聊天頭部 -->
+        <div class="chat-header">
+            <div class="chat-avatar">
+                @otherUser.UserName.Substring(0, 1).ToUpper()
+            </div>
+            <div class="chat-user-info">
+                <div class="chat-user-name">@otherUser.UserName</div>
+                <div class="chat-user-status">在線</div>
+            </div>
+            <div class="chat-actions">
+                <button class="btn btn-secondary" onclick="goBack()">返回</button>
+                <button class="btn btn-secondary" onclick="clearChat()">清空</button>
+            </div>
+        </div>
+        
+        <!-- 消息區域 -->
+        <div class="chat-messages" id="chatMessages">
+            @if (Model.DM_Messages.Any())
+            {
+                @foreach (var message in Model.DM_Messages)
+                {
+                    var isSent = message.SenderUserId == 1;
+                    var messageClass = isSent ? "sent" : "received";
+                    var senderName = isSent ? "我" : message.SenderUser.UserName;
+                    
+                    <div class="message @messageClass">
+                        <div class="message-avatar">
+                            @senderName.Substring(0, 1).ToUpper()
+                        </div>
+                        <div class="message-content">
+                            <p class="message-text">@message.MessageContent</p>
+                            <div class="message-meta">
+                                <span class="message-time">@message.SentAt.ToString("HH:mm")</span>
+                                @if (isSent)
+                                {
+                                    <span class="message-status">
+                                        @if (message.ReadAt.HasValue)
+                                        {
+                                            <span>已讀</span>
+                                        }
+                                        else
+                                        {
+                                            <span>已發送</span>
+                                        }
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-messages">
+                    <div class="empty-icon">💬</div>
+                    <div class="empty-title">開始對話</div>
+                    <div class="empty-desc">發送第一條消息開始聊天吧！</div>
+                </div>
+            }
+        </div>
+        
+        <!-- 輸入區域 -->
+        <div class="chat-input">
+            <div class="input-container">
+                <textarea class="message-input" id="messageInput" placeholder="輸入消息..." rows="1"></textarea>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">發送</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const conversationId = @Model.ConversationId;
+        
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            
+            if (!content) {
+                return;
+            }
+            
+            // 禁用發送按鈕
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = '發送中...';
+            
+            fetch('/Chat/SendMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({
+                    conversationId: conversationId,
+                    content: content,
+                    messageType: 'Text'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 清空輸入框
+                    input.value = '';
+                    input.style.height = 'auto';
+                    
+                    // 重新載入消息
+                    loadMessages();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                alert('發送失敗，請稍後再試');
+            })
+            .finally(() => {
+                // 恢復發送按鈕
+                sendBtn.disabled = false;
+                sendBtn.textContent = '發送';
+            });
+        }
+        
+        function loadMessages() {
+            fetch(`/Chat/GetMessages?conversationId=${conversationId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateMessages(data.messages);
+                }
+            })
+            .catch(error => {
+                console.error('載入消息失敗:', error);
+            });
+        }
+        
+        function updateMessages(messages) {
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML = '';
+            
+            if (messages.length === 0) {
+                messagesContainer.innerHTML = `
+                    <div class="empty-messages">
+                        <div class="empty-icon">💬</div>
+                        <div class="empty-title">開始對話</div>
+                        <div class="empty-desc">發送第一條消息開始聊天吧！</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            messages.forEach(message => {
+                const isSent = message.senderId === 1;
+                const messageClass = isSent ? 'sent' : 'received';
+                const senderName = isSent ? '我' : message.senderName;
+                
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${messageClass}`;
+                messageElement.innerHTML = `
+                    <div class="message-avatar">
+                        ${senderName.substring(0, 1).toUpperCase()}
+                    </div>
+                    <div class="message-content">
+                        <p class="message-text">${message.messageContent}</p>
+                        <div class="message-meta">
+                            <span class="message-time">${new Date(message.sentAt).toLocaleTimeString('zh-TW', {hour: '2-digit', minute: '2-digit'})}</span>
+                            ${isSent ? `<span class="message-status">${message.readAt ? '已讀' : '已發送'}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                messagesContainer.appendChild(messageElement);
+            });
+            
+            // 滾動到底部
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function goBack() {
+            window.location.href = '/Chat';
+        }
+        
+        function clearChat() {
+            if (confirm('確定要清空聊天記錄嗎？此操作無法撤銷！')) {
+                alert('清空聊天功能開發中...');
+            }
+        }
+        
+        // 自動調整輸入框高度
+        document.getElementById('messageInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+        
+        // 按Enter發送消息
+        document.getElementById('messageInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // 定期載入新消息
+        setInterval(loadMessages, 3000);
+        
+        // 添加請求驗證令牌
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.createElement('form');
+            form.style.display = 'none';
+            form.innerHTML = '@Html.AntiForgeryToken()';
+            document.body.appendChild(form);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+@model IEnumerable<GameSpace.Controllers.Admin.ManagerRoleViewModel>
+@{
+    ViewData["Title"] = "管理員角色分配";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>管理員角色分配</h4>
+                <div class="card-tools">
+                    <a asp-action="AssignRole" class="btn btn-primary btn-sm">
+                        <i class="fas fa-user-plus"></i> 分配角色
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>管理員帳號</th>
+                                    <th>姓名</th>
+                                    <th>角色名稱</th>
+                                    <th>權限</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@item.ManagerAccount</strong>
+                                        </td>
+                                        <td>@item.ManagerName</td>
+                                        <td>
+                                            <span class="badge bg-primary">@item.RoleName</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-wrap gap-1">
+                                                @if (item.AdministratorPrivilegesManagement)
+                                                {
+                                                    <span class="badge bg-danger">管理員權限</span>
+                                                }
+                                                @if (item.UserStatusManagement)
+                                                {
+                                                    <span class="badge bg-success">用戶管理</span>
+                                                }
+                                                @if (item.ShoppingPermissionManagement)
+                                                {
+                                                    <span class="badge bg-info">購物管理</span>
+                                                }
+                                                @if (item.MessagePermissionManagement)
+                                                {
+                                                    <span class="badge bg-warning">訊息管理</span>
+                                                }
+                                                @if (item.PetRightsManagement)
+                                                {
+                                                    <span class="badge bg-purple">寵物管理</span>
+                                                }
+                                                @if (item.CustomerService)
+                                                {
+                                                    <span class="badge bg-secondary">客服</span>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a asp-action="EditManagerRole" asp-route-managerId="@item.ManagerId" 
+                                                   class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-edit"></i> 編輯
+                                                </a>
+                                                <a asp-action="RemoveManagerRole" asp-route-managerId="@item.ManagerId" 
+                                                   class="btn btn-outline-danger btn-sm"
+                                                   onclick="return confirm('確定要移除 @item.ManagerName 的角色嗎？')">
+                                                    <i class="fas fa-trash"></i> 移除
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">尚無管理員角色分配</h5>
+                        <p class="text-muted">請先創建角色，然後為管理員分配角色。</p>
+                        <a asp-action="CreateRole" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> 創建角色
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.badge.bg-purple {
+    background-color: #6f42c1 !important;
+}
+</style>

@@ -1,0 +1,13 @@
+using System;
+using System.Collections.Generic;
+
+namespace GameSpace.Models;
+
+public partial class UserSalesInformation
+{
+    public int UserId { get; set; }
+
+    public int? UserSalesWallet { get; set; }
+
+    public virtual Users User { get; set; } = null!;
+}

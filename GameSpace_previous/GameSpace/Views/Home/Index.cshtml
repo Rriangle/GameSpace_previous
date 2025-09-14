@@ -1,0 +1,315 @@
+@{
+    ViewData["Title"] = "首頁";
+    Layout = "_Layout";
+}
+
+<!-- Hero Section -->
+<section class="hero-section mb-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-4">
+                歡迎來到 <span class="text-gradient">GameSpace</span>
+            </h1>
+            <p class="lead mb-4">
+                一個充滿樂趣的遊戲平台，讓你在遊戲中獲得更多驚喜！<br>
+                探索小遊戲、養成寵物、參與論壇討論，享受無限樂趣。
+            </p>
+            <div class="d-flex gap-3">
+                <a href="/Game" class="btn btn-primary btn-lg">
+                    <i class="fas fa-gamepad me-2"></i>開始遊戲
+                </a>
+                <a href="/Pet" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-paw me-2"></i>我的寵物
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="hero-image text-center">
+                <div class="card p-5">
+                    <i class="fas fa-gamepad display-1 text-gradient mb-3"></i>
+                    <h3>遊戲世界</h3>
+                    <p class="text-muted">探索無限可能</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 彩色看板 -->
+<section class="tiles-section mb-5">
+    <h2 class="h3 mb-4 text-center">快速導航</h2>
+    <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-1 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">熱門遊戲</h5>
+                        <p class="card-text text-white-50">今日最受歡迎</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">+12%</span>
+                        <a href="/Game" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-2 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">最新文章</h5>
+                        <p class="card-text text-white-50">論壇動態</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">+8</span>
+                        <a href="/Forum" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-3 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">我的史萊姆</h5>
+                        <p class="card-text text-white-50">寵物狀態</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">Lv.15</span>
+                        <a href="/Pet" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-4 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">小遊戲</h5>
+                        <p class="card-text text-white-50">冒險挑戰</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">3/3</span>
+                        <a href="/Game" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-5 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">商城</h5>
+                        <p class="card-text text-white-50">限時優惠</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">-20%</span>
+                        <a href="/Shop" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card tile-card colorful-6 h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold">排行榜</h5>
+                        <p class="card-text text-white-50">玩家排名</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white bg-opacity-25 text-white">#1</span>
+                        <a href="/Game" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 功能特色 -->
+<section class="features-section mb-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="h3 mb-4">為什麼選擇 GameSpace？</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-gamepad fa-3x text-gradient"></i>
+                            </div>
+                            <h5 class="card-title">豐富小遊戲</h5>
+                            <p class="card-text">多種有趣的迷你遊戲，每日挑戰獲得獎勵</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-paw fa-3x text-gradient"></i>
+                            </div>
+                            <h5 class="card-title">可愛寵物</h5>
+                            <p class="card-text">養成專屬的史萊姆寵物，陪伴你的遊戲時光</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-users fa-3x text-gradient"></i>
+                            </div>
+                            <h5 class="card-title">社群互動</h5>
+                            <p class="card-text">與其他玩家交流，分享遊戲心得</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 最新動態 -->
+<section class="news-section mb-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <h2 class="h3 mb-4">最新動態</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar me-3">
+                            <i class="fas fa-user-circle fa-2x text-gradient"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">系統更新</h6>
+                            <small class="text-muted">2小時前</small>
+                        </div>
+                    </div>
+                    <p class="mb-3">歡迎來到 GameSpace！我們已經準備好為您提供最佳的遊戲體驗。快來探索各種功能吧！</p>
+                    <div class="d-flex gap-2">
+                        <span class="badge bg-primary">公告</span>
+                        <span class="badge bg-secondary">更新</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <h2 class="h3 mb-4">快速統計</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <div class="h4 mb-0 text-gradient">1,234</div>
+                                <small class="text-muted">活躍用戶</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <div class="h4 mb-0 text-gradient">5,678</div>
+                                <small class="text-muted">遊戲次數</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <style>
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-section {
+            padding: 4rem 0;
+        }
+
+        .tile-card {
+            transition: all 0.3s ease;
+            border: none;
+            overflow: hidden;
+        }
+
+        .tile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tile-card.colorful-1 {
+            background: linear-gradient(135deg, #4f46e5, #22d3ee);
+            color: white;
+        }
+
+        .tile-card.colorful-2 {
+            background: linear-gradient(135deg, #f43f5e, #f59e0b);
+            color: white;
+        }
+
+        .tile-card.colorful-3 {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .tile-card.colorful-4 {
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            color: white;
+        }
+
+        .tile-card.colorful-5 {
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            color: white;
+        }
+
+        .tile-card.colorful-6 {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            color: white;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border-radius: 50%;
+            border: 1px solid var(--line);
+        }
+
+        .stat-item {
+            padding: 1rem 0;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+}

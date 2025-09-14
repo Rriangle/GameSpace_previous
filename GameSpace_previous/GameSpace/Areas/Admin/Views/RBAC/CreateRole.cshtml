@@ -1,0 +1,132 @@
+@model GameSpace.Controllers.Admin.CreateRoleViewModel
+@{
+    ViewData["Title"] = "創建角色";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>創建新角色</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="CreateRole" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="RoleName" class="form-label"></label>
+                        <input asp-for="RoleName" class="form-control" placeholder="請輸入角色名稱" />
+                        <span asp-validation-for="RoleName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>權限設定</h5>
+                        <p class="text-muted">請選擇此角色應具備的權限</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check mb-3">
+                                <input asp-for="AdministratorPrivilegesManagement" class="form-check-input" type="checkbox" />
+                                <label asp-for="AdministratorPrivilegesManagement" class="form-check-label">
+                                    <strong>管理員權限管理</strong>
+                                    <small class="text-muted d-block">最高權限，可管理所有系統功能</small>
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input asp-for="UserStatusManagement" class="form-check-input" type="checkbox" />
+                                <label asp-for="UserStatusManagement" class="form-check-label">
+                                    <strong>用戶狀態管理</strong>
+                                    <small class="text-muted d-block">可管理用戶狀態、停權等</small>
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input asp-for="ShoppingPermissionManagement" class="form-check-input" type="checkbox" />
+                                <label asp-for="ShoppingPermissionManagement" class="form-check-label">
+                                    <strong>購物權限管理</strong>
+                                    <small class="text-muted d-block">可管理商城相關功能</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check mb-3">
+                                <input asp-for="MessagePermissionManagement" class="form-check-input" type="checkbox" />
+                                <label asp-for="MessagePermissionManagement" class="form-check-label">
+                                    <strong>訊息權限管理</strong>
+                                    <small class="text-muted d-block">可管理論壇、聊天等功能</small>
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input asp-for="PetRightsManagement" class="form-check-input" type="checkbox" />
+                                <label asp-for="PetRightsManagement" class="form-check-label">
+                                    <strong>寵物權限管理</strong>
+                                    <small class="text-muted d-block">可管理寵物系統相關功能</small>
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input asp-for="CustomerService" class="form-check-input" type="checkbox" />
+                                <label asp-for="CustomerService" class="form-check-label">
+                                    <strong>客服權限</strong>
+                                    <small class="text-muted d-block">基本客服功能權限</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Roles" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> 返回角色列表
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 創建角色
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>權限說明</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="text-primary">管理員權限管理</h6>
+                    <small class="text-muted">最高權限，包含所有其他權限功能</small>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-success">用戶狀態管理</h6>
+                    <small class="text-muted">可停權、啟用用戶帳號</small>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-info">購物權限管理</h6>
+                    <small class="text-muted">可管理商城商品、訂單等</small>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-warning">訊息權限管理</h6>
+                    <small class="text-muted">可管理論壇、聊天內容</small>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-danger">寵物權限管理</h6>
+                    <small class="text-muted">可管理寵物系統設定</small>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-secondary">客服權限</h6>
+                    <small class="text-muted">基本客服功能</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

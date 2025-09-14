@@ -1,0 +1,78 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "登入 - GameSpace";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0" style="border-radius: 20px; backdrop-filter: blur(20px); background: rgba(255,255,255,0.8);">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background: linear-gradient(135deg, #7557ff, #34d2ff); border-radius: 15px; color: white; font-size: 24px; font-weight: bold; box-shadow: 0 8px 25px rgba(117,87,255,0.3);">
+                            G
+                        </div>
+                        <h2 class="mt-3 mb-1" style="color: #1f2937; font-weight: 900;">歡迎回來</h2>
+                        <p class="text-muted">登入您的 GameSpace 帳號</p>
+                    </div>
+
+                    <form asp-action="Login" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Account" class="form-label fw-bold" style="color: #374151;">帳號或 Email</label>
+                            <input asp-for="Account" class="form-control form-control-lg" style="border-radius: 12px; border: 2px solid #e5e7eb; padding: 12px 16px;" placeholder="請輸入您的帳號或 Email" />
+                            <span asp-validation-for="Account" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Password" class="form-label fw-bold" style="color: #374151;">密碼</label>
+                            <input asp-for="Password" type="password" class="form-control form-control-lg" style="border-radius: 12px; border: 2px solid #e5e7eb; padding: 12px 16px;" placeholder="請輸入您的密碼" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4 form-check">
+                            <input asp-for="RememberMe" class="form-check-input" type="checkbox" style="border-radius: 6px;" />
+                            <label asp-for="RememberMe" class="form-check-label" style="color: #6b7280;">
+                                記住我
+                            </label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg" style="border-radius: 12px; padding: 12px; background: linear-gradient(135deg, #7557ff, #3b82f6); border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(117,87,255,0.4);">
+                                登入
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="text-muted mb-0">還沒有帳號？</p>
+                        <a asp-action="Register" class="text-decoration-none fw-bold" style="color: #7557ff;">立即註冊</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: 
+            radial-gradient(900px 500px at -10% -10%, rgba(117,87,255,.10), transparent 60%),
+            radial-gradient(800px 460px at 110% 10%, rgba(52,210,255,.10), transparent 50%),
+            linear-gradient(180deg, #eef3f8, #ffffff);
+        min-height: 100vh;
+    }
+    
+    .form-control:focus {
+        border-color: #7557ff !important;
+        box-shadow: 0 0 0 0.2rem rgba(117,87,255,0.25) !important;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(117,87,255,0.5) !important;
+        transition: all 0.3s ease;
+    }
+</style>

@@ -1,0 +1,195 @@
+@model IEnumerable<GameSpace.Models.Users>
+@{
+    ViewData["Title"] = "用戶管理";
+    Layout = "_AdminLayout";
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">用戶管理</h1>
+    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-plus fa-sm text-white-50"></i> 新增用戶
+    </a>
+</div>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">用戶列表</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>用戶ID</th>
+                        <th>用戶名</th>
+                        <th>電子郵件</th>
+                        <th>註冊時間</th>
+                        <th>最後登入</th>
+                        <th>狀態</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>用戶ID</th>
+                        <th>用戶名</th>
+                        <th>電子郵件</th>
+                        <th>註冊時間</th>
+                        <th>最後登入</th>
+                        <th>狀態</th>
+                        <th>操作</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.UserId</td>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td>@user.CreatedAt.ToString("yyyy/MM/dd HH:mm")</td>
+                            <td>@(user.LastLoginTime?.ToString("yyyy/MM/dd HH:mm") ?? "從未登入")</td>
+                            <td>
+                                @if (user.IsBanned)
+                                {
+                                    <span class="badge badge-danger">已封禁</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success">正常</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="viewUser(@user.UserId)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning" onclick="editUser(@user.UserId)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    @if (user.IsBanned)
+                                    {
+                                        <button type="button" class="btn btn-sm btn-success" onclick="unbanUser(@user.UserId)">
+                                            <i class="fas fa-unlock"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="banUser(@user.UserId)">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 分頁 -->
+@if (ViewBag.TotalPages > 1)
+{
+    <nav aria-label="用戶列表分頁">
+        <ul class="pagination justify-content-center">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?page=@(ViewBag.CurrentPage - 1)">上一頁</a>
+                </li>
+            }
+            
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="?page=@i">@i</a>
+                </li>
+            }
+            
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?page=@(ViewBag.CurrentPage + 1)">下一頁</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/zh-HANT.json"
+                },
+                "pageLength": 25,
+                "order": [[ 0, "desc" ]]
+            });
+        });
+
+        function viewUser(userId) {
+            // 查看用戶詳情
+            window.location.href = '/Admin/UserDetails/' + userId;
+        }
+
+        function editUser(userId) {
+            // 編輯用戶
+            window.location.href = '/Admin/EditUser/' + userId;
+        }
+
+        function banUser(userId) {
+            if (confirm('確定要封禁此用戶嗎？')) {
+                // 封禁用戶
+                fetch('/Admin/BanUser/' + userId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('用戶已封禁');
+                        location.reload();
+                    } else {
+                        alert('操作失敗：' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('操作失敗，請稍後再試');
+                });
+            }
+        }
+
+        function unbanUser(userId) {
+            if (confirm('確定要解封此用戶嗎？')) {
+                // 解封用戶
+                fetch('/Admin/UnbanUser/' + userId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('用戶已解封');
+                        location.reload();
+                    } else {
+                        alert('操作失敗：' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('操作失敗，請稍後再試');
+                });
+            }
+        }
+    </script>
+}

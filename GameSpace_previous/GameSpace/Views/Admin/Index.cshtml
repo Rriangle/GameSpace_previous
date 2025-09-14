@@ -1,0 +1,350 @@
+@{
+    ViewData["Title"] = "儀表板";
+    Layout = "_AdminLayout";
+    var stats = ViewBag.Stats as dynamic;
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">儀表板</h1>
+    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-download fa-sm text-white-50"></i> 生成報告
+    </a>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+    <!-- 總用戶數 -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">總用戶數</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@stats?.TotalUsers</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 總訂單數 -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">總訂單數</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@stats?.TotalOrders</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 總優惠券數 -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">總優惠券數</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@stats?.TotalCoupons</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-ticket-alt fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 總電子禮券數 -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">總電子禮券數</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@stats?.TotalEVouchers</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-gift fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+    <!-- 活躍用戶數 -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">活躍用戶數 (30天)</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@stats?.ActiveUsers</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-check fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 待處理訂單數 -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">待處理訂單數</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@stats?.PendingOrders</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+    <!-- 用戶統計圖表 -->
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">用戶統計</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">圖表選項</div>
+                        <a class="dropdown-item" href="#">7天</a>
+                        <a class="dropdown-item" href="#">30天</a>
+                        <a class="dropdown-item" href="#">90天</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">全部</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="userChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 訂單狀態分佈 -->
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">訂單狀態分佈</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">圖表選項</div>
+                        <a class="dropdown-item" href="#">本週</a>
+                        <a class="dropdown-item" href="#">本月</a>
+                        <a class="dropdown-item" href="#">本年</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-pie pt-4 pb-2">
+                    <canvas id="orderStatusChart"></canvas>
+                </div>
+                <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-primary"></i> 待處理
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-success"></i> 已完成
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-info"></i> 已取消
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+    <!-- 最近活動 -->
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">最近活動</h6>
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="~/lib/sb-admin/assets/img/undraw_profile.svg" alt="...">
+                    <p>最近活動功能開發中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 系統狀態 -->
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">系統狀態</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="text-center">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">正常</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">系統狀態</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-center">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">99.9%</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">正常運行時間</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // 用戶統計圖表
+        var ctx = document.getElementById("userChart");
+        var userChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["1月", "2月", "3月", "4月", "5月", "6月"],
+                datasets: [{
+                    label: "新用戶",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "rgba(78, 115, 223, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: [0, 10000, 5000, 15000, 10000, 20000, 15000],
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    x: {
+                        time: {
+                            unit: 'month'
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 7
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            maxTicksLimit: 5,
+                            padding: 10,
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    },
+                },
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    titleMarginBottom: 10,
+                    titleFontColor: '#6e707e',
+                    titleFontSize: 14,
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    intersect: false,
+                    mode: 'index',
+                    caretPadding: 10,
+                }
+            }
+        });
+
+        // 訂單狀態分佈圖表
+        var ctx2 = document.getElementById("orderStatusChart");
+        var orderStatusChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ["待處理", "已完成", "已取消"],
+                datasets: [{
+                    data: [@stats?.PendingOrders, @(stats?.TotalOrders - stats?.PendingOrders), 0],
+                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: false
+                },
+                cutoutPercentage: 80,
+            },
+        });
+    </script>
+}

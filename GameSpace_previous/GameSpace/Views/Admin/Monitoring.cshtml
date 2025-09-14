@@ -1,0 +1,297 @@
+@{
+    ViewData["Title"] = "系統監控";
+    Layout = "_AdminLayout";
+    var monitoring = ViewBag.Monitoring as dynamic;
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">系統監控</h1>
+    <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="refreshMonitoring()">
+        <i class="fas fa-sync fa-sm text-white-50"></i> 重新整理
+    </button>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+    <!-- 系統運行時間 -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">系統運行時間</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="systemUptime">@monitoring?.SystemUptime</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 記憶體使用量 -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">記憶體使用量</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="memoryUsage">@monitoring?.MemoryUsage</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-memory fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 資料庫連接狀態 -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">資料庫連接</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="dbConnection">@monitoring?.ActiveConnections</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-database fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 最後備份時間 -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">最後備份</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="lastBackup">@monitoring?.LastBackup.ToString("yyyy/MM/dd HH:mm")</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-archive fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+    <!-- 效能指標 -->
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">效能指標</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">時間範圍</div>
+                        <a class="dropdown-item" href="#" onclick="updateChart('1h')">過去1小時</a>
+                        <a class="dropdown-item" href="#" onclick="updateChart('24h')">過去24小時</a>
+                        <a class="dropdown-item" href="#" onclick="updateChart('7d')">過去7天</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 系統狀態 -->
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">系統狀態</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="text-center">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="avgResponseTime">@monitoring?.PerformanceMetrics.AvgResponseTime</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">平均回應時間</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-center">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="requestsPerSecond">@monitoring?.PerformanceMetrics.RequestsPerSecond</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">每秒請求數</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-6">
+                        <div class="text-center">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="errorRate">@monitoring?.PerformanceMetrics.ErrorRate</div>
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">錯誤率</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-center">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">99.9%</div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">正常運行時間</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+    <!-- 錯誤日誌 -->
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">錯誤日誌</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="errorLogsTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>時間</th>
+                                <th>級別</th>
+                                <th>來源</th>
+                                <th>訊息</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">暫無錯誤日誌</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // 效能指標圖表
+        var ctx = document.getElementById("performanceChart");
+        var performanceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00", "24:00"],
+                datasets: [{
+                    label: "CPU使用率 (%)",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "rgba(78, 115, 223, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: [20, 25, 30, 35, 40, 45, 50],
+                }, {
+                    label: "記憶體使用率 (%)",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(28, 200, 138, 0.05)",
+                    borderColor: "rgba(28, 200, 138, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(28, 200, 138, 1)",
+                    pointBorderColor: "rgba(28, 200, 138, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(28, 200, 138, 1)",
+                    pointHoverBorderColor: "rgba(28, 200, 138, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: [30, 35, 40, 45, 50, 55, 60],
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    x: {
+                        time: {
+                            unit: 'hour'
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 7
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            maxTicksLimit: 5,
+                            padding: 10,
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    },
+                },
+                legend: {
+                    display: true
+                },
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    titleMarginBottom: 10,
+                    titleFontColor: '#6e707e',
+                    titleFontSize: 14,
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    intersect: false,
+                    mode: 'index',
+                    caretPadding: 10,
+                }
+            }
+        });
+
+        function refreshMonitoring() {
+            // 重新整理監控數據
+            location.reload();
+        }
+
+        function updateChart(timeRange) {
+            // 更新圖表時間範圍
+            console.log('更新圖表時間範圍:', timeRange);
+            // 這裡可以實現動態更新圖表的邏輯
+        }
+
+        // 自動重新整理監控數據（每30秒）
+        setInterval(function() {
+            // 這裡可以實現自動重新整理監控數據的邏輯
+        }, 30000);
+    </script>
+}

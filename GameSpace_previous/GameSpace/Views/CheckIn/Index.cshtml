@@ -1,0 +1,256 @@
+@{
+    ViewData["Title"] = "每日簽到 - GameSpace";
+    Layout = "_Layout";
+    var todayCheckIn = ViewBag.TodayCheckIn as DailyCheckIn;
+    var consecutiveDays = (int)ViewBag.ConsecutiveDays;
+    var thisMonthCheckIns = ViewBag.ThisMonthCheckIns as List<DailyCheckIn>;
+    var canCheckIn = (bool)ViewBag.CanCheckIn;
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>每日簽到 - GameSpace</title>
+    <style>
+        :root{
+            --bg:#eef3f8; --bg2:#ffffff; --ink:#1f2937; --muted:#64748b; --line:#e5e7eb;
+            --surface:rgba(255,255,255,.75); --glass:rgba(255,255,255,.45);
+            --accent:#7557ff; --accent-2:#34d2ff; --accent-3:#22c55e;
+            --radius:18px; --radius-sm:12px; --shadow:0 18px 40px rgba(17,24,39,.12);
+            --blur:14px;
+        }
+        body.dark{
+            --bg:#0c111b; --bg2:#0a0f18; --ink:#e5edff; --muted:#9fb1c9; --line:#1e2b43;
+            --surface:rgba(22,30,48,.65); --glass:rgba(18,24,39,.50);
+            --shadow:0 18px 42px rgba(0,0,0,.35);
+        }
+        *{box-sizing:border-box} html,body{height:100%}
+        body{
+            margin:0; color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+            background:
+                radial-gradient(900px 500px at -10% -10%, rgba(117,87,255,.10), transparent 60%),
+                radial-gradient(800px 460px at 110% 10%, rgba(52,210,255,.10), transparent 50%),
+                linear-gradient(180deg, var(--bg), var(--bg2));
+        }
+        .wrap{max-width:1200px; margin:0 auto; padding:0 16px}
+        
+        /* 簽到卡片 */
+        .checkin-card{
+            background:var(--glass); border:1px solid var(--line); border-radius:20px; 
+            padding:40px; backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow);
+            text-align:center; margin:20px 0;
+        }
+        .checkin-title{font-size:32px; font-weight:900; color:var(--ink); margin-bottom:20px}
+        .consecutive-days{font-size:48px; font-weight:900; color:var(--accent); margin-bottom:10px}
+        .consecutive-label{font-size:18px; color:var(--muted); margin-bottom:30px}
+        
+        /* 簽到按鈕 */
+        .checkin-btn{
+            width:120px; height:120px; border-radius:50%; border:none; font-size:24px; font-weight:900;
+            cursor:pointer; transition:all 0.3s ease; box-shadow:var(--shadow);
+            display:flex; align-items:center; justify-content:center; margin:0 auto 20px;
+        }
+        .checkin-btn.available{
+            background:linear-gradient(135deg,var(--accent-3),#16a34a); color:#fff;
+        }
+        .checkin-btn.available:hover{transform:scale(1.1); box-shadow:0 8px 25px rgba(34,197,94,0.4)}
+        .checkin-btn.completed{
+            background:linear-gradient(135deg,#6b7280,#9ca3af); color:#fff; cursor:not-allowed;
+        }
+        
+        /* 獎勵預覽 */
+        .rewards-preview{
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; margin:30px 0;
+        }
+        .reward-item{
+            background:var(--surface); border:1px solid var(--line); border-radius:15px;
+            padding:20px; text-align:center;
+        }
+        .reward-icon{font-size:32px; margin-bottom:10px}
+        .reward-title{font-weight:700; color:var(--ink); margin-bottom:5px}
+        .reward-desc{color:var(--muted); font-size:14px}
+        
+        /* 簽到日曆 */
+        .calendar-section{margin:30px 0}
+        .calendar-title{font-size:24px; font-weight:900; color:var(--ink); margin-bottom:20px; text-align:center}
+        .calendar-grid{
+            display:grid; grid-template-columns:repeat(7, 1fr); gap:8px; max-width:400px; margin:0 auto;
+        }
+        .calendar-day{
+            aspect-ratio:1; border:1px solid var(--line); border-radius:8px; display:flex;
+            align-items:center; justify-content:center; font-weight:700; font-size:14px;
+        }
+        .calendar-day.checked{background:var(--accent-3); color:#fff}
+        .calendar-day.today{background:var(--accent); color:#fff}
+        .calendar-day.other-month{color:var(--muted); opacity:0.5}
+        
+        /* 簽到歷史 */
+        .history-section{margin:30px 0}
+        .history-title{font-size:24px; font-weight:900; color:var(--ink); margin-bottom:20px}
+        .history-item{
+            background:var(--glass); border:1px solid var(--line); border-radius:15px; 
+            padding:15px; backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow);
+            margin:10px 0; display:flex; justify-content:space-between; align-items:center;
+        }
+        .history-date{font-weight:700; color:var(--ink)}
+        .history-rewards{color:var(--muted); font-size:14px}
+        .history-points{color:var(--accent-3); font-weight:700}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="checkin-card">
+            <h1 class="checkin-title">📅 每日簽到</h1>
+            <div class="consecutive-days">@consecutiveDays</div>
+            <div class="consecutive-label">連續簽到天數</div>
+            
+            <button class="checkin-btn @(canCheckIn ? "available" : "completed")" 
+                    onclick="@(canCheckIn ? "performCheckIn()" : "")" 
+                    @(canCheckIn ? "" : "disabled")>
+                @(canCheckIn ? "簽到" : "✓")
+            </button>
+            
+            @if (canCheckIn)
+            {
+                <p style="color:var(--muted); margin-bottom:30px">點擊按鈕完成今日簽到</p>
+            }
+            else
+            {
+                <p style="color:var(--muted); margin-bottom:30px">今日已簽到，明天再來吧！</p>
+            }
+            
+            <div class="rewards-preview">
+                <div class="reward-item">
+                    <div class="reward-icon">💰</div>
+                    <div class="reward-title">點數獎勵</div>
+                    <div class="reward-desc">@(10 + Math.Min(consecutiveDays * 2, 50)) 點</div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-icon">🐱</div>
+                    <div class="reward-title">寵物經驗</div>
+                    <div class="reward-desc">@(5 + Math.Min(consecutiveDays, 20)) 經驗</div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-icon">🎫</div>
+                    <div class="reward-title">優惠券</div>
+                    <div class="reward-desc">@(consecutiveDays % 7 == 0 ? "可獲得" : "暫無")</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="calendar-section">
+            <h2 class="calendar-title">📊 本月簽到日曆</h2>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- 日曆將由JavaScript生成 -->
+            </div>
+        </div>
+        
+        <div class="history-section">
+            <h2 class="history-title">📈 簽到記錄</h2>
+            @if (thisMonthCheckIns.Any())
+            {
+                @foreach (var checkIn in thisMonthCheckIns)
+                {
+                    <div class="history-item">
+                        <div>
+                            <div class="history-date">@checkIn.CheckInDate.ToString("MM/dd")</div>
+                            <div class="history-rewards">連續 @checkIn.ConsecutiveDays 天</div>
+                        </div>
+                        <div class="history-points">+@checkIn.PointsEarned 點</div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div style="text-align:center; padding:40px; color:var(--muted)">
+                    <div style="font-size:48px; margin-bottom:20px">📭</div>
+                    <div style="font-size:18px; font-weight:700; margin-bottom:10px; color:var(--ink)">暫無簽到記錄</div>
+                    <div>開始每日簽到吧！</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <script>
+        function performCheckIn() {
+            fetch('/CheckIn/CheckIn', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`簽到成功！\n連續 ${data.consecutiveDays} 天\n獲得 ${data.pointsEarned} 點\n寵物經驗 +${data.petExpEarned}`);
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                alert('簽到失敗，請稍後再試');
+            });
+        }
+        
+        // 生成日曆
+        function generateCalendar() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            const calendarGrid = document.getElementById('calendarGrid');
+            calendarGrid.innerHTML = '';
+            
+            // 星期標題
+            const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+            weekDays.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-day';
+                dayHeader.style.background = 'var(--surface)';
+                dayHeader.style.fontWeight = '700';
+                dayHeader.textContent = day;
+                calendarGrid.appendChild(dayHeader);
+            });
+            
+            // 生成日期
+            for (let i = 0; i < 42; i++) {
+                const date = new Date(startDate);
+                date.setDate(startDate.getDate() + i);
+                
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = date.getDate();
+                
+                if (date.getMonth() !== month) {
+                    dayElement.classList.add('other-month');
+                } else if (date.toDateString() === today.toDateString()) {
+                    dayElement.classList.add('today');
+                }
+                
+                // 這裡可以添加已簽到日期的標記
+                // 需要從後端獲取簽到數據
+                
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+        
+        // 添加請求驗證令牌
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.createElement('form');
+            form.style.display = 'none';
+            form.innerHTML = '@Html.AntiForgeryToken()';
+            document.body.appendChild(form);
+            
+            generateCalendar();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+@model List<Forum>
+@{
+    ViewData["Title"] = "論壇 - GameSpace";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>論壇 - GameSpace</title>
+    <style>
+        :root{
+            --bg:#eef3f8; --bg2:#ffffff; --ink:#1f2937; --muted:#64748b; --line:#e5e7eb;
+            --surface:rgba(255,255,255,.75); --glass:rgba(255,255,255,.45);
+            --accent:#7557ff; --accent-2:#34d2ff; --accent-3:#22c55e;
+            --radius:18px; --radius-sm:12px; --shadow:0 18px 40px rgba(17,24,39,.12);
+            --blur:14px;
+        }
+        body.dark{
+            --bg:#0c111b; --bg2:#0a0f18; --ink:#e5edff; --muted:#9fb1c9; --line:#1e2b43;
+            --surface:rgba(22,30,48,.65); --glass:rgba(18,24,39,.50);
+            --shadow:0 18px 42px rgba(0,0,0,.35);
+        }
+        *{box-sizing:border-box} html,body{height:100%}
+        body{
+            margin:0; color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+            background:
+                radial-gradient(900px 500px at -10% -10%, rgba(117,87,255,.10), transparent 60%),
+                radial-gradient(800px 460px at 110% 10%, rgba(52,210,255,.10), transparent 50%),
+                linear-gradient(180deg, var(--bg), var(--bg2));
+        }
+        .wrap{max-width:1200px; margin:0 auto; padding:0 16px}
+        
+        /* 論壇卡片 */
+        .forum-card{
+            background:var(--glass); border:1px solid var(--line); border-radius:20px; 
+            padding:25px; backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow);
+            margin:15px 0; transition:all 0.3s ease; cursor:pointer;
+        }
+        .forum-card:hover{transform:translateY(-3px); box-shadow:0 25px 50px rgba(0,0,0,0.15)}
+        
+        .forum-header{display:flex; align-items:center; gap:15px; margin-bottom:15px}
+        .forum-icon{width:50px; height:50px; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff}
+        .forum-info{flex:1}
+        .forum-title{font-size:20px; font-weight:900; color:var(--ink); margin-bottom:5px}
+        .forum-desc{color:var(--muted); font-size:14px}
+        .forum-stats{display:flex; gap:20px; font-size:14px; color:var(--muted)}
+        
+        .forum-meta{display:flex; align-items:center; gap:10px; margin-top:15px; padding-top:15px; border-top:1px solid var(--line)}
+        .meta-item{display:flex; align-items:center; gap:5px; font-size:13px; color:var(--muted)}
+        .meta-value{font-weight:700; color:var(--ink)}
+        
+        /* 按鈕 */
+        .btn-create{background:linear-gradient(135deg,var(--accent),#3b82f6); color:#fff; border:none; padding:12px 24px; border-radius:12px; font-weight:700; cursor:pointer; transition:all 0.3s ease; box-shadow:var(--shadow)}
+        .btn-create:hover{transform:translateY(-2px); box-shadow:0 8px 25px rgba(117,87,255,0.4)}
+        
+        /* 空狀態 */
+        .empty-state{text-align:center; padding:60px 20px; color:var(--muted)}
+        .empty-icon{font-size:48px; margin-bottom:20px}
+        .empty-title{font-size:20px; font-weight:700; margin-bottom:10px; color:var(--ink)}
+        .empty-desc{font-size:14px}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin:30px 0">
+            <h1 style="font-size:32px; font-weight:900; color:var(--ink); margin:0">🎮 遊戲論壇</h1>
+            <button class="btn-create" onclick="showCreateForum()">+ 創建論壇</button>
+        </div>
+        
+        @if (Model.Any())
+        {
+            @foreach (var forum in Model)
+            {
+                <div class="forum-card" onclick="goToForum(@forum.ForumId)">
+                    <div class="forum-header">
+                        <div class="forum-icon">🎯</div>
+                        <div class="forum-info">
+                            <div class="forum-title">@forum.ForumName</div>
+                            <div class="forum-desc">@forum.Description</div>
+                        </div>
+                    </div>
+                    
+                    <div class="forum-stats">
+                        <div>📝 @forum.ThreadCount 討論串</div>
+                        <div>💬 @forum.PostCount 回覆</div>
+                        <div>👀 @forum.ViewCount 瀏覽</div>
+                    </div>
+                    
+                    <div class="forum-meta">
+                        <div class="meta-item">
+                            <span>🎮</span>
+                            <span class="meta-value">@(forum.Game?.GameName ?? "未知遊戲")</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⏰</span>
+                            <span class="meta-value">@forum.LastActivity?.ToString("MM/dd HH:mm")</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <span class="meta-value">@forum.CreatedAt.ToString("yyyy/MM/dd")</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <div class="empty-title">暫無論壇</div>
+                <div class="empty-desc">還沒有任何論壇，快來創建第一個吧！</div>
+            </div>
+        }
+    </div>
+
+    <script>
+        function goToForum(forumId) {
+            window.location.href = '/Forum/Threads/' + forumId;
+        }
+        
+        function showCreateForum() {
+            alert('創建論壇功能開發中...');
+        }
+    </script>
+</body>
+</html>

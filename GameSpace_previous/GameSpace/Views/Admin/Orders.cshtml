@@ -1,0 +1,263 @@
+@model IEnumerable<GameSpace.Models.OrderInfo>
+@{
+    ViewData["Title"] = "訂單管理";
+    Layout = "_AdminLayout";
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">訂單管理</h1>
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-sm btn-primary" onclick="exportOrders()">
+            <i class="fas fa-download fa-sm text-white-50"></i> 匯出訂單
+        </button>
+        <button type="button" class="btn btn-sm btn-success" onclick="refreshOrders()">
+            <i class="fas fa-sync fa-sm text-white-50"></i> 重新整理
+        </button>
+    </div>
+</div>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">訂單列表</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>訂單編號</th>
+                        <th>用戶</th>
+                        <th>訂單狀態</th>
+                        <th>付款狀態</th>
+                        <th>訂單總額</th>
+                        <th>下單時間</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>訂單編號</th>
+                        <th>用戶</th>
+                        <th>訂單狀態</th>
+                        <th>付款狀態</th>
+                        <th>訂單總額</th>
+                        <th>下單時間</th>
+                        <th>操作</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>@order.OrderCode</td>
+                            <td>@order.User.UserName</td>
+                            <td>
+                                @switch (order.OrderStatus)
+                                {
+                                    case "待付款":
+                                        <span class="badge badge-warning">@order.OrderStatus</span>
+                                        break;
+                                    case "已付款":
+                                        <span class="badge badge-info">@order.OrderStatus</span>
+                                        break;
+                                    case "已出貨":
+                                        <span class="badge badge-primary">@order.OrderStatus</span>
+                                        break;
+                                    case "已完成":
+                                        <span class="badge badge-success">@order.OrderStatus</span>
+                                        break;
+                                    case "已取消":
+                                        <span class="badge badge-danger">@order.OrderStatus</span>
+                                        break;
+                                    default:
+                                        <span class="badge badge-secondary">@order.OrderStatus</span>
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                @if (order.Paid)
+                                {
+                                    <span class="badge badge-success">已付款</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-warning">未付款</span>
+                                }
+                            </td>
+                            <td>NT$ @order.OrderTotal.ToString("N0")</td>
+                            <td>@order.CreatedAt.ToString("yyyy/MM/dd HH:mm")</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="viewOrder(@order.OrderId)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning" onclick="editOrder(@order.OrderId)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    @if (order.OrderStatus == "待付款")
+                                    {
+                                        <button type="button" class="btn btn-sm btn-success" onclick="confirmPayment(@order.OrderId)">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    }
+                                    @if (order.OrderStatus == "已付款" && !order.Shipped)
+                                    {
+                                        <button type="button" class="btn btn-sm btn-info" onclick="shipOrder(@order.OrderId)">
+                                            <i class="fas fa-truck"></i>
+                                        </button>
+                                    }
+                                    @if (order.OrderStatus != "已完成" && order.OrderStatus != "已取消")
+                                    {
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="cancelOrder(@order.OrderId)">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 分頁 -->
+@if (ViewBag.TotalPages > 1)
+{
+    <nav aria-label="訂單列表分頁">
+        <ul class="pagination justify-content-center">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?page=@(ViewBag.CurrentPage - 1)">上一頁</a>
+                </li>
+            }
+            
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="?page=@i">@i</a>
+                </li>
+            }
+            
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?page=@(ViewBag.CurrentPage + 1)">下一頁</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/zh-HANT.json"
+                },
+                "pageLength": 25,
+                "order": [[ 5, "desc" ]]
+            });
+        });
+
+        function viewOrder(orderId) {
+            // 查看訂單詳情
+            window.location.href = '/Admin/OrderDetails/' + orderId;
+        }
+
+        function editOrder(orderId) {
+            // 編輯訂單
+            window.location.href = '/Admin/EditOrder/' + orderId;
+        }
+
+        function confirmPayment(orderId) {
+            if (confirm('確定要確認此訂單的付款嗎？')) {
+                // 確認付款
+                fetch('/Admin/ConfirmPayment/' + orderId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('付款已確認');
+                        location.reload();
+                    } else {
+                        alert('操作失敗：' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('操作失敗，請稍後再試');
+                });
+            }
+        }
+
+        function shipOrder(orderId) {
+            if (confirm('確定要出貨此訂單嗎？')) {
+                // 出貨
+                fetch('/Admin/ShipOrder/' + orderId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('訂單已出貨');
+                        location.reload();
+                    } else {
+                        alert('操作失敗：' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('操作失敗，請稍後再試');
+                });
+            }
+        }
+
+        function cancelOrder(orderId) {
+            if (confirm('確定要取消此訂單嗎？')) {
+                // 取消訂單
+                fetch('/Admin/CancelOrder/' + orderId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('訂單已取消');
+                        location.reload();
+                    } else {
+                        alert('操作失敗：' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('操作失敗，請稍後再試');
+                });
+            }
+        }
+
+        function exportOrders() {
+            // 匯出訂單
+            window.location.href = '/Admin/ExportOrders';
+        }
+
+        function refreshOrders() {
+            // 重新整理
+            location.reload();
+        }
+    </script>
+}
