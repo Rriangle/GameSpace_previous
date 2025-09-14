@@ -1,3 +1,5 @@
+我是GameSpace_previous第二版資料樹 務必推送至成功
+
 .
 ├── appsettings.Development.json
 ├── appsettings.json
@@ -410,6 +412,7 @@
 ├── reports
 │   ├── file_tree.txt
 │   ├── file_tree_v2.txt
+│   ├── file_tree_v3.txt
 │   ├── _latest
 │   │   ├── build_report.txt
 │   │   ├── cs_file_count.txt
@@ -654,4 +657,4 @@
                 ├── chat-1to1.js
                 └── chat.js
 
-134 directories, 521 files
+134 directories, 522 files
