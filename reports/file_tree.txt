@@ -132,6 +132,8 @@
 │   │   │           └── _ViewStart.cshtml
 │   │   ├── Attributes
 │   │   │   └── RBACAuthorizeAttribute.cs
+│   │   ├── .config
+│   │   │   └── dotnet-tools.json
 │   │   ├── Controllers
 │   │   │   ├── Admin
 │   │   │   │   └── RBACController.cs
@@ -139,22 +141,16 @@
 │   │   │   ├── AuthController.cs
 │   │   │   ├── ChatController.cs
 │   │   │   ├── CheckInController.cs
-│   │   │   ├── CommerceController.cs
-│   │   │   ├── CommunityController.cs
 │   │   │   ├── CouponController.cs
 │   │   │   ├── EVoucherController.cs
-│   │   │   ├── ForumController.cs
 │   │   │   ├── FriendshipController.cs
-│   │   │   ├── GameController.cs
 │   │   │   ├── GameHeatController.cs
-│   │   │   ├── HealthController.cs
 │   │   │   ├── HomeController.cs
 │   │   │   ├── NotificationController.cs
 │   │   │   ├── OAuthController.cs
 │   │   │   ├── PetController.cs
 │   │   │   ├── ShopController.cs
 │   │   │   ├── TestController.cs
-│   │   │   ├── UsersController.cs
 │   │   │   └── WalletController.cs
 │   │   ├── Data
 │   │   │   ├── ApplicationDbContext.cs
@@ -171,11 +167,14 @@
 │   │   │   │       └── WIP.md
 │   │   │   ├── AUDIT.md
 │   │   │   ├── AUDIT_REPORT.md
+│   │   │   ├── dialogue_after_run.txt
+│   │   │   ├── dialogue.txt
 │   │   │   ├── PERF_NOTES.md
 │   │   │   ├── PERFORMANCE_BUDGET.md
 │   │   │   ├── TESTING_POLICY.md
 │   │   │   ├── WIP.md
 │   │   │   └── WIP_RUN.md
+│   │   ├── EF_COMMANDS.md
 │   │   ├── GameSpace.Api
 │   │   │   ├── appsettings.Development.json
 │   │   │   ├── appsettings.json
@@ -329,13 +328,9 @@
 │   │   │   ├── EmailQueue.cs
 │   │   │   ├── EmailTemplate.cs
 │   │   │   ├── ErrorViewModel.cs
-│   │   │   ├── Evoucher.cs
 │   │   │   ├── EVoucher.cs
-│   │   │   ├── EvoucherRedeemLog.cs
 │   │   │   ├── EVoucherRedeemLog.cs
-│   │   │   ├── EvoucherToken.cs
 │   │   │   ├── EVoucherToken.cs
-│   │   │   ├── EvoucherType.cs
 │   │   │   ├── EVoucherType.cs
 │   │   │   ├── FileUpload.cs
 │   │   │   ├── Forum.cs
@@ -350,12 +345,9 @@
 │   │   │   ├── GroupChat.cs
 │   │   │   ├── Group.cs
 │   │   │   ├── GroupMember.cs
-│   │   │   ├── GroupReadState.cs
 │   │   │   ├── Group_Read_States.cs
-│   │   │   ├── Groups.cs
 │   │   │   ├── LeaderboardSnapshot.cs
 │   │   │   ├── ManagerData.cs
-│   │   │   ├── ManagerDatum.cs
 │   │   │   ├── ManagerRole.cs
 │   │   │   ├── ManagerRolePermission.cs
 │   │   │   ├── MemberSalesProfile.cs
@@ -363,21 +355,19 @@
 │   │   │   ├── Metric.cs
 │   │   │   ├── MetricSource.cs
 │   │   │   ├── MiniGame.cs
-│   │   │   ├── Mutes.cs
+│   │   │   ├── Mute.cs
 │   │   │   ├── NotificationAction.cs
+│   │   │   ├── Notification.cs
 │   │   │   ├── NotificationRecipient.cs
-│   │   │   ├── Notifications.cs
 │   │   │   ├── NotificationSource.cs
 │   │   │   ├── OfficialStoreRanking.cs
 │   │   │   ├── OrderAddress.cs
-│   │   │   ├── OrderAddresses.cs
 │   │   │   ├── OrderInfo.cs
-│   │   │   ├── OrderItems.cs
+│   │   │   ├── OrderItem.cs
 │   │   │   ├── OrderStatusHistory.cs
 │   │   │   ├── OtherProductDetail.cs
 │   │   │   ├── OtherProductDetails.cs
 │   │   │   ├── PaymentTransaction.cs
-│   │   │   ├── PaymentTransactions.cs
 │   │   │   ├── Pet.cs
 │   │   │   ├── PlayerMarketOrderInfo.cs
 │   │   │   ├── PlayerMarketOrderTradepage.cs
@@ -391,16 +381,15 @@
 │   │   │   ├── PostMetricSnapshot.cs
 │   │   │   ├── PostSource.cs
 │   │   │   ├── ProductCode.cs
-│   │   │   ├── ProductImages.cs
+│   │   │   ├── ProductImage.cs
 │   │   │   ├── ProductInfoAuditLog.cs
 │   │   │   ├── ProductInfo.cs
 │   │   │   ├── Provider.cs
 │   │   │   ├── Reaction.cs
 │   │   │   ├── Relation.cs
 │   │   │   ├── RelationStatus.cs
-│   │   │   ├── Shipments.cs
+│   │   │   ├── Shipment.cs
 │   │   │   ├── StockMovement.cs
-│   │   │   ├── StockMovements.cs
 │   │   │   ├── Style.cs
 │   │   │   ├── Supplier.cs
 │   │   │   ├── Support_Ticket_Assignments.cs
@@ -418,9 +407,7 @@
 │   │   │   ├── UserReport.cs
 │   │   │   ├── UserRight.cs
 │   │   │   ├── UserSalesInformation.cs
-│   │   │   ├── Users.cs
 │   │   │   ├── UserSession.cs
-│   │   │   ├── UserSignInStat.cs
 │   │   │   ├── UserSignInStats.cs
 │   │   │   ├── UserToken.cs
 │   │   │   ├── UserWallet.cs
@@ -430,7 +417,7 @@
 │   │   │   ├── VwThreadPostsFlat.cs
 │   │   │   └── WalletHistory.cs
 │   │   ├── Partials
-│   │   │   └── GameSpacedatabaseContext.cs
+│   │   │   └── GameSpaceDatabaseContext.cs
 │   │   ├── Program.cs
 │   │   ├── progress.json
 │   │   ├── Properties
@@ -441,10 +428,13 @@
 │   │   ├── reports
 │   │   │   ├── file_tree.txt
 │   │   │   └── _latest
+│   │   │       ├── build_report.txt
+│   │   │       ├── cs_file_count.txt
 │   │   │       ├── db_table_count.txt
 │   │   │       ├── dotnet_build.txt
 │   │   │       ├── dotnet_test.txt
 │   │   │       ├── eslint.txt
+│   │   │       ├── file_count.txt
 │   │   │       └── todo_scan.txt
 │   │   ├── Services
 │   │   │   ├── Caching
@@ -680,13 +670,14 @@
 │   │                   ├── chat-1to1.js
 │   │                   └── chat.js
 │   ├── GameSpace.sln
-│   └── My_Own_Source_Of_Data
-│       ├── CONTRIBUTING_AGENT.txt
-│       ├── database.json
-│       ├── index.txt
-│       ├── new_0905.txt
-│       └── old_0905.txt
+│   ├── My_Own_Source_Of_Data
+│   │   ├── CONTRIBUTING_AGENT.txt
+│   │   ├── database.json
+│   │   ├── index.txt
+│   │   ├── new_0905.txt
+│   │   └── old_0905.txt
+│   └── README.md
 └── reports
     └── file_tree.txt
 
-141 directories, 549 files
+142 directories, 539 files
