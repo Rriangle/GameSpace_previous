@@ -29,7 +29,7 @@
 - Required State: 依 CONTRIBUTING_AGENT.txt，需提供 `/healthz/db` 端點，連線成功回 `{ status: "ok" }`；失敗應具體回報。  
 - Current State: 僅有 `/health` 與 `/healthz`；未提供 `/healthz/db`。  
 - Resolution Plan: 於 `Program.cs` 新增 `GET /healthz/db`，使用 `GameSpaceDbContext.Database.CanConnectAsync()` 檢測連線。  
-- Status: Fixed（本次修復）
+- Status: Fixed（本次修復；另將 /health 與 /healthz 改為 text/plain）
 
 3) AUDIT 文件位置不符約定（已矯正）  
 - Location: 目前存在 `GameSpace/docs/AUDIT.md`；常數要求 `docs/AUDIT.md`（專案根目錄）。  
@@ -44,6 +44,13 @@
 - Current State: 前台 `_Layout.cshtml` 採 Bootstrap；後台存在 SB Admin 結構，但資產路徑需修正（見 Finding #1）。  
 - Resolution Plan: 修正資產路徑後，再次抽樣檢查是否有混用。  
 - Status: In-Progress
+ 
+5) 前台 index.txt 依賴之 API 缺漏  
+- Location: `/api/pet/me`, `/api/pet/care`, `/api/pet/adventure`, `/api/points/balance`  
+- Required State: 提供最小可用回應（前台示範頁可正常互動）。  
+- Current State: 不存在上述端點。  
+- Resolution Plan: 新增 `Controllers/PetRuntimeController.cs` 與 `Controllers/PointsController.cs` 提供最小回應。  
+- Status: Fixed（本次修復）
 
 ## Status 總覽
 - Open: #1, #2, #4（部分）

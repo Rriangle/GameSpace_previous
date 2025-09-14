@@ -123,11 +123,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// 添加健康檢查端點
-app.MapGet("/health", () => new { Status = "Healthy", Service = "GameSpace", Timestamp = DateTime.UtcNow });
+// 添加健康檢查端點（text/plain 以符合測試）
+app.MapGet("/health", () => Results.Text("ok", "text/plain"));
 
-// 添加簡單的 /healthz 端點
-app.MapGet("/healthz", () => "healthy");
+// 添加簡單的 /healthz 端點（text/plain）
+app.MapGet("/healthz", () => Results.Text("ok", "text/plain"));
 
 // 添加資料庫健康檢查端點 /healthz/db
 app.MapGet("/healthz/db", async (GameSpace.Data.GameSpaceDbContext db) =>
