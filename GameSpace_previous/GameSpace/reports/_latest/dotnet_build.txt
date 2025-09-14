@@ -1,10 +1,6 @@
   Determining projects to restore...
-  Restored /workspace/GameSpace_previous/GameSpace/GameSpace.Models/GameSpace.Models.csproj (in 191 ms).
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj [/workspace/GameSpace_previous/GameSpace/GameSpace.sln]
-  Restored /workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj (in 2.8 sec).
-  Restored /workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj (in 2.8 sec).
-  Restored /workspace/GameSpace_previous/GameSpace/GameSpace.Data/GameSpace.Data.csproj (in 2.56 sec).
-  Restored /workspace/GameSpace_previous/GameSpace/GameSpace.Api/GameSpace.Api.csproj (in 2.84 sec).
+  All projects are up-to-date for restore.
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj
   GameSpace.Models -> /workspace/GameSpace_previous/GameSpace/GameSpace.Models/bin/Debug/net8.0/GameSpace.Models.dll
   GameSpace.Data -> /workspace/GameSpace_previous/GameSpace/GameSpace.Data/bin/Debug/net8.0/GameSpace.Data.dll
@@ -23,4 +19,4 @@ Build FAILED.
     2 Warning(s)
     3 Error(s)
 
-Time Elapsed 00:00:06.54
+Time Elapsed 00:00:02.78
