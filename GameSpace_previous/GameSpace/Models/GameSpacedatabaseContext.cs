@@ -77,11 +77,11 @@ public partial class GameSpacedatabaseContext : DbContext
 
     public virtual DbSet<MiniGame> MiniGames { get; set; }
 
-    public virtual DbSet<Mute> Mutes { get; set; }
+    public virtual DbSet<Mutes> Mutes { get; set; }
 
     public virtual DbSet<Mutes> MutesNew { get; set; }
 
-    public virtual DbSet<Notification> Notifications { get; set; }
+    public virtual DbSet<Notifications> Notifications { get; set; }
 
     public virtual DbSet<Notifications> NotificationsNew { get; set; }
 
