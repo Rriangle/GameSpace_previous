@@ -97,9 +97,9 @@ public partial class GameSpaceDatabaseContext : DbContext
 
         public virtual DbSet<OrderAddresses> OrderAddressesNew { get; set; }
         public virtual DbSet<OrderItems> OrderItemsNew { get; set; }
-        public virtual DbSet<OtherProductDetails> OtherProductDetailsNew { get; set; }
+        public virtual DbSet<OtherProductDetail> OtherProductDetailsNew { get; set; }
         public virtual DbSet<PaymentTransactions> PaymentTransactionsNew { get; set; }
-        public virtual DbSet<PlayerMarketProductImgs> PlayerMarketProductImgsNew { get; set; }
+        public virtual DbSet<PlayerMarketProductImg> PlayerMarketProductImgsNew { get; set; }
         public virtual DbSet<ProductImages> ProductImagesNew { get; set; }
         public virtual DbSet<Shipments> ShipmentsNew { get; set; }
         public virtual DbSet<StockMovements> StockMovementsNew { get; set; }
@@ -2386,7 +2386,7 @@ public partial class GameSpaceDatabaseContext : DbContext
         });
 
         // 配置 OtherProductDetails 模型
-        modelBuilder.Entity<OtherProductDetails>(entity =>
+        modelBuilder.Entity<OtherProductDetail>(entity =>
         {
             entity.HasKey(e => e.ProductId).HasName("PK_OtherProductDetails");
             entity.ToTable("OtherProductDetails");
@@ -2470,7 +2470,7 @@ public partial class GameSpaceDatabaseContext : DbContext
         });
 
         // 配置 PlayerMarketProductImgs 模型
-        modelBuilder.Entity<PlayerMarketProductImgs>(entity =>
+        modelBuilder.Entity<PlayerMarketProductImg>(entity =>
         {
             entity.HasKey(e => e.ImageId).HasName("PK_PlayerMarketProductImgs");
             entity.ToTable("PlayerMarketProductImgs");

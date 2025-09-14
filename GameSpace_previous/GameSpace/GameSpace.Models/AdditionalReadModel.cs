@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace GameSpace.Models
 {
     /// <summary>
-    /// °g§A¹CÀ¸Åª¨ú¼Ò«¬
+    /// ï¿½gï¿½Aï¿½Cï¿½ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class MiniGameReadModel
     {
@@ -18,7 +18,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¥Î¤á¿ú¥]Åª¨ú¼Ò«¬
+    /// ï¿½Î¤ï¿½ï¿½ï¿½]Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class UserWalletReadModel
     {
@@ -30,7 +30,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¥Î¤áÃ±¨ì²Î­pÅª¨ú¼Ò«¬
+    /// ï¿½Î¤ï¿½Ã±ï¿½ï¿½Î­pÅªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class UserSignInStatsReadModel
     {
@@ -45,7 +45,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// °Q½×¦ê¶K¤åÅª¨ú¼Ò«¬
+    /// ï¿½Qï¿½×¦ï¿½Kï¿½ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class ThreadPostReadModel
     {
@@ -63,7 +63,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¶K¤å«ü¼Ð§Ö·ÓÅª¨ú¼Ò«¬
+    /// ï¿½Kï¿½ï¿½ï¿½ï¿½Ð§Ö·ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class PostMetricSnapshotReadModel
     {
@@ -77,7 +77,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¶K¤å¨Ó·½Åª¨ú¼Ò«¬
+    /// ï¿½Kï¿½ï¿½Ó·ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class PostSourceReadModel
     {
@@ -90,7 +90,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¸s²Õ²á¤ÑÅª¨ú¼Ò«¬
+    /// ï¿½sï¿½Õ²ï¿½ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class GroupChatReadModel
     {
@@ -105,7 +105,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¸s²ÕÅª¨ú¼Ò«¬
+    /// ï¿½sï¿½ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class GroupReadModel
     {
@@ -120,7 +120,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¸s²Õ¦¨­ûÅª¨ú¼Ò«¬
+    /// ï¿½sï¿½Õ¦ï¿½ï¿½ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class GroupMemberReadModel
     {
@@ -135,7 +135,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¸s²Õ«ÊÂêÅª¨ú¼Ò«¬
+    /// ï¿½sï¿½Õ«ï¿½ï¿½ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class GroupBlockReadModel
     {
@@ -151,7 +151,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// Ãö«YÅª¨ú¼Ò«¬
+    /// ï¿½ï¿½ï¿½YÅªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class RelationReadModel
     {
@@ -165,7 +165,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// Ãö«Yª¬ºAÅª¨ú¼Ò«¬
+    /// ï¿½ï¿½ï¿½Yï¿½ï¿½ï¿½AÅªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class RelationStatusReadModel
     {
@@ -178,7 +178,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ©x¤è°Ó©±±Æ¦WÅª¨ú¼Ò«¬
+    /// ï¿½xï¿½ï¿½Ó©ï¿½ï¿½Æ¦WÅªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class OfficialStoreRankingReadModel
     {
@@ -192,7 +192,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¹CÀ¸²£«~¸Ô±¡Åª¨ú¼Ò«¬
+    /// ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½~ï¿½Ô±ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class GameProductDetailsReadModel
     {
@@ -210,9 +210,9 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¨ä¥L²£«~¸Ô±¡Åª¨ú¼Ò«¬
+    /// ï¿½ï¿½Lï¿½ï¿½ï¿½~ï¿½Ô±ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
-    public class OtherProductDetailsReadModel
+    public class OtherProductDetailReadModel
     {
         public int ProductID { get; set; }
         public string ProductName { get; set; } = string.Empty;
@@ -228,7 +228,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ª±®a¥«³õ±Æ¦WÅª¨ú¼Ò«¬
+    /// ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½ï¿½Æ¦WÅªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class PlayerMarketRankingReadModel
     {
@@ -244,7 +244,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ª±®a¥«³õ²£«~¸ê°TÅª¨ú¼Ò«¬
+    /// ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~ï¿½ï¿½TÅªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class PlayerMarketProductInfoReadModel
     {
@@ -266,7 +266,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ª±®a¥«³õ²£«~¹Ï¤ùÅª¨ú¼Ò«¬
+    /// ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~ï¿½Ï¤ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class PlayerMarketProductImgReadModel
     {
@@ -280,7 +280,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ª±®a¥«³õ­q³æ¸ê°TÅª¨ú¼Ò«¬
+    /// ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½ï¿½qï¿½ï¿½ï¿½TÅªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class PlayerMarketOrderInfoReadModel
     {
@@ -297,7 +297,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ª±®a¥«³õ­q³æ¥æ©ö­¶­±Åª¨ú¼Ò«¬
+    /// ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½ï¿½qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class PlayerMarketOrderTradepageReadModel
     {
@@ -310,7 +310,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ª±®a¥«³õ¥æ©ö°T®§Åª¨ú¼Ò«¬
+    /// ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class PlayerMarketTradeMsgReadModel
     {
@@ -324,7 +324,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ²£«~¸ê°T¼f­p¤é»xÅª¨ú¼Ò«¬
+    /// ï¿½ï¿½ï¿½~ï¿½ï¿½Tï¿½fï¿½pï¿½ï¿½xÅªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class ProductInfoAuditLogReadModel
     {
@@ -340,7 +340,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// Àu´f¨éÃþ«¬Åª¨ú¼Ò«¬
+    /// ï¿½uï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class CouponTypeReadModel
     {
@@ -353,7 +353,7 @@ namespace GameSpace.Models
     }
 
     /// <summary>
-    /// ¹q¤lÂ§¨éÃþ«¬Åª¨ú¼Ò«¬
+    /// ï¿½qï¿½lÂ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åªï¿½ï¿½ï¿½Ò«ï¿½
     /// </summary>
     public class EVoucherTypeReadModel
     {

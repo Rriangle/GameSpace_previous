@@ -1,0 +1,565 @@
+=== SPEC SNAPSHOT 20250914-123000 ===
+--- CONTRIBUTING_AGENT.txt (first 200 lines) ---
+// File: CONTRIBUTING_AGENT.txt
+GameSpace — CONTRIBUTING_AGENT.txt
+(Single Source of Truth for process, constraints, module coverage, area partition, runbook, CI/CD, and stage-gated testing)
+A) Start-of-Run Mandatory Reading & Drift Repair (READ THIS FIRST)
+Every time you start, you must re-read these four files, in this order:
+ * CONTRIBUTING_AGENT.txt (this file)
+ * old_0905.txt
+ * new_0905.txt
+ * database.json
+This prevents "spec drift." If you detect any drift (your current or planned work conflicts with these sources), immediately enter Repair Mode:
+ * Stop adding new scope.
+ * Identify the drift (what conflicts with which source).
+ * Fix the code/docs/tests to comply with this file + old/new + database.json.
+ * Document the fix briefly in the next commit message ("WHY it drifted, HOW corrected").
+ * Only then resume normal work.
+You are not allowed to proceed with any new changes until drift is repaired.
+0) Global Language Rule (Mandatory)
+All human-readable outputs must be Traditional Chinese (繁體中文).
+This includes:
+ * commit messages, PR descriptions
+ * logs/console output
+ * documentation/READMEs
+ * audit reports, progress/status lines
+ * UI copy/labels/placeholders
+ * and all code comments (C#, Razor, JS/TS, SQL comments, XML doc).
+Do NOT translate or localize code identifiers (class/method/variable names), file paths, or SQL/CLI keywords.
+1) Authority & Arbitration (90% / 10%)
+The three sources are: old_0905.txt, new_0905.txt, and database.json.
+Rule: old_0905.txt + new_0905.txt together describe ~90% of the business spec.
+For the remaining ~10% gaps or conflicts, database.json is the final authority.
+→ Reconcile terms across old/new line-by-line. When ambiguous, take database.json as the ground truth, and note this decision in your commit message.
+2) Visual & Front-End References (put up front)
+ * Public (front site): follow index.txt for layout/interaction (Bootstrap-based).
+ * Admin (back office): use SB Admin (third-party library; do not modify vendor files).
+Each module must declare its UI affiliation (Admin or Public).
+Do not mix Admin and Public assets/styles in the same page or Area.
+Admin layout tip (C08): Extract sidebar/topbar into Area-level partials
+(e.g., Areas/<Area>/Views/Shared/_Sidebar.cshtml, _Topbar.cshtml). Do not edit vendor files.
+3) Continuous Run, WIP/Progress & Single-Line Status (put up front)
+Only stop when the token budget is nearly exhausted.
+Before you touch anything, read docs/WIP_RUN.md (append-only) and docs/PROGRESS.json (per-stage % + overall).
+On START and on STOP, print exactly one status line (and nothing else):
+> 整體進度: <overall>% | 目前階段: <stage>% | 狀態: <short description>
+> 
+NEXT_RUN_PROMPT may be printed only if you completed ≥ 1 code diff and ≥ 1 commit this run.
+The NEXT_RUN_PROMPT must be one line in Traditional Chinese (繁體中文) that resumes the next precise step.
+Delta Plan (C16): Before STOP, append your next mini-plan to docs/WIP_RUN.md → Next (targets, files, tests, risks/assumptions). Do not print the Delta Plan to console.
+4) Master Kickoff Command (paste every run)
+> Read and follow CONTRIBUTING_AGENT.txt. Continue from last WIP. Work in small chunks (<=3 files, <=400 LOC). Only stop when token budget is nearly exhausted. On START and on STOP, print exactly one line: 整體進度: <overall>% | 目前階段: <stage>% | 狀態: <short description>.
+> 
+5) Delivery Format (Notebook/Diff, enforced)
+Deliver all changes in Notebook/Diff form.
+New file format:
+// File: <relative/path>
+<full file content>
+
+Existing files: provide minimal diff (unless a full file is explicitly requested).
+ * No shell commands (PowerShell/Bash/CMD), including redirection (>/>>).
+ * You may use shell locally for non-file-write tasks (e.g., launching, testing), but never include shell in deliverables.
+ * All human-readable explanations inside the diff must be Traditional Chinese (繁體中文) (C11).
+ * Per-batch limits: ≤ 3 files, ≤ 400 LOC. Then build/test → commit → proceed.
+6) Setup & Execution (local run)
+ * Install: Visual Studio 2022+ and SQL Server 2019/2022.
+ * Run ./database.json in SSMS → creates GameSpaceDatabase with initial data.
+ * Open the ASP.NET Core MVC solution in VS2022.
+ * Set appsettings.json connection string (e.g., DefaultConnection) to your SQL Server.
+   * No EF Migrations or schema edits; the schema lives in ./database.json.
+ * Build & Run. The Public site appears on localhost.
+ * Admin login (seeded): zhang_zhiming_01 / Password001@, li_xiaohua_02 / Password001@.
+ * Public check (sample): dragonknight88 / Password001@.
+7) Manual DB Setup & Run Workflow (agent must support)
+ * Seeder/Runner does not auto-run on startup; provide a manual entry point (callable code/admin endpoint).
+ * Provide a DB connectivity check endpoint (e.g., /healthz/db, returning { status:"ok" } or an error).
+ * Seeding must be idempotent, batched (≤ 1000 rows/batch), with Traditional Chinese (繁體中文) structured logs; failures can rollback/retry, with clear comments.
+ * README must include a "Manual DB initialization & local run" section and a brief troubleshooting list.
+...
+11) Database as Single Source of Truth (database.json rules)
+ * Only database.json defines the schema. No EF Migrations or alternate schemas.
+ * Use existing seed data as-is; do not overwrite/delete deterministic keys unless fixing a clear error (document why).
+ * Read queries should use AsNoTracking(); project aggregates to read models (avoid returning entities directly).
+11.1) Fake Data — 以繁體中文呈現，規則明確
+ * database.json already contains part of the fake data — use it directly.
+ * For missing data, the agent must read new_0905.txt, old_0905.txt, and database.json first, then generate realistic data that looks human (daily/weekly rhythms, peaks, revisits/churn, correlated behaviors).
+ * All generated data must be persisted with SQL INSERT into the database. No in-memory-only or cache-only data.
+ * Target size (simple rule): Every table should end up with exactly 200 rows.
+   * If a table has < 200, insert the missing rows up to exactly 200.
+   * If a table already has > 200, do not delete existing rows; add a DEMO-NOTE: in the commit message explaining the exception.
+   * Idempotency: reruns must not duplicate data (enforce via PK/natural key/UNIQUE). Batch size ≤ 1000.
+   * Random yet reproducible: prefer a global seed Demo.Seed + natural-key hashing (same key → same outputs; different keys → varied outputs).
+   * Constraints: all PK/FK/UNIQUE/CHECK/DEFAULT must pass.
+   * Realism: Traditional Chinese (繁體中文) text, plausible URLs/images (Unsplash/Lorem Picsum acceptable), amounts/frequencies with Zipf/log-normal flavor; inject a small rate of failures/refunds (0.5–2%) without breaking rules.
+...
+19) Documentation Deliverables (must-have; C18 "beginner-friendly")
+ * README.md — overview, quick start, local run, structure (beginner-friendly)
+ * docs/DEPLOYMENT.md — GitHub Actions CI/CD, GCP deployment (Cloud Run + Cloud SQL for SQL Server and/or GCE), env vars & secrets table, SQL Server connectivity, Admin/Public build notes
+ * docs/MODULES.md — per-module features, routes/endpoints, DTO/OpenAPI refs, UI affiliation (Admin/Public)
+ * docs/DATABASE.md — tables from database.json, seed coverage rule (exactly 200 rows per table), relationships, constraints
+ * docs/OPERATIONS.md, docs/PERF_NOTES.md (Stage 7 outputs)
+20) Safety & Prohibited List
+ * ❌ Any schema source besides database.json (including migrations/ad-hoc scripts)
+...
+21) Runbook — Auto-Start on read CONTRIBUTING_AGENT.txt and begin
+ * Re-read A) Start-of-Run Mandatory Reading (this file + old_0905.txt + new_0905.txt + database.json).
+
+--- old_0905.txt (first 200 lines) ---
+GameSpace 遊戲論壇平台專案規格書
+〈術語表／名詞統一〉
+會員錢包系統術語
+•	禮券（E-voucher）：會員可扣會員點數獲得的電子券，用於兌換實體商品或折抵現金
+•	優惠券（Coupon）：官方商城專用的折扣券，僅限商城內使用
+•	會員點數 (Point)：系統內虛擬貨幣，用於兌換禮券、優惠券、購買寵物膚色（或背景色）
+簽到系統術語
+•	每日簽到：用戶每日可進行一次的簽到活動
+•	連續簽到：連續多日的簽到記錄
+•	簽到獎勵：簽到後獲得的會員點數、寵物經驗值、商城優惠券
+寵物系統術語
+•	史萊姆寵物：系統中的虛擬寵物，具有五維屬性
+•	五維屬性：飢餓、心情、體力、清潔、健康五個屬性值
+•	寵物經驗值：寵物升級所需的數值
+•	等級：寵物成長階段指標
+小遊戲系統術語
+•	小遊戲：系統內的小冒險遊戲
+•	冒險遊戲：與小遊戲同義
+•	遊戲次數限制：每日最多 3 次遊戲限制
+________________________________________
+技術規格（Technical Specifications）
+開發技術棧
+後端技術：
+•	框架：ASP.NET MVC + C#
+•	資料庫：SQL Server
+•	ORM：Entity Framework Core
+•	架構模式：三層式架構設計（Presentation Layer、Business Logic Layer、Data Access Layer）
+前端技術：
+•	模板引擎：Razor
+•	HTML/CSS/JavaScript：基礎前端技術
+•	UI 框架：Bootstrap
+•	JavaScript 庫：jQuery
+•	現代化支援：Vue.js、Tailwind CSS、shadcn/ui
+認證與授權：
+•	登入機制：Email、自訂帳號 + OAuth（Google、Facebook、Discord）
+•	會話管理：JWT Token 或 Session Cookie
+•	權限控制：基於角色的存取控制（RBAC）
+資料庫設計：
+•	資料庫類型：Microsoft SQL Server
+•	資料類型：使用 SQL Server 原生資料類型（int、nvarchar、datetime2、bit、decimal、varbinary(max) 等）
+•	索引策略：主鍵索引、唯一索引、複合索引
+•	外鍵約束：確保資料完整性
+•	中文註釋：所有資料表與欄位均需詳細中文註釋
+系統架構
+三層式架構：
+1.	表現層（Presentation Layer）：
+o	ASP.NET MVC Controllers
+o	Razor Views
+o	HTML/CSS/JavaScript 前端組件
+o	Vue.js 組件（支援）
+2.	業務邏輯層（Business Logic Layer）：
+o	各功能模組控制器（SignInController、PetController 等）
+o	業務規則驗證
+o	資料轉換與處理
+o	第三方服務整合
+3.	資料存取層（Data Access Layer）：
+o	Entity Framework Core
+o	Repository 模式（PetRepository、UserRepository 等）
+o	資料庫連線管理
+o	交易處理
+開發工具與環境
+開發環境：
+•	IDE：Visual Studio 2022 或 Visual Studio Code
+•	版本控制：Git（支援 GitHub 部署）
+•	資料庫管理：SQL Server Management Studio (SSMS)
+•	API 測試：Postman 或 Swagger UI
+測試框架：
+•	單元測試：xUnit 或 MSTest
+•	整合測試：ASP.NET Core Test Host
+•	端對端測試：Selenium WebDriver
+•	API 測試：REST Assured 或類似工具
+部署與監控：
+•	容器化：Docker（可選）
+•	CI/CD：GitHub Actions 或 Azure DevOps
+•	監控：Application Insights
+•	日誌：Serilog 或 NLog
+效能與擴展性
+效能要求：
+•	響應時間：頁面載入時間 < 3 秒
+•	API 響應：API 響應時間 < 1 秒
+•	並發處理：支援 1000+ 同時在線用戶
+•	資料庫查詢：複雜查詢執行時間 < 5 秒
+擴展性設計：
+•	水平擴展：支援多實例部署
+•	快取策略：Redis 或 Memory Cache
+•	資料庫優化：查詢優化、索引策略
+•	CDN：靜態資源 CDN 加速
+安全性要求
+資料安全：
+•	密碼加密：使用 bcrypt 或 PBKDF2 雜湊
+•	**資料傳輸：**HTTPS/TLS 1.2+
+•	**SQL 注入防護：**參數化查詢
+•	**XSS 防護：**輸入驗證與輸出編碼
+存取控制：
+•	**身份驗證：**多因子認證支援
+•	**授權控制：**基於角色的權限管理
+•	**API 安全：**Rate Limiting、API Key 驗證
+•	**審計日誌：**所有敏感操作記錄
+________________________________________
+前端風格規格（Frontend Style Specifications）
+設計系統
+色彩系統：
+•	主色調：玻璃風設計，支援多種主色切換
+o	預設主色：#7557ff（紫色）
+o	次要色：#34d2ff（藍色）
+o	成功色：#22c55e（綠色）
+•	**背景色：**漸層背景設計
+o	淺色模式：#eef3f8 到 #ffffff 的漸層
+o	深色模式：#0c111b 到 #0a0f18 的漸層
+•	文字色：
+o	主要文字：#1f2937（淺色）/ #e5edff（深色）
+o	次要文字：#64748b（淺色）/ #9fb1c9（暗色）
+字體系統：
+•	字體族：system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif
+•	字體大小：16px 基礎，支援響應式縮放
+•	行高：1.65 倍行高
+間距系統：
+•	基礎間距：8px 網格系統
+•	元件間距：12px、16px、24px、32px
+•	頁面邊距：16px（手機）、24px（平板）、32px（桌面）
+元件設計
+按鈕設計：
+•	主要按鈕：漸層背景、圓角 12px、陰影效果
+•	次要按鈕：邊框樣式、透明背景
+•	連結按鈕：虛線邊框、透明背景
+•	狀態變化：hover 時上移 3px、縮放 1.01
+卡片設計：
+•	背景：玻璃風效果（backdrop-filter: blur(14px)）
+•	邊框：1px 實線、圓角 16px
+•	陰影：0 18px 40px rgba(17,24,39,.12)
+•	懸停效果：上移 3px、縮放 1.01
+表單設計：
+•	輸入框：圓角 12px、邊框樣式、聚焦時邊框變色
+•	下拉選單：與輸入框一致樣式
+•	標籤：左對齊、字重 600
+•	驗證訊息：紅色文字、圖示提示
+響應式設計
+斷點設定：
+•	手機：< 740px
+•	平板：740px - 1100px
+•	桌面：> 1100px
+網格系統：
+•	手機：單欄佈局
+•	平板：雙欄佈局
+•	桌面：多欄佈局（最多 6 欄）
+元件適配：
+•	導航欄：手機版摺疊選單
+•	卡片：響應式寬度調整
+•	表格：手機版水平滾動
+•	圖片：響應式縮放
+動畫與互動
+過渡動畫：
+•	持續時間：0.16s ease
+•	緩動函數：ease-in-out
+•	屬性：transform、box-shadow、filter
+載入動畫：
+•	骨架屏：內容載入時的佔位動畫
+•	進度條：操作進度指示
+•	**旋轉動畫：**載入中狀態
+微互動：
+•	按鈕回饋：點擊時縮放效果
+•	懸停效果：元件懸停時的視覺回饋
+•	焦點指示：鍵盤導航的焦點指示
+主題系統
+主題切換：
+•	淺色主題：預設主題
+•	深色主題：可切換的深色模式
+•	緊湊模式：減少間距的緊湊佈局
+主色切換：
+•	紫色主題：#7557ff（預設）
+•	藍色主題：#34d2ff
+•	綠色主題：#22c55e
+特殊效果
+玻璃風效果：
+•	背景模糊：backdrop-filter: blur(14px)
+•	透明度：rgba(255,255,255,.75)（淺色）/ rgba(22,30,48,.65)（深色）
+•	邊框：半透明邊框效果
+漸層背景：
+•	主背景：多層徑向漸層
+•	元件背景：線性漸層
+•	動態效果：支援動態漸層變化
+陰影系統：
+•	基礎陰影：0 18px 40px rgba(17,24,39,.12)
+•	深色模式：0 18px 42px rgba(0,0,0,.35)
+•	懸停陰影：增強陰影效果
+可近用性（Accessibility）
+鍵盤導航：
+•	焦點指示：清晰的焦點樣式
+•	Tab 順序：邏輯的 Tab 鍵順序
+•	快捷鍵：常用功能的快捷鍵支援
+螢幕閱讀器：
+•	語義化標籤：正確的 HTML 語義標籤
+•	ARIA 標籤：適當的 ARIA 屬性
+•	替代文字：圖片的替代文字
+色彩對比：
+•	文字對比：符合 WCAG AA 標準
+•	狀態指示：不依賴顏色的狀態指示
+•	高對比模式：支援高對比模式
+效能優化
+
+--- new_0905.txt (first 200 lines) ---
+GameSpace 遊戲論壇平台完整規格文件
+系統總覽與範圍
+
+GameSpace 是一個結合遊戲討論與社群互動的綜合平台，涵蓋會員系統、遊戲資訊追蹤、線上社群以及商務交易等功能。整個系統採用 MVC 架構實作，前端顯示層、業務邏輯層與資料存取層嚴格分離，使用者操作由 Controller 接收，再由 Service 處理業務規則，最後透過 Repository 存取資料庫。系統以三層式架構（Presentation/Business/Data Layer）設計，並透過 DTO 等物件在各層傳遞資料，提升模組化和維護性。基礎資料庫採用 Microsoft SQL Server，設計了多張資料表覆蓋會員資料、寵物屬性、遊戲論壇、交易訂單等核心資料（詳細結構見「資料表結構」章節）。
+
+系統功能範圍包含：會員註冊與認證、會員錢包（點數管理）、每日簽到獎勵、寵物養成系統、小遊戲冒險、官方商城（訂單管理、商品展示）、玩家自由市場（C2C 交易）、優惠券/電子禮券系統、遊戲熱度指標追蹤與排行榜、遊戲討論論壇、好友與群組社群、即時聊天、通知系統、收藏與按讚互動、管理後台權限控制等模組。
+
+系統範圍排除：實體商品物流配送（僅記錄訂單與數位交付，不處理實體運送）、手機行動 App（僅開發 Web 平台，未包含 App 部分）、多語言國際化（目前僅支援繁體中文 zh-Hant）、遊戲內容嵌入（僅追蹤外部遊戲數據，未內嵌可交互遊戲）。以上排除項目未在本版本中實作。
+
+術語定義
+
+為避免歧義，以下統一重要名詞術語：
+
+會員錢包系統術語：
+
+禮券（E-voucher）：會員可扣除會員點數兌換取得的電子禮券，用於兌換實體商品或折抵現金。
+
+優惠券（Coupon）：官方商城專用的折扣券，只能在官方商城內使用，例如免運券、折扣券等。
+
+會員點數（Point）：平台內的虛擬貨幣，可用於兌換禮券、優惠券，或購買寵物膚色/背景等虛擬商品。
+
+每日簽到系統術語：
+
+每日簽到：會員每日可進行一次的簽到操作。
+
+連續簽到：會員連續多日簽到所形成的簽到記錄。
+
+簽到獎勵：會員完成每日簽到後獲得的獎勵，包括會員點數、寵物經驗值或商城優惠券等。
+
+寵物系統術語：
+
+史萊姆寵物：平台提供的虛擬寵物，目前為可愛造型的史萊姆，具有五項屬性。
+
+五維屬性：指寵物的五項狀態值：飢餓、心情、體力、清潔、健康。
+
+寵物經驗值：寵物升級所需累積的經驗數值。
+
+等級：寵物成長階段的等級指標，等級提升可獲得獎勵。
+
+小遊戲系統術語：
+
+小遊戲：平台內的冒險小遊戲，玩家可派出寵物參與戰鬥。
+
+冒險遊戲：與"小遊戲"同義，指小遊戲冒險挑戰。
+
+遊戲次數限制：每日最多可進行 3 次小遊戲挑戰的限制。
+
+技術架構與開發環境
+
+後端技術棧：本專案採用 ASP.NET MVC + C# 作為主要後端框架。資料庫使用 Microsoft SQL Server，資料存取透過 Entity Framework Core (ORM) 實作，遵循 Repository 模式以分離資料庫操作。系統採用三層式架構，包括表現層（ASP.NET MVC 控制器與 Razor 視圖）、業務邏輯層（各功能模組的服務與控制器，例如 SignInController、PetController 等）以及資料存取層（Repository 和 EF Core）。前端部分使用 Razor 模板引擎搭配 HTML/CSS/JavaScript 開發，UI 框架採用 Bootstrap，並視需要整合現代化前端技術如 Vue.js、Tailwind CSS 等提升互動體驗。
+
+開發工具：開發環境使用 Visual Studio 2022 或 VS Code，版本控制使用 Git（GitHub），資料庫管理透過 SQL Server Management Studio (SSMS)。API 測試使用 Postman 或 Swagger UI 進行。自動化測試方面，單元測試使用 xUnit 或 MSTest，整合測試可使用 ASP.NET Core TestHost，端對端測試則可採用 Selenium WebDriver。部署方面，本專案可選用 Docker 進行容器化，並使用 GitHub Actions 或 Azure DevOps 建置 CI/CD。生產環境監控使用 Application Insights 等工具，日誌記錄採用 Serilog 或 NLog。
+
+資料庫設計：後端資料庫使用 SQL Server，資料類型採用 SQL Server 原生類型（int, nvarchar, datetime2, bit, decimal, varbinary(max) 等）。每張資料表均設計了適當的主鍵（多使用自增 INT 型）、唯一索引及必要的複合索引以優化查詢。所有外鍵關係均定義完整，以確保參考完整性；所有資料表與欄位具備詳細的中文註解以方便維護。
+
+認證與授權：系統支援多種登入方式，包括傳統 Email/帳號密碼登入以及 OAuth 第三方登入（例如 Google、Facebook、Discord）。登入成功後，伺服器簽發 JWT Token 或建立 Session Cookie 以維持使用者會話。系統實作基於角色的存取控制（RBAC），使用者與管理員的操作權限由其角色與權限設定決定。所有後端 API 均透過 [Authorize] 屬性檢查 JWT 權限與使用者角色，在進行敏感操作（如購物、留言、管理後台）前會驗證使用者是否具有相應的權限。若未通過權限驗證，API 將返回 HTTP 401（未授權）或 403（禁止存取）的錯誤。
+
+非功能性需求（NFR）
+
+效能要求：平台須確保良好的效能。頁面載入時間應低於 3 秒；REST API 的平均響應時間應低於 1 秒。系統需支援至少 1000 名以上的同時在線使用者，並發時系統保持穩定。對於複雜的資料查詢操作，應優化 SQL 或使用索引確保執行時間在 5 秒以內。系統前端採用漸進式加載與快取策略減少延遲。為應對高併發，系統可透過水平擴充（增加伺服器實例）來提高吞吐量，同時可使用 Redis 或 Memory Cache 進行快取減輕資料庫負載。靜態資源（圖片、JS/CSS）則可部署於 CDN 以加速全球訪問。
+
+安全性要求：系統高度重視安全。使用者密碼在資料庫中必須使用強雜湊（例如 bcrypt 或 PBKDF2）儲存，決不能以明文形式保存。所有資料傳輸必須經由 HTTPS（TLS 1.2 以上）加密通道進行，防止中間人攔截。後端對資料庫查詢採用參數化查詢，杜絕 SQL Injection 攻擊風險；前端與後端皆實施嚴格的輸入驗證和輸出編碼，防範 XSS 跨站腳本攻擊。身份驗證方面支援多因子驗證（2FA），例如 Email 確認或手機簡訊驗證。授權控制方面，採用 RBAC 管理使用者權限，並以最小權限原則配置各角色功能。為保障 API 安全，實作頻率限制（Rate Limiting）及 API Key 驗證（對內部 API）等機制。系統保存操作審計日誌：對所有敏感操作（如登入、交易、後台管理）皆記錄詳細日誌，以便於日後追蹤和審計。
+
+擴充性與維護：系統設計須具有高度擴充性，可隨專案需求演進進行模組擴充與升級。程式碼遵循SOLID原則，模組解耦以方便替換或重構。資料庫考慮將高頻日志或歷史資料進行分區或拆分（例如將聊天訊息依月份分表）來維持性能。系統提供容錯機制：關鍵操作包裹在資料庫交易中，若過程發生錯誤將回滾避免資料不一致。對第三方服務（如 OAuth、支付網關）調用設置超時與重試策略，避免依賴外部導致功能阻塞。
+
+前端設計與UI規範
+
+設計系統：前端介面採用玻璃風設計風格，支援亮色與暗色兩種主題。主色調為紫色 (#7557ff)，次要搭配藍色 (#34d2ff)；成功訊息色使用綠色 (#22c55e)。背景以漸層呈現：亮色模式下從#eef3f8 過渡到 #ffffff，暗色模式下從 #0c111b 過渡到 #0a0f18。主要文字顏色在亮色模式為 #1f2937，在暗色模式為 #e5edff，次要文字為 #64748b（亮）或 #9fb1c9（暗）。
+
+字體與版面：字體採用系統預設字型搭配思源黑體 (Noto Sans TC) 及微軟正黑等無襯線字體。基本字號為 16px，行高約為字號的 1.65 倍以確保易讀性。版面設計基於 8px 的網格系統控制間距，常用的內外間距依序為 12px、16px、24px、32px 等。頁面邊距在手機端為 16px，平板為 24px，桌面為 32px，以適配不同裝置尺寸。
+
+響應式與互動：整體 UI 採用響應式設計，確保在桌面、平板與手機等不同解析度裝置上介面均能良好顯示。針對較小螢幕，某些次要資訊欄位會自動隱藏或折疊，由使用者點擊按鈕展開查看。交互方面，大量採用 AJAX 或 Fetch 進行局部資料更新，提升用戶體驗的即時性。針對遊戲相關的動畫頁面，採用 CSS3 或 Canvas/WebGL 技術繪製，並使用 requestAnimationFrame 進行動畫渲染，以確保流暢度和效能。介面動效廣泛運用硬體加速（CSS Transitions/Transforms）減少重繪負擔，並結合音效增強沉浸感。
+
+
+會員認證與帳號系統
+
+功能描述：會員認證系統負責處理使用者的註冊、登入、身份驗證和權限控管。會員基本資料分散儲存在多個資料表中，包括 Users（帳號主檔）、User_Introduce（個人檔案）、User_Rights（權限設定）、UserTokens（登入/認證 Token 紀錄）等。新用戶註冊時需提供帳號、密碼、電子郵件、手機號碼、身份證字號、暱稱、出生日期等資訊，後端將驗證這些資訊的格式與唯一性（例如帳號、Email、電話號碼和身分證字號均需唯一）。若註冊資料通過驗證，系統會在 Users 表建立帳號記錄，並於 User_Introduce 表寫入對應的個人資訊。同時產生默認的權限設定(User_Rights)，例如 User_Status 設為正常（1）等。系統也會發送驗證信件或簡訊以確認 Email/手機。密碼在儲存前經過不可逆雜湊處理，確保資料安全。
+
+Users 資料表的主要欄位包括：User_ID（主鍵）、User_Account（登入帳號，唯一）、User_Password（雜湊後的密碼）、User_EmailConfirmed/PhoneConfirmed（Email/手機驗證標誌）、User_AccessFailedCount（登入失敗次數）、User_LockoutEnabled（是否啟用鎖定）、User_LockoutEnd（帳戶鎖定截止時間）等。系統利用 User_AccessFailedCount 來記錄連續登入失敗次數；當其超過預設上限時，User_LockoutEnabled 會被設置鎖定且 User_LockoutEnd 欄位標記解鎖時間，在此之前使用者無法登入。UserTokens 表則記錄使用者的登入 Token（例如發行重設密碼連結的Token或第三方登入資訊），包含 Token 值、提供者（Provider）名稱、過期時間等欄位。這可用於實現例如 "記住我" 功能或 OAuth 資料記錄。
+
+權限與角色：每個會員在 User_Rights 表中對應一筆權限紀錄，欄位如 User_Status（使用者狀態，例如正常=1、停權=0）、ShoppingPermission（商城購物權限）、MessagePermission（論壇發文留言權限）、SalesAuthority（開啟自由市場銷售權限）等。系統根據這些欄位控制功能開關：例如 ShoppingPermission=0 的帳號將無法進行商城購物，MessagePermission=0 則禁止在論壇發表文章或留言。SalesAuthority=1 方可申請成為賣家上架商品（詳見商城系統）。管理後台有獨立的管理員帳號系統，ManagerData 表存儲管理員資訊，包括 Manager_Account、Manager_Password（同樣需雜湊）、Email 及鎖定相關欄位。管理員的角色權限由 ManagerRolePermission 表定義，每個角色有不同的許可權布林值欄位，例如 UserStatusManagement（管理使用者狀態權限）、ShoppingPermissionManagement（商城管理權限）、MessagePermissionManagement（論壇內容管理權限）、Pet_Rights_Management（寵物系統管理權限）等。ManagerRole 表則將管理員分配到一個或多個角色，實現多對多的角色指派。透過這套角色權限機制，管理後台也實現了 RBAC 控制，只有被賦予特定角色的管理員才能使用相應後台功能。
+
+資料庫關聯：Users 表作為會員的主檔，通過主鍵 User_ID 與多張表產生關聯。User_Introduce 和 User_Rights 皆以 User_ID 作為主鍵及外鍵，與 Users 表一對一對應。這表示每新增一個 Users 紀錄，必須同步新增對應的 User_Introduce 及 User_Rights 紀錄，以初始化使用者的個人資訊與權限。注意：管理員帳號與會員帳號資料表分開，ManagerData 以獨立的 Manager_Id 作主鍵，不會與 Users 表互相混用。
+
+註冊流程：用戶透過前端提供的註冊頁面填寫帳號、密碼及個人資訊提交註冊申請。前端進行基本的格式驗證（例如密碼強度、Email 格式）後，呼叫後端 API /api/auth/register 傳送用戶輸入資料。後端接收到請求後，執行以下步驟： (1) 檢查帳號、Email、手機等是否已被註冊；(2) 如果資料有效且未重複，建立 Users、User_Introduce、User_Rights 對應記錄；(3) 將密碼欄位使用安全雜湊後存儲；(4) 產生 Email 驗證信或手機驗證碼並發送給使用者；(5) 回傳註冊成功結果給前端。前端收到成功響應後，提示使用者查收驗證信完成後續驗證。若任一驗證步驟失敗（例如帳號重複或格式錯誤），後端將回傳對應錯誤訊息（如 400 Bad Request）並說明原因。註冊成功的帳號在驗證Email/手機前可能受限部分功能（User_EmailConfirmed 為0時可限制其發文或交易）。
+
+登入流程：使用者在登入頁面輸入帳號（或Email）與密碼後提交登入請求。後端收到後查詢 Users 表檢索相符的帳號，然後比對密碼雜湊是否正確。如果密碼錯誤，將累加該 User 的 User_AccessFailedCount 欄位計數；若連續失敗次數超出系統上限（例如 5 次），則將 User_LockoutEnabled 設為 1 並設定 User_LockoutEnd 為鎖定截止時間（如 15 分鐘後）。若驗證通過且帳號狀態正常 (User_Status=1)，後端生成 JWT Token 或建立 Session，並在回應中返回 Token 供前端保存（例如存於 localStorage 或 Cookie）。前端隨後帶著該 Token 進入系統，後續所有需要身份驗證的 API 請求都在 Header 附帶此 Token。後端採用中介軟體驗證 Token 的有效性及解析其中的 UserID，繼而加載使用者資料與權限。若帳號被鎖定或停權 (User_Status=0 或鎖定尚未解除)，登入請求將被拒絕並返回相應錯誤（如帳號已停權或暫時鎖定）。
+
+權限控管流程：所有經過身份驗證的後端 API 都會根據使用者的權限決定是否授權執行。例如，當一般會員嘗試存取管理後台功能時，由於缺乏管理員角色，其請求將被拒絕返回 HTTP 403。再如，使用者在商城購物結帳時，系統會檢查該用戶的 User_Rights.ShoppingPermission 是否為 1；若為 0 則禁止下單操作並返回錯誤訊息。類似地，論壇發文時檢查 MessagePermission 欄位，無權者則顯示無法發言提示。管理員登入後，系統會核對其 ManagerRole 設定，決定顯示哪些後台功能選單：例如只有擁有 Pet_Rights_Management 權限的管理員才能進入寵物系統管理介面。此外，對於使用者之間的互動，如加好友或發送訊息，後端會檢查雙方關係與封鎖狀態（Relation.Status）；若發現目標用戶將發送者封鎖，則拒絕聊天訊息送達。所有未通過授權的操作都會被記錄到審計日誌，以備日後檢查。
+
+使用流程（會員註冊與登入）：
+
+帳號註冊：小明透過首頁的「註冊」按鈕進入註冊頁，按照提示輸入帳號、密碼、Email 等必要資訊並提交。系統即時檢查他填寫的帳號是否已被使用，以及密碼強度是否符合要求（例如至少8字元，包含大小寫與數字）。小明提交後，後端成功建立他的會員帳戶，並立即發出一封驗證信到他提供的 Email。小明在信中點擊驗證連結，系統確認後將他的 EmailConfirmed 狀態標記為已驗證。此時，小明的帳號就完全啟用了。
+
+帳號登入：小明返回網站點擊「登入」，輸入剛才註冊的帳號和密碼嘗試登入。由於密碼正確且帳號已驗證，後端簽發了一組 JWT 身份憑證給前端。前端保存該 Token 後，自動將頁面跳轉到會員中心首頁，右上角顯示小明的暱稱來表明已登入狀態。此後，小明每次發出需要權限的操作請求（例如編輯個人資料、發表文章），瀏覽器都會自動附帶 JWT Token，後端驗證該 Token 有效且未過期，小明即可順利使用相關功能。如果小明連續幾次輸入錯誤密碼導致帳號被鎖定，前端會收到錯誤回應，提示「帳號已鎖定，請稍後再試」，小明必須等待鎖定時間過後或透過「忘記密碼」流程重置密碼才能重新登入。整個過程對小明而言是透明的，但在後端已經完整記錄了他的註冊、Email 驗證及每次登入嘗試的狀態，以確保安全性和可追溯性。
+
+--- database.json (first 200 lines) ---
+{
+  "meta": {
+    "generated_at": "2025-09-12T14:57:08.715921Z",
+    "source_files": [
+      "/mnt/data/unpacked_sql/database.sql"
+    ],
+    "tables": 75,
+    "columns_total": 527,
+    "pk_count": 55,
+    "fk_count": 151,
+    "unique_count": 14,
+    "check_count": 20,
+    "sequences": []
+  },
+  "tables": [
+    {
+      "schema": "dbo",
+      "name": "banned_words",
+      "columns": [
+        {
+          "name": "word_id",
+          "datatype": "[int] IDENTITY(1,1)",
+          "nullability": "NOT NULL",
+          "default": null,
+          "identity": null,
+          "computed": null
+        },
+        {
+          "name": "word",
+          "datatype": "[nvarchar](50)",
+          "nullability": "NULL",
+          "default": null,
+          "identity": null,
+          "computed": null
+        },
+        {
+          "name": "created_at",
+          "datatype": "[datetime2](7)",
+          "nullability": "NULL",
+          "default": null,
+          "identity": null,
+          "computed": null
+        }
+      ],
+      "constraints": {
+        "primary_key": {
+          "name": "PK__banned_w__7FFA1D406FBDDC61",
+          "columns": [
+            "word_id"
+          ]
+        },
+        "foreign_keys": [],
+        "unique_constraints": [],
+        "check_constraints": []
+      },
+      "indexes": [
+        {
+          "name": "IX_banned_words_word",
+          "columns": [
+            "word"
+          ],
+          "is_unique": false,
+          "is_clustered": false
+        }
+      ],
+      "triggers": [],
+      "comments": "禁用詞彙表"
+    },
+    {
+      "schema": "dbo",
+      "name": "bookmarks",
+      "columns": [
+        {
+          "name": "bookmark_id",
+          "datatype": "[int] IDENTITY(1,1)",
+          "nullability": "NOT NULL",
+          "default": null,
+          "identity": null,
+          "computed": null
+        },
+        {
+          "name": "user_id",
+          "datatype": "[int]",
+          "nullability": "NOT NULL",
+          "default": null,
+          "identity": null,
+          "computed": null
+        },
+        {
+          "name": "post_id",
+          "datatype": "[int]",
+          "nullability": "NOT NULL",
+          "default": null,
+          "identity": null,
+          "computed": null
+        },
+        {
+          "name": "created_at",
+          "datatype": "[datetime2](7)",
+          "nullability": "NULL",
+          "default": null,
+          "identity": null,
+          "computed": null
+        }
+      ],
+      "constraints": {
+        "primary_key": {
+          "name": "PK__bookmark__7FFA1D406FBDDC61",
+          "columns": [
+            "bookmark_id"
+          ]
+        },
+        "foreign_keys": [
+          {
+            "name": "FK_bookmarks_users",
+            "columns": [
+              "user_id"
+            ],
+            "referenced_table": "users",
+            "referenced_columns": [
+              "user_id"
+            ]
+          },
+          {
+            "name": "FK_bookmarks_posts",
+            "columns": [
+              "post_id"
+            ],
+            "referenced_table": "posts",
+            "referenced_columns": [
+              "post_id"
+            ]
+          }
+        ],
+        "unique_constraints": [],
+        "check_constraints": []
+      },
+      "indexes": [
+        {
+          "name": "IX_bookmarks_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "is_unique": false,
+          "is_clustered": false
+        },
+        {
+          "name": "IX_bookmarks_post_id",
+          "columns": [
+            "post_id"
+          ],
+          "is_unique": false,
+          "is_clustered": false
+        }
+      ],
+      "triggers": [],
+      "comments": "書籤表"
+    }
+  ]
+}

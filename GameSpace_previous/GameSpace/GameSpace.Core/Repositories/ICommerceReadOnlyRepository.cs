@@ -3,26 +3,26 @@ using GameSpace.Models;
 namespace GameSpace.Core.Repositories
 {
     /// <summary>
-    /// °Ó«°¬ÛÃö¥uÅª¦sÀx®w
+    /// ï¿½Ó«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uÅªï¿½sï¿½xï¿½w
     /// </summary>
     public interface ICommerceReadOnlyRepository
     {
-        // ©x¤è°Ó«°
+        // ï¿½xï¿½ï¿½Ó«ï¿½
         Task<List<OfficialStoreRankingReadModel>> GetOfficialStoreRankingsAsync(string? periodType = null, int limit = 20);
         Task<List<ProductInfoReadModel>> GetProductsAsync(string? productType = null, int page = 1, int pageSize = 20);
         Task<ProductInfoReadModel?> GetProductByIdAsync(int productId);
         Task<List<GameProductDetailsReadModel>> GetGameProductDetailsAsync(int productId);
-        Task<List<OtherProductDetailsReadModel>> GetOtherProductDetailsAsync(int productId);
+        Task<List<OtherProductDetailReadModel>> GetOtherProductDetailsAsync(int productId);
         Task<List<SupplierReadModel>> GetSuppliersAsync();
         Task<SupplierReadModel?> GetSupplierByIdAsync(int supplierId);
         
-        // ­q³æ¬ÛÃö
+        // ï¿½qï¿½ï¿½ï¿½ï¿½ï¿½
         Task<List<OrderInfoReadModel>> GetUserOrdersAsync(int userId, int page = 1, int pageSize = 20);
         Task<OrderInfoReadModel?> GetOrderByIdAsync(int orderId);
         Task<List<OrderItemReadModel>> GetOrderItemsAsync(int orderId);
         Task<List<OrderInfoReadModel>> GetOrdersAsync(int page = 1, int pageSize = 20);
         
-        // ¦Û¥Ñ¥«³õ
+        // ï¿½Û¥Ñ¥ï¿½ï¿½ï¿½
         Task<List<PlayerMarketRankingReadModel>> GetPlayerMarketRankingsAsync(string? periodType = null, int limit = 20);
         Task<List<PlayerMarketProductInfoReadModel>> GetPlayerMarketProductsAsync(string? productType = null, int? sellerId = null, int page = 1, int pageSize = 20);
         Task<PlayerMarketProductInfoReadModel?> GetPlayerMarketProductByIdAsync(int productId);
@@ -32,10 +32,10 @@ namespace GameSpace.Core.Repositories
         Task<List<PlayerMarketOrderTradepageReadModel>> GetPlayerMarketOrderTradepagesAsync(int orderId);
         Task<List<PlayerMarketTradeMsgReadModel>> GetPlayerMarketTradeMessagesAsync(int tradepageId);
         
-        // °Ó«~­×§ï¤é»x
+        // ï¿½Ó«~ï¿½×§ï¿½ï¿½x
         Task<List<ProductInfoAuditLogReadModel>> GetProductAuditLogsAsync(int productId, int limit = 50);
         
-        // ²Î­p
+        // ï¿½Î­p
         Task<int> GetProductCountAsync(string? productType = null);
         Task<int> GetOrderCountAsync(int? userId = null);
         Task<int> GetPlayerMarketProductCountAsync(string? productType = null, int? sellerId = null);

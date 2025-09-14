@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using GameSpace.Core.Repositories;
 using GameSpace.Core.Models;
 
@@ -99,7 +99,7 @@ namespace GameSpace.Api.Controllers
         /// 取得非遊戲商品詳細資訊
         /// </summary>
         [HttpGet("products/{productId}/other-details")]
-        public async Task<ActionResult<List<OtherProductDetailsReadModel>>> GetOtherProductDetails(int productId)
+        public async Task<ActionResult<List<OtherProductDetailReadModel>>> GetOtherProductDetails(int productId)
         {
             try
             {

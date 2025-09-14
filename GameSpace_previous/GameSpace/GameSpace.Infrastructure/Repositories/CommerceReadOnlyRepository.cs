@@ -14,7 +14,7 @@ namespace GameSpace.Infrastructure.Repositories
             _context = context;
         }
 
-        // ©x¤è°Ó«°¬ÛÃö - ¼È®Éªð¦^ªÅ¦Cªí
+        // ï¿½xï¿½ï¿½Ó«ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½È®Éªï¿½^ï¿½Å¦Cï¿½ï¿½
         public async Task<List<OfficialStoreRankingReadModel>> GetOfficialStoreRankingsAsync(string? periodType = null, int limit = 20)
         {
             return await Task.FromResult(new List<OfficialStoreRankingReadModel>());
@@ -35,12 +35,12 @@ namespace GameSpace.Infrastructure.Repositories
             return await Task.FromResult(new List<GameProductDetailsReadModel>());
         }
 
-        public async Task<List<OtherProductDetailsReadModel>> GetOtherProductDetailsAsync(int productId)
+        public async Task<List<OtherProductDetailReadModel>> GetOtherProductDetailsAsync(int productId)
         {
-            return await Task.FromResult(new List<OtherProductDetailsReadModel>());
+            return await Task.FromResult(new List<OtherProductDetailReadModel>());
         }
 
-        // ¨ÑÀ³°Ó¬ÛÃö - ¼È®Éªð¦^ªÅ¦Cªí
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ó¬ï¿½ï¿½ï¿½ - ï¿½È®Éªï¿½^ï¿½Å¦Cï¿½ï¿½
         public async Task<List<SupplierReadModel>> GetSuppliersAsync()
         {
             return await Task.FromResult(new List<SupplierReadModel>());
@@ -51,7 +51,7 @@ namespace GameSpace.Infrastructure.Repositories
             return await Task.FromResult<SupplierReadModel?>(null);
         }
 
-        // ­q³æ¬ÛÃö - ¼È®Éªð¦^ªÅ¦Cªí
+        // ï¿½qï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½È®Éªï¿½^ï¿½Å¦Cï¿½ï¿½
         public async Task<List<OrderInfoReadModel>> GetUserOrdersAsync(int userId, int page = 1, int pageSize = 20)
         {
             return await Task.FromResult(new List<OrderInfoReadModel>());
@@ -72,7 +72,7 @@ namespace GameSpace.Infrastructure.Repositories
             return await Task.FromResult(new List<OrderInfoReadModel>());
         }
 
-        // ¦Û¥Ñ¥«³õ¬ÛÃö - ¼È®Éªð¦^ªÅ¦Cªí
+        // ï¿½Û¥Ñ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½È®Éªï¿½^ï¿½Å¦Cï¿½ï¿½
         public async Task<List<PlayerMarketRankingReadModel>> GetPlayerMarketRankingsAsync(string? periodType = null, int limit = 20)
         {
             return await Task.FromResult(new List<PlayerMarketRankingReadModel>());
@@ -113,13 +113,13 @@ namespace GameSpace.Infrastructure.Repositories
             return await Task.FromResult(new List<PlayerMarketTradeMsgReadModel>());
         }
 
-        // °Ó«~­×§ï¤é»x¬ÛÃö - ¼È®Éªð¦^ªÅ¦Cªí
+        // ï¿½Ó«~ï¿½×§ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ - ï¿½È®Éªï¿½^ï¿½Å¦Cï¿½ï¿½
         public async Task<List<ProductInfoAuditLogReadModel>> GetProductAuditLogsAsync(int productId, int limit = 50)
         {
             return await Task.FromResult(new List<ProductInfoAuditLogReadModel>());
         }
 
-        // ²Î­p¬ÛÃö - ¼È®Éªð¦^0
+        // ï¿½Î­pï¿½ï¿½ï¿½ï¿½ - ï¿½È®Éªï¿½^0
         public async Task<int> GetProductCountAsync(string? productType = null)
         {
             return await Task.FromResult(0);
