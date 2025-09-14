@@ -1,0 +1,24 @@
+  Determining projects to restore...
+/workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj [/workspace/GameSpace_previous/GameSpace/GameSpace.sln]
+  All projects are up-to-date for restore.
+/workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj
+  GameSpace.Models -> /workspace/GameSpace_previous/GameSpace/GameSpace.Models/bin/Debug/net8.0/GameSpace.Models.dll
+  GameSpace.Data -> /workspace/GameSpace_previous/GameSpace/GameSpace.Data/bin/Debug/net8.0/GameSpace.Data.dll
+  GameSpace.Core -> /workspace/GameSpace_previous/GameSpace/GameSpace.Core/bin/Debug/net8.0/GameSpace.Core.dll
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/SignInWriteRepository.cs(99,37): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/SignInWriteRepository.cs(122,45): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Seeders/SeedDataRunner.cs(230,85): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/UserWriteRepository.cs(146,36): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj]
+
+Build FAILED.
+
+/workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj [/workspace/GameSpace_previous/GameSpace/GameSpace.sln]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Core/GameSpace.Core.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/SignInWriteRepository.cs(99,37): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/SignInWriteRepository.cs(122,45): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Seeders/SeedDataRunner.cs(230,85): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/UserWriteRepository.cs(146,36): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj]
+    2 Warning(s)
+    4 Error(s)
+
+Time Elapsed 00:00:01.07
