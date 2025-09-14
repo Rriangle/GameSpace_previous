@@ -6,7 +6,7 @@ namespace GameSpace.Models;
 /// <summary>
 /// 通知表
 /// </summary>
-public partial class Notifications
+public partial class Notification
 {
     /// <summary>
     /// 通知ID
