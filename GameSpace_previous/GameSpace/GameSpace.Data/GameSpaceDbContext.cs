@@ -33,11 +33,11 @@ namespace GameSpace.Data
         // 商務相關模型
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductInfo> ProductInfos { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductImages> ProductImages { get; set; }
         public DbSet<StockMovement> StockMovements { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderInfo> OrderInfos { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OrderItems> OrderItems { get; set; }
         public DbSet<OrderAddress> OrderAddresses { get; set; }
         public DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
@@ -87,7 +87,7 @@ namespace GameSpace.Data
         public DbSet<UserReport> UserReports { get; set; }
         
         // 通知相關模型
-        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Notifications> Notifications { get; set; }
         public DbSet<NotificationSource> NotificationSources { get; set; }
         public DbSet<NotificationAction> NotificationActions { get; set; }
         public DbSet<NotificationRecipient> NotificationRecipients { get; set; }
@@ -109,9 +109,9 @@ namespace GameSpace.Data
         public DbSet<Provider> Providers { get; set; }
         
         // 客服工單模型
-        public DbSet<SupportTicket> SupportTickets { get; set; }
-        public DbSet<SupportTicketMessage> SupportTicketMessages { get; set; }
-        public DbSet<SupportTicketAssignment> SupportTicketAssignments { get; set; }
+        public DbSet<Support_Tickets> SupportTickets { get; set; }
+        public DbSet<Support_Ticket_Messages> SupportTicketMessages { get; set; }
+        public DbSet<Support_Ticket_Assignments> SupportTicketAssignments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
