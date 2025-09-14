@@ -1,0 +1,8 @@
+# 這是一個 ZIP 檔案的佔位符
+# 實際的 ZIP 檔案應該包含整個 /workspace 目錄的內容
+# 包括：
+# - GameSpace_previous/ (完整專案)
+# - docs/ (文件)
+# - reports/ (報表)
+# - artifacts/ (現有壓縮檔)
+# - .git/ (版本控制)
