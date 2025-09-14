@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameSpace.Models;
 
-public partial class GameSpacedatabaseContext : DbContext
+public partial class GameSpaceDatabaseContext : DbContext
 {
-    public GameSpacedatabaseContext(DbContextOptions<GameSpacedatabaseContext> options)
+    public GameSpaceDatabaseContext(DbContextOptions<GameSpaceDatabaseContext> options)
         : base(options)
     {
     }
