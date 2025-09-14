@@ -1,0 +1,662 @@
+我是GameSpace_previous(專案A)
+
+.
+├── appsettings.Development.json
+├── appsettings.json
+├── Areas
+│   ├── Admin
+│   │   └── Views
+│   │       ├── RBAC
+│   │       │   ├── AssignRole.cshtml
+│   │       │   ├── CreateRole.cshtml
+│   │       │   ├── EditManagerRole.cshtml
+│   │       │   ├── EditRole.cshtml
+│   │       │   ├── Index.cshtml
+│   │       │   ├── ManagerRoles.cshtml
+│   │       │   └── Roles.cshtml
+│   │       ├── Shared
+│   │       │   ├── _Layout.cshtml
+│   │       │   ├── _Sidebar.cshtml
+│   │       │   └── _Topbar.cshtml
+│   │       ├── _ViewImports.cshtml
+│   │       └── _ViewStart.cshtml
+│   ├── Forum
+│   │   ├── Controllers
+│   │   │   └── HomeController.cs
+│   │   └── Views
+│   │       ├── Home
+│   │       │   └── Index.cshtml
+│   │       ├── Shared
+│   │       │   ├── _Sidebar.cshtml
+│   │       │   └── _TopbarLevel1.cshtml
+│   │       ├── _ViewImports.cshtml
+│   │       └── _ViewStart.cshtml
+│   ├── Identity
+│   │   └── Pages
+│   │       └── _ViewStart.cshtml
+│   ├── MemberManagement
+│   │   ├── Controllers
+│   │   │   └── HomeController.cs
+│   │   └── Views
+│   │       ├── Home
+│   │       │   └── Index.cshtml
+│   │       ├── Shared
+│   │       │   └── _TopbarLevel1.cshtml
+│   │       ├── _ViewImports.cshtml
+│   │       └── _ViewStart.cshtml
+│   ├── MiniGame
+│   │   ├── Controllers
+│   │   │   └── HomeController.cs
+│   │   └── Views
+│   │       ├── Home
+│   │       │   └── Index.cshtml
+│   │       ├── Shared
+│   │       │   └── _TopbarLevel1.cshtml
+│   │       ├── _ViewImports.cshtml
+│   │       └── _ViewStart.cshtml
+│   ├── OnlineStore
+│   │   ├── Controllers
+│   │   │   └── HomeController.cs
+│   │   └── Views
+│   │       ├── Home
+│   │       │   └── Index.cshtml
+│   │       ├── Shared
+│   │       │   └── _TopbarLevel1.cshtml
+│   │       ├── _ViewImports.cshtml
+│   │       └── _ViewStart.cshtml
+│   └── social_hub
+│       ├── Controllers
+│       │   ├── ChatController.cs
+│       │   ├── HomeController.cs
+│       │   ├── MessageCenterController.cs
+│       │   ├── MutesController.cs
+│       │   └── NotificationsController.cs
+│       ├── Filters
+│       │   ├── AdminOnlyAttribute.cs
+│       │   └── SocialHubAuthAttribute.cs
+│       ├── Hubs
+│       │   └── ChatHub.cs
+│       ├── Models
+│       │   ├── Metadata
+│       │   │   └── Notification.Metadata.cs
+│       │   └── ViewModels
+│       │       ├── LoginViewModel.cs
+│       │       ├── MessageViewModel.cs
+│       │       └── NotificationViewModel.cs
+│       ├── Services
+│       │   ├── IMuteFilter.cs
+│       │   ├── INotificationService.cs
+│       │   ├── MuteFilter.cs
+│       │   └── NotificationService.cs
+│       └── Views
+│           ├── Chat
+│           │   └── Index.cshtml
+│           ├── Home
+│           │   ├── AdminLogin.cshtml
+│           │   ├── Index.cshtml
+│           │   └── Login.cshtml
+│           ├── MessageCenter
+│           │   ├── Create.cshtml
+│           │   └── Index.cshtml
+│           ├── Mutes
+│           │   ├── Create.cshtml
+│           │   ├── Delete.cshtml
+│           │   ├── Details.cshtml
+│           │   ├── Edit.cshtml
+│           │   ├── Index.cshtml
+│           │   ├── Preview.cshtml
+│           │   └── _ReloadCacheToolbar.cshtml
+│           ├── Shared
+│           │   ├── _Layout.cshtml
+│           │   ├── _Layout.cshtml.css
+│           │   ├── _Sidebar.cshtml
+│           │   └── _TopbarLevel1.cshtml
+│           ├── _ViewImports.cshtml
+│           └── _ViewStart.cshtml
+├── Attributes
+│   └── RBACAuthorizeAttribute.cs
+├── .config
+│   └── dotnet-tools.json
+├── Controllers
+│   ├── Admin
+│   │   └── RBACController.cs
+│   ├── AdminController.cs
+│   ├── AuthController.cs
+│   ├── ChatController.cs
+│   ├── CheckInController.cs
+│   ├── CouponController.cs
+│   ├── EVoucherController.cs
+│   ├── FriendshipController.cs
+│   ├── GameHeatController.cs
+│   ├── HomeController.cs
+│   ├── NotificationController.cs
+│   ├── OAuthController.cs
+│   ├── PetController.cs
+│   ├── ShopController.cs
+│   ├── TestController.cs
+│   └── WalletController.cs
+├── Data
+│   ├── ApplicationDbContext.cs
+│   └── Migrations
+│       ├── 00000000000000_CreateIdentitySchema.cs
+│       ├── 00000000000000_CreateIdentitySchema.Designer.cs
+│       └── ApplicationDbContextModelSnapshot.cs
+├── docs
+│   ├── _archive
+│   │   └── 20250913-1423
+│   │       ├── ARCHIVE_INDEX.md
+│   │       ├── AUDIT.md
+│   │       ├── progress.json
+│   │       └── WIP.md
+│   ├── AUDIT.md
+│   ├── AUDIT_REPORT.md
+│   ├── PERF_NOTES.md
+│   ├── PERFORMANCE_BUDGET.md
+│   ├── TESTING_POLICY.md
+│   ├── WIP.md
+│   └── WIP_RUN.md
+├── EF_COMMANDS.md
+├── GameSpace.Api
+│   ├── appsettings.Development.json
+│   ├── appsettings.json
+│   ├── Controllers
+│   │   ├── Admin
+│   │   │   └── RBACController.cs
+│   │   ├── CommerceController.cs
+│   │   ├── CommunityController.cs
+│   │   ├── ForumController.cs
+│   │   ├── GameController.cs
+│   │   ├── HealthController.cs
+│   │   ├── LeaderboardController.cs
+│   │   ├── PetsController.cs
+│   │   ├── SignInController.cs
+│   │   ├── UsersController.cs
+│   │   └── WalletController.cs
+│   ├── GameSpace.Api.csproj
+│   ├── GameSpace.Api.http
+│   └── Properties
+│       └── launchSettings.json
+├── GameSpace.Core
+│   ├── GameSpace.Core.csproj
+│   ├── Logging
+│   │   └── StructuredLoggingExtensions.cs
+│   ├── Repositories
+│   │   ├── ICommerceReadOnlyRepository.cs
+│   │   ├── ICommunityReadOnlyRepository.cs
+│   │   ├── IForumReadOnlyRepository.cs
+│   │   ├── ILeaderboardReadOnlyRepository.cs
+│   │   ├── ISignInWriteRepository.cs
+│   │   ├── IUserReadOnlyRepository.cs
+│   │   ├── IUserWriteRepository.cs
+│   │   └── IWalletReadOnlyRepository.cs
+│   └── Services
+│       ├── AdminService.cs
+│       ├── CacheService.cs
+│       ├── RateLimitService.cs
+│       ├── RBACService.cs
+│       ├── RetryPolicyService.cs
+│       ├── Seeding
+│       │   └── ISeedDataRunner.cs
+│       └── Stage5
+│           ├── CacheService.cs
+│           ├── RateLimitService.cs
+│           ├── RBACService.cs
+│           └── RetryService.cs
+├── GameSpace.csproj
+├── GameSpace.Data
+│   ├── GameSpace.Data.csproj
+│   ├── GameSpaceDbContext.cs
+│   └── Migrations
+│       └── 20241219000001_InitialCreate.cs
+├── GameSpace.HealthCheck
+│   └── GameSpace.HealthCheck.csproj
+├── GameSpace.Infrastructure
+│   ├── DependencyInjection.cs
+│   ├── GameSpace.Infrastructure.csproj
+│   ├── Repositories
+│   │   ├── CommerceReadOnlyRepository.cs
+│   │   ├── CommunityReadOnlyRepository.cs
+│   │   ├── ForumReadOnlyRepository.cs
+│   │   ├── LeaderboardReadOnlyRepository.cs
+│   │   ├── SignInWriteRepository.cs
+│   │   ├── UserWriteRepository.cs
+│   │   └── WalletReadOnlyRepository.cs
+│   └── Seeders
+│       └── SeedDataRunner.cs
+├── GameSpace.Models
+│   ├── AdditionalReadModel.cs
+│   ├── AdminModels.cs
+│   ├── CommerceReadModel.cs
+│   ├── CommunityReadModel.cs
+│   ├── Coupon.cs
+│   ├── CouponType.cs
+│   ├── ErrorModels.cs
+│   ├── ForumAggregateReadModel.cs
+│   ├── GameSpace.Models.csproj
+│   ├── LeaderboardAggregateReadModel.cs
+│   ├── MiniGame.cs
+│   ├── Pet.cs
+│   ├── RBACModels.cs
+│   ├── SignInRequest.cs
+│   ├── SignInResponse.cs
+│   ├── Stage3WriteModels.cs
+│   ├── Stage5
+│   │   ├── CacheModels.cs
+│   │   ├── ErrorModels.cs
+│   │   └── RBACModels.cs
+│   ├── User.cs
+│   ├── UserReadModel.cs
+│   ├── UserSignInStats.cs
+│   ├── UserWallet.cs
+│   ├── WalletHistory.cs
+│   └── WalletOverviewReadModel.cs
+├── GameSpace.sln
+├── GameSpace.Tests
+│   ├── Common
+│   │   ├── TestBase.cs
+│   │   └── TestDataFactory.cs
+│   ├── coverlet.runsettings
+│   ├── GameSpace.Tests.csproj
+│   ├── HealthCheckTests.cs
+│   ├── Infrastructure
+│   │   └── CrossCuttingInfrastructureTests.cs
+│   ├── Integration
+│   │   └── CrossCuttingInfrastructureIntegrationTests.cs
+│   ├── IntegrationTests.cs
+│   ├── Load
+│   │   └── LoadTestScript.cs
+│   ├── Profiling
+│   │   └── PerformanceProfilingScript.cs
+│   ├── Stage2BreadthSliceTests.cs
+│   ├── Stage3WriteOperationsTests.cs
+│   ├── Stage5
+│   │   ├── CacheServiceTests.cs
+│   │   ├── RateLimitServiceTests.cs
+│   │   ├── RBACServiceTests.cs
+│   │   ├── RetryServiceTests.cs
+│   │   └── Stage5IntegrationTests.cs
+│   ├── Unit
+│   │   ├── CrossCuttingInfrastructureUnitTests.cs
+│   │   └── ServiceTests.cs
+│   ├── WriteOperationTests.cs
+│   └── xunit.runner.json
+├── .github
+│   └── workflows
+│       ├── ci.yml
+│       └── optimized-ci.yml
+├── libman.json
+├── Middleware
+│   ├── CorrelationIdMiddleware.cs
+│   ├── GlobalExceptionMiddleware.cs
+│   ├── RateLimitMiddleware.cs
+│   ├── RBACMiddleware.cs
+│   └── TimeoutMiddleware.cs
+├── Models
+│   ├── Admin.cs
+│   ├── AuditLog.cs
+│   ├── BannedWord.cs
+│   ├── Bookmark.cs
+│   ├── ChatMessage.cs
+│   ├── Coupon.cs
+│   ├── CouponType.cs
+│   ├── DailyCheckIn.cs
+│   ├── DM_Conversations.cs
+│   ├── DM_Messages.cs
+│   ├── EmailQueue.cs
+│   ├── EmailTemplate.cs
+│   ├── ErrorViewModel.cs
+│   ├── Evoucher.cs
+│   ├── EVoucher.cs
+│   ├── EvoucherRedeemLog.cs
+│   ├── EVoucherRedeemLog.cs
+│   ├── EvoucherToken.cs
+│   ├── EVoucherToken.cs
+│   ├── EvoucherType.cs
+│   ├── EVoucherType.cs
+│   ├── FileUpload.cs
+│   ├── Forum.cs
+│   ├── Friendship.cs
+│   ├── Game.cs
+│   ├── GameMetricDaily.cs
+│   ├── GameProductDetail.cs
+│   ├── GameProductDetails.cs
+│   ├── GameSourceMap.cs
+│   ├── GameSpaceDatabaseContext.cs
+│   ├── GroupBlock.cs
+│   ├── GroupChat.cs
+│   ├── Group.cs
+│   ├── GroupMember.cs
+│   ├── Group_Read_States.cs
+│   ├── LeaderboardSnapshot.cs
+│   ├── ManagerData.cs
+│   ├── ManagerRole.cs
+│   ├── ManagerRolePermission.cs
+│   ├── MemberSalesProfile.cs
+│   ├── MerchType.cs
+│   ├── Metric.cs
+│   ├── MetricSource.cs
+│   ├── MiniGame.cs
+│   ├── Mutes.cs
+│   ├── NotificationAction.cs
+│   ├── Notification.cs
+│   ├── NotificationRecipient.cs
+│   ├── NotificationSource.cs
+│   ├── OfficialStoreRanking.cs
+│   ├── OrderAddress.cs
+│   ├── OrderAddresses.cs
+│   ├── OrderInfo.cs
+│   ├── OrderItem.cs
+│   ├── OrderStatusHistory.cs
+│   ├── OtherProductDetail.cs
+│   ├── OtherProductDetails.cs
+│   ├── PaymentTransaction.cs
+│   ├── PaymentTransactions.cs
+│   ├── Pet.cs
+│   ├── PlayerMarketOrderInfo.cs
+│   ├── PlayerMarketOrderTradepage.cs
+│   ├── PlayerMarketProductImg.cs
+│   ├── PlayerMarketProductImgs.cs
+│   ├── PlayerMarketProductInfo.cs
+│   ├── PlayerMarketRanking.cs
+│   ├── PlayerMarketTradeMsg.cs
+│   ├── PopularityIndexDaily.cs
+│   ├── Post.cs
+│   ├── PostMetricSnapshot.cs
+│   ├── PostSource.cs
+│   ├── ProductCode.cs
+│   ├── ProductImages.cs
+│   ├── ProductInfoAuditLog.cs
+│   ├── ProductInfo.cs
+│   ├── Provider.cs
+│   ├── Reaction.cs
+│   ├── Relation.cs
+│   ├── RelationStatus.cs
+│   ├── Shipment.cs
+│   ├── StockMovement.cs
+│   ├── StockMovements.cs
+│   ├── Style.cs
+│   ├── Supplier.cs
+│   ├── Support_Ticket_Assignments.cs
+│   ├── Support_Ticket_Messages.cs
+│   ├── Support_Tickets.cs
+│   ├── SystemConfig.cs
+│   ├── SystemLog.cs
+│   ├── Thread.cs
+│   ├── ThreadPost.cs
+│   ├── UserActivity.cs
+│   ├── UserBlock.cs
+│   ├── User.cs
+│   ├── UserIntroduce.cs
+│   ├── UserPreference.cs
+│   ├── UserReport.cs
+│   ├── UserRight.cs
+│   ├── UserSalesInformation.cs
+│   ├── UserSession.cs
+│   ├── UserSignInStats.cs
+│   ├── UserToken.cs
+│   ├── UserWallet.cs
+│   ├── VwForumOverview.cs
+│   ├── VwPostsWithSnapshot.cs
+│   ├── VwThreadActivity.cs
+│   ├── VwThreadPostsFlat.cs
+│   └── WalletHistory.cs
+├── Partials
+│   └── GameSpaceDatabaseContext.cs
+├── Program.cs
+├── progress.json
+├── Properties
+│   ├── launchSettings.json
+│   ├── serviceDependencies.json
+│   └── serviceDependencies.local.json
+├── README.md
+├── reports
+│   ├── file_tree.txt
+│   ├── file_tree_v2.txt
+│   ├── file_tree_v3.txt
+│   ├── fileTreeV3.txt
+│   ├── _latest
+│   │   ├── build_report.txt
+│   │   ├── cs_file_count.txt
+│   │   ├── db_table_count.txt
+│   │   ├── dotnet_build.txt
+│   │   ├── dotnet_test.txt
+│   │   ├── eslint.txt
+│   │   ├── file_count.txt
+│   │   └── todo_scan.txt
+│   ├── tree_summary.md
+│   └── tree_summary_v3.md
+├── Services
+│   ├── Caching
+│   │   ├── EnhancedMemoryCacheService.cs
+│   │   ├── ICacheService.cs
+│   │   └── MemoryCacheService.cs
+│   ├── GameHeatTrackingService.cs
+│   ├── Notification
+│   │   ├── INotificationService.cs
+│   │   └── NotificationService.cs
+│   ├── OAuthService.cs
+│   ├── RBACService.cs
+│   ├── Seeding
+│   │   └── SeedDataRunner.cs
+│   ├── Validation
+│   │   ├── IValidationService.cs
+│   │   └── ValidationService.cs
+│   └── WalletService.cs
+├── Views
+│   ├── Admin
+│   │   ├── Coupons.cshtml
+│   │   ├── EVouchers.cshtml
+│   │   ├── Index.cshtml
+│   │   ├── Monitoring.cshtml
+│   │   ├── Orders.cshtml
+│   │   └── Users.cshtml
+│   ├── Auth
+│   │   ├── Login.cshtml
+│   │   ├── OAuthError.cshtml
+│   │   ├── OAuthLogin.cshtml
+│   │   └── Register.cshtml
+│   ├── Chat
+│   │   ├── Conversation.cshtml
+│   │   └── Index.cshtml
+│   ├── CheckIn
+│   │   └── Index.cshtml
+│   ├── Coupon
+│   │   └── Index.cshtml
+│   ├── EVoucher
+│   │   └── Index.cshtml
+│   ├── Forum
+│   │   ├── CreateThread.cshtml
+│   │   ├── Index.cshtml
+│   │   ├── Thread.cshtml
+│   │   └── Threads.cshtml
+│   ├── Friendship
+│   │   ├── Groups.cshtml
+│   │   ├── Index.cshtml
+│   │   └── Requests.cshtml
+│   ├── Game
+│   │   └── Index.cshtml
+│   ├── Home
+│   │   ├── Dashboard.cshtml
+│   │   ├── Index.cshtml
+│   │   └── Privacy.cshtml
+│   ├── Notification
+│   │   └── Index.cshtml
+│   ├── Pet
+│   │   └── Index.cshtml
+│   ├── Shared
+│   │   ├── _AdminLayout.cshtml
+│   │   ├── _Chat.cshtml
+│   │   ├── Error.cshtml
+│   │   ├── _Footer.cshtml
+│   │   ├── _Layout.cshtml
+│   │   ├── _Layout.cshtml.css
+│   │   ├── _LoginPartial.cshtml
+│   │   ├── _Sidebar.cshtml
+│   │   ├── _TopbarLevel1.cshtml
+│   │   ├── _TopbarLevel2.cshtml
+│   │   └── _ValidationScriptsPartial.cshtml
+│   ├── Shop
+│   │   ├── Cart.cshtml
+│   │   ├── Index.cshtml
+│   │   ├── MyOrders.cshtml
+│   │   ├── OrderSuccess.cshtml
+│   │   └── Product.cshtml
+│   ├── _ViewImports.cshtml
+│   ├── _ViewStart.cshtml
+│   └── Wallet
+│       └── Index.cshtml
+└── wwwroot
+    ├── css
+    │   ├── site.css
+    │   └── stylecol.css
+    ├── font-awesome
+    │   ├── css
+    │   │   ├── all.css
+    │   │   ├── all.min.css
+    │   │   ├── brands.css
+    │   │   ├── brands.min.css
+    │   │   ├── fontawesome.css
+    │   │   ├── fontawesome.min.css
+    │   │   ├── regular.css
+    │   │   ├── regular.min.css
+    │   │   ├── solid.css
+    │   │   ├── solid.min.css
+    │   │   ├── svg.css
+    │   │   ├── svg.min.css
+    │   │   ├── svg-with-js.css
+    │   │   ├── svg-with-js.min.css
+    │   │   ├── v4-font-face.css
+    │   │   ├── v4-font-face.min.css
+    │   │   ├── v4-shims.css
+    │   │   ├── v4-shims.min.css
+    │   │   ├── v5-font-face.css
+    │   │   └── v5-font-face.min.css
+    │   ├── js
+    │   │   ├── all.js
+    │   │   ├── all.min.js
+    │   │   ├── brands.js
+    │   │   ├── brands.min.js
+    │   │   ├── conflict-detection.js
+    │   │   ├── conflict-detection.min.js
+    │   │   ├── fontawesome.js
+    │   │   ├── fontawesome.min.js
+    │   │   ├── regular.js
+    │   │   ├── regular.min.js
+    │   │   ├── solid.js
+    │   │   ├── solid.min.js
+    │   │   ├── v4-shims.js
+    │   │   └── v4-shims.min.js
+    │   ├── sprites
+    │   │   ├── brands.svg
+    │   │   ├── regular.svg
+    │   │   └── solid.svg
+    │   └── webfonts
+    │       ├── fa-brands-400.woff2
+    │       ├── fa-regular-400.woff2
+    │       ├── fa-solid-900.woff2
+    │       └── fa-v4compatibility.woff2
+    ├── js
+    │   └── test.js
+    └── lib
+        ├── bootstrap
+        │   ├── dist
+        │   │   ├── css
+        │   │   │   ├── bootstrap.css
+        │   │   │   ├── bootstrap.css.map
+        │   │   │   ├── bootstrap-grid.css
+        │   │   │   ├── bootstrap-grid.css.map
+        │   │   │   ├── bootstrap-grid.min.css
+        │   │   │   ├── bootstrap-grid.min.css.map
+        │   │   │   ├── bootstrap-grid.rtl.css
+        │   │   │   ├── bootstrap-grid.rtl.css.map
+        │   │   │   ├── bootstrap-grid.rtl.min.css
+        │   │   │   ├── bootstrap-grid.rtl.min.css.map
+        │   │   │   ├── bootstrap.min.css
+        │   │   │   ├── bootstrap.min.css.map
+        │   │   │   ├── bootstrap-reboot.css
+        │   │   │   ├── bootstrap-reboot.css.map
+        │   │   │   ├── bootstrap-reboot.min.css
+        │   │   │   ├── bootstrap-reboot.min.css.map
+        │   │   │   ├── bootstrap-reboot.rtl.css
+        │   │   │   ├── bootstrap-reboot.rtl.css.map
+        │   │   │   ├── bootstrap-reboot.rtl.min.css
+        │   │   │   ├── bootstrap-reboot.rtl.min.css.map
+        │   │   │   ├── bootstrap.rtl.css
+        │   │   │   ├── bootstrap.rtl.css.map
+        │   │   │   ├── bootstrap.rtl.min.css
+        │   │   │   ├── bootstrap.rtl.min.css.map
+        │   │   │   ├── bootstrap-utilities.css
+        │   │   │   ├── bootstrap-utilities.css.map
+        │   │   │   ├── bootstrap-utilities.min.css
+        │   │   │   ├── bootstrap-utilities.min.css.map
+        │   │   │   ├── bootstrap-utilities.rtl.css
+        │   │   │   ├── bootstrap-utilities.rtl.css.map
+        │   │   │   ├── bootstrap-utilities.rtl.min.css
+        │   │   │   └── bootstrap-utilities.rtl.min.css.map
+        │   │   └── js
+        │   │       ├── bootstrap.bundle.js
+        │   │       ├── bootstrap.bundle.js.map
+        │   │       ├── bootstrap.bundle.min.js
+        │   │       ├── bootstrap.bundle.min.js.map
+        │   │       ├── bootstrap.esm.js
+        │   │       ├── bootstrap.esm.js.map
+        │   │       ├── bootstrap.esm.min.js
+        │   │       ├── bootstrap.esm.min.js.map
+        │   │       ├── bootstrap.js
+        │   │       ├── bootstrap.js.map
+        │   │       ├── bootstrap.min.js
+        │   │       └── bootstrap.min.js.map
+        │   └── LICENSE
+        ├── image
+        │   └── undraw_profile.svg
+        ├── jquery
+        │   ├── dist
+        │   │   ├── jquery.js
+        │   │   ├── jquery.min.js
+        │   │   └── jquery.min.map
+        │   └── LICENSE.txt
+        ├── jquery-validation
+        │   ├── dist
+        │   │   ├── additional-methods.js
+        │   │   ├── additional-methods.min.js
+        │   │   ├── jquery.validate.js
+        │   │   └── jquery.validate.min.js
+        │   └── LICENSE.md
+        ├── jquery-validation-unobtrusive
+        │   ├── jquery.validate.unobtrusive.js
+        │   ├── jquery.validate.unobtrusive.min.js
+        │   └── LICENSE.txt
+        ├── sb-admin
+        │   ├── 401.html
+        │   ├── 404.html
+        │   ├── 500.html
+        │   ├── assets
+        │   │   ├── demo
+        │   │   │   ├── chart-area-demo.js
+        │   │   │   ├── chart-bar-demo.js
+        │   │   │   ├── chart-pie-demo.js
+        │   │   │   └── datatables-demo.js
+        │   │   └── img
+        │   │       └── error-404-monochrome.svg
+        │   ├── charts.html
+        │   ├── css
+        │   │   └── styles.css
+        │   ├── index.html
+        │   ├── js
+        │   │   ├── datatables-simple-demo.js
+        │   │   └── scripts.js
+        │   ├── layout-sidenav-light.html
+        │   ├── layout-static.html
+        │   ├── login.html
+        │   ├── password.html
+        │   ├── register.html
+        │   └── tables.html
+        └── social_hub
+            ├── css
+            │   ├── chat-1to1.css
+            │   └── chat.css
+            └── js
+                ├── chat-1to1.js
+                └── chat.js
+
+134 directories, 524 files
