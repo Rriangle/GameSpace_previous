@@ -1,4 +1,5 @@
 using GameSpace.Infrastructure;
+using GameSpace.Data;
 using GameSpace.Middleware;
 using GameSpace.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -135,6 +136,22 @@ app.MapGet("/health", () => new { Status = "Healthy", Service = "GameSpace", Tim
 
 // 添加簡單的 /healthz 端點
 app.MapGet("/healthz", () => "healthy");
+
+// 資料庫連線健康檢查端點（依規格提供 /healthz/db）
+app.MapGet("/healthz/db", async (GameSpaceDbContext db) =>
+{
+    try
+    {
+        var canConnect = await db.Database.CanConnectAsync();
+        return canConnect
+            ? Results.Ok(new { status = "ok" })
+            : Results.Problem("資料庫無法連線");
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"資料庫健康檢查失敗: {ex.Message}");
+    }
+});
 
 // 添加種子數據端點
 app.MapPost("/seed", async (ISeedDataRunner seedRunner) =>

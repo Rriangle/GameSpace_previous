@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
-using GameSpace.Api;
 
 namespace GameSpace.Tests
 {
     /// <summary>
-    /// ∞∑±d¿À¨d¥˙∏’
+    /// ÂÅ•Â∫∑Ê™¢Êü•Ê∏¨Ë©¶
     /// </summary>
     public class HealthCheckTests : IClassFixture<WebApplicationFactory<Program>>
     {
@@ -18,7 +16,7 @@ namespace GameSpace.Tests
         }
 
         [Fact]
-        public async Task HealthCheck_ReturnsOk()
+        public async Task Health_ReturnsOk_AndJson()
         {
             // Arrange
             var client = _factory.CreateClient();
@@ -28,11 +26,11 @@ namespace GameSpace.Tests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.Equal("text/plain", response.Content.Headers.ContentType?.MediaType);
+            Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
         }
 
         [Fact]
-        public async Task Healthz_ReturnsOk()
+        public async Task Healthz_ReturnsOk_PlainText()
         {
             // Arrange
             var client = _factory.CreateClient();
@@ -43,6 +41,20 @@ namespace GameSpace.Tests
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/plain", response.Content.Headers.ContentType?.MediaType);
+        }
+
+        [Fact]
+        public async Task HealthzDb_ReturnsOk_AndJson()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/healthz/db");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
         }
     }
 }

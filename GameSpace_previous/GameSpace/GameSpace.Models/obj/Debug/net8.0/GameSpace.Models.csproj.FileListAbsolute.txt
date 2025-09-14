@@ -1,0 +1,12 @@
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/bin/Debug/net8.0/GameSpace.Models.deps.json
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/bin/Debug/net8.0/GameSpace.Models.dll
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/bin/Debug/net8.0/GameSpace.Models.pdb
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/obj/Debug/net8.0/GameSpace.Models.GeneratedMSBuildEditorConfig.editorconfig
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/obj/Debug/net8.0/GameSpace.Models.AssemblyInfoInputs.cache
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/obj/Debug/net8.0/GameSpace.Models.AssemblyInfo.cs
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/obj/Debug/net8.0/GameSpace.Models.csproj.CoreCompileInputs.cache
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/obj/Debug/net8.0/GameSpace.Models.sourcelink.json
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/obj/Debug/net8.0/GameSpace.Models.dll
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/obj/Debug/net8.0/refint/GameSpace.Models.dll
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/obj/Debug/net8.0/GameSpace.Models.pdb
+/workspace/GameSpace_previous/GameSpace/GameSpace.Models/obj/Debug/net8.0/ref/GameSpace.Models.dll

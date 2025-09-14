@@ -1,0 +1,6 @@
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Release/net8.0/GameSpace.Infrastructure.csproj.AssemblyReference.cache
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Release/net8.0/GameSpace.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Release/net8.0/GameSpace.Infrastructure.AssemblyInfoInputs.cache
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Release/net8.0/GameSpace.Infrastructure.AssemblyInfo.cs
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Release/net8.0/GameSpace.Infrastructure.csproj.CoreCompileInputs.cache
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Release/net8.0/GameSpace.Infrastructure.sourcelink.json

@@ -49,3 +49,18 @@ GameSpace_previous/
 - 遵循 Git 提交規範
 - 微批次開發：每次 ≤ 3 檔或 ≤ 400 行
 - 每批次需通過 `dotnet build` 驗證
+
+## 手動資料庫初始化與本機執行（依據 My_Own_Source_Of_Data/database.json）
+
+- 本專案以 `My_Own_Source_Of_Data/database.json` 為唯一資料庫權威規格（無 EF Migrations）。
+- 本機啟動前，請先在 SQL Server 使用 SSMS 匯入並執行 `database.json` 中的指令，以建立 `GameSpaceDatabase` 及基礎資料。
+- 於 `GameSpace/appsettings.json` 設定連線字串 `DefaultConnection` 指向本機 SQL Server。
+- 啟動後可用以下健康檢查端點確認服務狀態：
+  - `/health`：服務健康（JSON）
+  - `/healthz`：簡易存活檢查（純文字）
+  - `/healthz/db`：資料庫連線檢查（JSON，回傳 `{ status: "ok" }` 代表成功）
+
+## 視覺/流程對齊（index.txt）
+
+- 公開站點 UI 與互動流程請對齊 `My_Own_Source_Of_Data/index.txt`。
+- Admin 端採用 SB Admin（禁止直接修改 vendor 檔案），並將側邊欄/頂欄抽為區域層級 partials。
