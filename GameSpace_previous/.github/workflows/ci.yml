@@ -1,0 +1,18 @@
+name: ci
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore
+        run: dotnet restore GameSpace_previous/GameSpace/GameSpace.csproj
+      - name: Build
+        run: dotnet build -c Release GameSpace_previous/GameSpace/GameSpace.csproj
+      - name: Test
+        run: dotnet test -c Release --no-build GameSpace_previous/GameSpace/GameSpace.csproj
