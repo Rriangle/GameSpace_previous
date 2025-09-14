@@ -108,11 +108,10 @@ public partial class GameSpacedatabaseContext : DbContext
         public virtual DbSet<Support_Tickets> SupportTicketsNew { get; set; }
         public virtual DbSet<Users> UsersNew { get; set; }
         public virtual DbSet<UserSignInStats> UserSignInStatsNew { get; set; }
-        public virtual DbSet<UserTokens> UserTokensNew { get; set; }
 
     public virtual DbSet<OrderInfo> OrderInfos { get; set; }
 
-    public virtual DbSet<OrderItem> OrderItems { get; set; }
+    public virtual DbSet<OrderItems> OrderItems { get; set; }
 
     public virtual DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
 
@@ -144,7 +143,7 @@ public partial class GameSpacedatabaseContext : DbContext
 
     public virtual DbSet<ProductCode> ProductCodes { get; set; }
 
-    public virtual DbSet<ProductImage> ProductImages { get; set; }
+    public virtual DbSet<ProductImages> ProductImages { get; set; }
 
     public virtual DbSet<ProductInfo> ProductInfos { get; set; }
 
@@ -156,7 +155,7 @@ public partial class GameSpacedatabaseContext : DbContext
 
     public virtual DbSet<RelationStatus> RelationStatuses { get; set; }
 
-    public virtual DbSet<Shipment> Shipments { get; set; }
+    public virtual DbSet<Shipments> Shipments { get; set; }
 
     public virtual DbSet<StockMovement> StockMovements { get; set; }
 
@@ -2843,8 +2842,8 @@ public partial class GameSpacedatabaseContext : DbContext
             entity.Property(e => e.DeleteReason).HasColumnName("delete_reason");
         });
 
-        // 配置 UserTokens 模型
-        modelBuilder.Entity<UserTokens>(entity =>
+        // 配置 UserToken 模型
+        modelBuilder.Entity<UserToken>(entity =>
         {
             entity.HasKey(e => e.TokenId).HasName("PK_UserTokens");
             entity.ToTable("UserTokens");

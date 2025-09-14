@@ -13,43 +13,132 @@ namespace GameSpace.Models
         /// 令牌ID（主鍵）
         /// </summary>
         [Key]
-        [Column("Token_ID")]
+        [Column("token_id")]
         public int TokenId { get; set; }
 
         /// <summary>
         /// 用戶ID（外鍵）
         /// </summary>
         [Required]
-        [Column("User_ID")]
+        [Column("user_id")]
         public int UserId { get; set; }
-
-        /// <summary>
-        /// 提供者名稱（如Google、Facebook、Discord）
-        /// </summary>
-        [Required]
-        [StringLength(50)]
-        public string Provider { get; set; } = string.Empty;
-
-        /// <summary>
-        /// 令牌名稱（如access_token、refresh_token）
-        /// </summary>
-        [Required]
-        [StringLength(50)]
-        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// 令牌值
         /// </summary>
         [Required]
-        [StringLength(255)]
-        public string Value { get; set; } = string.Empty;
+        [Column("token")]
+        public string Token { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 令牌類型
+        /// </summary>
+        [Required]
+        [Column("token_type")]
+        public string TokenType { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 用途
+        /// </summary>
+        [Column("purpose")]
+        public string? Purpose { get; set; }
+
+        /// <summary>
+        /// 創建時間
+        /// </summary>
+        [Required]
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// 過期時間
         /// </summary>
-        [Required]
-        [Column("ExpireAt")]
-        public DateTime ExpireAt { get; set; }
+        [Column("expires_at")]
+        public DateTime? ExpiresAt { get; set; }
+
+        /// <summary>
+        /// 使用時間
+        /// </summary>
+        [Column("used_at")]
+        public DateTime? UsedAt { get; set; }
+
+        /// <summary>
+        /// 使用IP
+        /// </summary>
+        [Column("used_ip")]
+        public string? UsedIp { get; set; }
+
+        /// <summary>
+        /// 使用User Agent
+        /// </summary>
+        [Column("used_user_agent")]
+        public string? UsedUserAgent { get; set; }
+
+        /// <summary>
+        /// 狀態
+        /// </summary>
+        [Column("status")]
+        public string? Status { get; set; }
+
+        /// <summary>
+        /// 是否啟用
+        /// </summary>
+        [Column("is_active")]
+        public bool? IsActive { get; set; }
+
+        /// <summary>
+        /// 備註
+        /// </summary>
+        [Column("notes")]
+        public string? Notes { get; set; }
+
+        /// <summary>
+        /// 元數據
+        /// </summary>
+        [Column("metadata")]
+        public string? Metadata { get; set; }
+
+        /// <summary>
+        /// 設置
+        /// </summary>
+        [Column("settings")]
+        public string? Settings { get; set; }
+
+        /// <summary>
+        /// 更新時間
+        /// </summary>
+        [Column("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// 更新者
+        /// </summary>
+        [Column("updated_by")]
+        public string? UpdatedBy { get; set; }
+
+        /// <summary>
+        /// 是否刪除
+        /// </summary>
+        [Column("is_deleted")]
+        public bool? IsDeleted { get; set; }
+
+        /// <summary>
+        /// 刪除時間
+        /// </summary>
+        [Column("deleted_at")]
+        public DateTime? DeletedAt { get; set; }
+
+        /// <summary>
+        /// 刪除者
+        /// </summary>
+        [Column("deleted_by")]
+        public string? DeletedBy { get; set; }
+
+        /// <summary>
+        /// 刪除原因
+        /// </summary>
+        [Column("delete_reason")]
+        public string? DeleteReason { get; set; }
 
         /// <summary>
         /// 導航屬性 - 關聯的用戶
