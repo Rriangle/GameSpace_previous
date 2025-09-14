@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameSpace.Models;
 
-public partial class Evoucher
+public partial class EVoucher
 {
     public int EvoucherId { get; set; }
 
@@ -19,5 +19,5 @@ public partial class Evoucher
 
     public DateTime? UsedTime { get; set; }
 
-    public virtual Users User { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }

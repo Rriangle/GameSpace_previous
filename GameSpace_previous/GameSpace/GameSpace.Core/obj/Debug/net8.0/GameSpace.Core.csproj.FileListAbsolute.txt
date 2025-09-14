@@ -33,9 +33,6 @@ D:/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/GameSpace.Core.d
 D:/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/refint/GameSpace.Core.dll
 D:/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/GameSpace.Core.pdb
 D:/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/ref/GameSpace.Core.dll
-/workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/GameSpace.Core.dll
-/workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/refint/GameSpace.Core.dll
-/workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/GameSpace.Core.pdb
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/bin/Debug/net8.0/GameSpace.Core.deps.json
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/bin/Debug/net8.0/GameSpace.Core.dll
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/bin/Debug/net8.0/GameSpace.Core.pdb
@@ -50,4 +47,7 @@ D:/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/ref/GameSpace.Co
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/GameSpace.Core.csproj.CoreCompileInputs.cache
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/GameSpace.Core.sourcelink.json
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/GameSpac.E93DE101.Up2Date
+/workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/GameSpace.Core.dll
+/workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/refint/GameSpace.Core.dll
+/workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/GameSpace.Core.pdb
 /workspace/GameSpace_previous/GameSpace/GameSpace.Core/obj/Debug/net8.0/ref/GameSpace.Core.dll

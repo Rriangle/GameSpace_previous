@@ -26,9 +26,6 @@ D:/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Debug/net8.0/GameSp
 D:/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Debug/net8.0/GameSpace.Infrastructure.dll
 D:/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Debug/net8.0/refint/GameSpace.Infrastructure.dll
 D:/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Debug/net8.0/GameSpace.Infrastructure.pdb
-/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Debug/net8.0/GameSpace.Infrastructure.dll
-/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Debug/net8.0/refint/GameSpace.Infrastructure.dll
-/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Debug/net8.0/GameSpace.Infrastructure.pdb
 /workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Debug/net8.0/GameSpace.Infrastructure.csproj.AssemblyReference.cache
 /workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Debug/net8.0/GameSpace.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
 /workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/obj/Debug/net8.0/GameSpace.Infrastructure.AssemblyInfoInputs.cache

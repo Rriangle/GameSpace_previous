@@ -1,49 +1,23 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.Collections.Generic;
 
-namespace GameSpace.Models
+namespace GameSpace.Models;
+
+public partial class EVoucherType
 {
-    /// <summary>
-    /// 電子禮券類型模型
-    /// </summary>
-    public partial class EVoucherType
-    {
-        [Key]
-        [Column("EVoucherTypeID")]
-        public int EVoucherTypeId { get; set; }
+    public int EvoucherTypeId { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        [Column("TypeName")]
-        public string TypeName { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-        [StringLength(500)]
-        [Column("Description")]
-        public string? Description { get; set; }
+    public decimal ValueAmount { get; set; }
 
-        [Column("Value")]
-        public decimal Value { get; set; }
+    public DateTime ValidFrom { get; set; }
 
-        [Column("Currency")]
-        [StringLength(10)]
-        public string Currency { get; set; } = "TWD";
+    public DateTime ValidTo { get; set; }
 
-        [Column("IsActive")]
-        public bool IsActive { get; set; } = true;
+    public int PointsCost { get; set; }
 
-        [Column("ValidFrom")]
-        public DateTime ValidFrom { get; set; }
+    public int TotalAvailable { get; set; }
 
-        [Column("ValidTo")]
-        public DateTime ValidTo { get; set; }
-
-        [Column("CreatedAt")]
-        public DateTime CreatedAt { get; set; }
-
-        [Column("UpdatedAt")]
-        public DateTime UpdatedAt { get; set; }
-
-        // 導航屬性
-        public virtual ICollection<EVoucher> EVouchers { get; set; } = new List<EVoucher>();
-    }
+    public string? Description { get; set; }
 }

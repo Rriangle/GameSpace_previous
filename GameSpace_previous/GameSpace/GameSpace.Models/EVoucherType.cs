@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace GameSpace.Models;
 
-public partial class EvoucherType
+public partial class EVoucherType
 {
     public int EvoucherTypeId { get; set; }
 

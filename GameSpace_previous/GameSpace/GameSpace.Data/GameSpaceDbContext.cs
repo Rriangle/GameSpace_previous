@@ -86,28 +86,28 @@ namespace GameSpace.Data
             // 配置 EVoucher 模型
             modelBuilder.Entity<EVoucher>(entity =>
             {
-                entity.HasKey(e => e.VoucherID);
+                entity.HasKey(e => e.EvoucherId);
                 entity.ToTable("EVouchers");
             });
 
             // 配置 EVoucherType 模型
             modelBuilder.Entity<EVoucherType>(entity =>
             {
-                entity.HasKey(e => e.TypeID);
+                entity.HasKey(e => e.EvoucherTypeId);
                 entity.ToTable("EVoucherTypes");
             });
 
             // 配置 EVoucherToken 模型
             modelBuilder.Entity<EVoucherToken>(entity =>
             {
-                entity.HasKey(e => e.TokenID);
+                entity.HasKey(e => e.TokenId);
                 entity.ToTable("EVoucherTokens");
             });
 
             // 配置 EVoucherRedeemLog 模型
             modelBuilder.Entity<EVoucherRedeemLog>(entity =>
             {
-                entity.HasKey(e => e.LogID);
+                entity.HasKey(e => e.RedeemId);
                 entity.ToTable("EVoucherRedeemLogs");
             });
 

@@ -1,39 +1,17 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.Collections.Generic;
 
-namespace GameSpace.Models
+namespace GameSpace.Models;
+
+public partial class EVoucherToken
 {
-    /// <summary>
-    /// 電子禮券代幣模型
-    /// </summary>
-    public partial class EVoucherToken
-    {
-        [Key]
-        [Column("TokenID")]
-        public int TokenId { get; set; }
+    public int TokenId { get; set; }
 
-        [Column("EVoucherID")]
-        public int EVoucherId { get; set; }
+    public int EvoucherId { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        [Column("TokenValue")]
-        public string TokenValue { get; set; } = null!;
+    public string Token { get; set; } = null!;
 
-        [Column("IsUsed")]
-        public bool IsUsed { get; set; }
+    public DateTime ExpiresAt { get; set; }
 
-        [Column("CreatedAt")]
-        public DateTime CreatedAt { get; set; }
-
-        [Column("ExpiresAt")]
-        public DateTime? ExpiresAt { get; set; }
-
-        [Column("UsedAt")]
-        public DateTime? UsedAt { get; set; }
-
-        // 導航屬性
-        [ForeignKey("EVoucherId")]
-        public virtual EVoucher EVoucher { get; set; } = null!;
-    }
+    public bool IsRevoked { get; set; }
 }

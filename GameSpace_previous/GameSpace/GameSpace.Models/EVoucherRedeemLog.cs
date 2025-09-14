@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameSpace.Models;
 
-public partial class EvoucherRedeemLog
+public partial class EVoucherRedeemLog
 {
     public int RedeemId { get; set; }
 
@@ -17,5 +17,5 @@ public partial class EvoucherRedeemLog
 
     public string Status { get; set; } = null!;
 
-    public virtual Users User { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }
