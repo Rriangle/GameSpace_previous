@@ -49,3 +49,6 @@
 
 ## DB 規格來源
 -  為最終權威
+\n---\n**2025-09-14T21:27:39Z** — Re-Audit 批次輸出更新
+- 產出 reports/_latest：todo_scan/cloc/build/test/db_table_count
+- 依不可變規則，Sign-in 相關缺陷登記為 Open（文件化，不改邏輯）
