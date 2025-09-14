@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameSpace.Models
 {
 
-	public partial class GameSpacedatabaseContext : DbContext
+	public partial class GameSpaceDatabaseContext : DbContext
 	{
-		public GameSpacedatabaseContext() { 
+		public GameSpaceDatabaseContext() { 
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
