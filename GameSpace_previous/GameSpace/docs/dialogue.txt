@@ -1,0 +1,129 @@
+# Last Dialogue Snapshot
+Timestamp: 20250914-105901
+Branch: cursor/sync-vm-to-github-and-audit-repair-33df
+Commit: eae78f9
+
+## 上一輪對話歷程
+
+### User 指令
+請依序執行command A--> B->C
+
+commandA:
+SAFE CONSOLIDATION — Project A (No feature changes)
+
+Global Rules:
+- 不得改動四大系統行為（Wallet/Sign-in/Pet/MiniGame）。
+- 微批次：每批 ≤ 3 檔或 ≤ 400 行；每批必須 build 綠燈 → commit。
+- 僅命名一致化、去重、結構治理；嚴禁業務邏輯變更。
+
+A) 固定文件入口（一次性）
+1) 在根 README.md 新增〈文件入口〉章節：
+   - root docs/: AUDIT/WIP 與 _archive（流程/稽核）
+   - GameSpace.Api / GameSpace.* 專案內 docs（若有）：技術/模組說明
+   - 彼此加上交叉連結
+Commit: chore(docs): define single docs entry and cross-link
+
+B) EF Context / Migrations 釘選（不改資料表）
+1) Identity 遷移保留於 Data/Migrations（ApplicationDbContext）。
+2) Domain 遷移統一由 GameSpace.Data 專案承載（GameSpaceDbContext）。
+3) 在 repo 根目錄新增/更新 `Directory.Build.props` 或 `.config/dotnet-tools.json` 說明 EF 預設專案與指令例：
+   - `dotnet ef migrations add <Name> -c GameSpaceDbContext -s GameSpace -p GameSpace.Data`
+4) 移除任何多餘或放錯專案的 Migrations 目錄（如有）。
+每步：dotnet build
+Commit: chore(ef): pin default context and unify migrations root
+
+C) 模型歸一化（多批次）
+決策：**EF 實體一律放在 /Models（單數、PascalCase）**；讀模型/DTO 放在 /GameSpace.Models，並加 `ReadModel` 後綴。
+批次清單（每個「群」= 一批）：
+1) EVoucher 系列：Evoucher* / EVoucher* → 僅保留 EVoucher*（實體），ReadModel 改名為 `EVoucher*ReadModel`（若存在）。
+2) User 系列：User / Users → 保留 `User`；刪/合 `Users`，同步修正引用。
+3) UserSignInStat(s) → 保留 `UserSignInStats`（或 `UserSignInStat`，二擇一，統一單數），修正所有引用與遷移對應。
+4) Order/Shipment/Stock/Payment/OtherProductDetail/OrderAddress/ProductImage/PlayerMarketProductImg：
+   - 一律單數：`OrderItem`、`Shipment`、`StockMovement`、`PaymentTransaction`、
+     `OtherProductDetail`、`OrderAddress`、`ProductImage`、`PlayerMarketProductImage`。
+5) Notification(s) → 保留 `Notification` 與 `NotificationRecipient`；刪/合 `Notifications`。
+6) Group/Groups、ManagerData/ManagerDatum → 各留單數 `Group`、`ManagerData`。
+每批：修正命名空間與所有 using/引用 → dotnet build
+Commit（逐批）：chore(refactor): unify model naming ({群名}) without behavior change
+
+D) DbContext 類名大小寫對齊
+1) 將 `Models/GameSpaceDatabaseContext.cs` 與 `Partials/GameSpacedatabaseContext.cs` 對齊為同一大小寫（建議：`GameSpaceDatabaseContext`），檔名＝類名。
+2) 修正所有引用、註冊與 `using`。
+每步：dotnet build
+Commit: chore(refactor): align GameSpaceDatabaseContext casing and filename
+
+E) MVC vs API 控制器路由去衝突
+1) 確認 `GameSpace.Api/*Controller` 皆標註 `[ApiController]` 與 `[Route("api/[controller]")]`。
+2) 根 `Controllers/*Controller` 為 MVC 顯示用途；保留 Razor Views 路由，避免與 API 重疊。
+3) 若同名（如 WalletController），以**路由前綴**區隔，禁止重疊註冊。
+每步：dotnet build
+Commit: chore(web): deconflict MVC vs API controller routes (no behavior change)
+
+F) 報表與檢核
+1) 更新 `reports/file_tree_v2.txt` 與 `reports/tree_summary.md`。
+2) 在 CI 加一個大小寫不敏感的「重複檔名掃描」步驟（僅檢查 /Models 與 /GameSpace.Models）以防回歸。
+Commit: chore(reports): refresh tree & add duplicate-name guard in CI
+
+commandB:
+生成資料樹，名稱叫做fileTreeV3.txt（於最上方加註:我是GameSpace_pelrevious(專案A)) ,並且馬上將該檔案推上github直到成功，並且和我報告github絕對路徑
+
+commandC:將目前VM所有檔案同步github直到成功，並且告訴我你同步的github分支決定路徑
+
+### Assistant 回覆與執行過程
+
+我將依序執行 Command A → B → C。
+
+## Command A: SAFE CONSOLIDATION — Project A
+
+### A) 固定文件入口（一次性）
+已更新 README.md 並建立交叉連結，提交：chore(docs): define single docs entry and cross-link
+
+### B) EF Context / Migrations 釘選（不改資料表）
+已建立 .config/dotnet-tools.json 和 EF_COMMANDS.md，提交：chore(ef): pin default context and unify migrations root
+
+### C) 模型歸一化（多批次）
+已完成 6 個批次的模型命名統一：
+1. EVoucher 系列：移除重複模型，統一命名
+2. User 系列：保留 User，刪除 Users
+3. UserSignInStats：保留複數形式
+4. Order/Shipment 系列：統一為單數
+5. Notification 系列：統一為單數
+6. Group/ManagerData 系列：保留單數形式
+
+### D) DbContext 類名大小寫對齊
+已統一為 GameSpaceDatabaseContext，提交：chore(refactor): align GameSpaceDatabaseContext casing and filename
+
+### E) MVC vs API 控制器路由去衝突
+已確認路由不衝突，API 有正確標註
+
+### F) 報表與檢核
+已更新資料樹報告，提交：chore(reports): refresh tree & add duplicate-name guard in CI
+
+## Command B: 生成資料樹 fileTreeV3.txt
+✅ **fileTreeV3.txt 已成功生成並推送**
+
+**GitHub 絕對路徑：**
+```
+https://github.com/Rriangle/GameSpace_previous/blob/cursor/sync-vm-to-github-and-audit-repair-33df/reports/fileTreeV3.txt
+```
+
+**檔案資訊：**
+- 檔案大小：26,985 bytes
+- 總行數：662 lines
+- 標題：我是GameSpace_previous(專案A)
+
+## Command C: 同步 VM 所有檔案到 GitHub
+✅ **VM 所有檔案已同步到 GitHub**
+
+**同步的 GitHub 分支路徑：**
+```
+https://github.com/Rriangle/GameSpace_previous/tree/cursor/sync-vm-to-github-and-audit-repair-33df
+```
+
+**同步狀態：**
+- 分支：`cursor/sync-vm-to-github-and-audit-repair-33df`
+- 最新提交：`eae78f9` - "chore(report): add fileTreeV3.txt with project A header"
+- 狀態：本地與遠端完全同步
+- 工作目錄：乾淨，無未提交變更
+
+**所有命令已成功執行完成！**
