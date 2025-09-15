@@ -86,3 +86,4 @@
 - 2025-09-15T04:04:11Z 新增 .gitignore、heartbeat 與檢查點
 - 2025-09-15T04:22:49Z 新增 TEST_STRATEGY、heartbeat 與檢查點
 - 2025-09-15T04:23:06Z 新增 Makefile、heartbeat 與檢查點
+- 2025-09-15T04:23:27Z 新增 RELEASE_NOTES、heartbeat 與檢查點
