@@ -62,3 +62,4 @@
 - 2025-09-15T03:29:47Z 產生 BT_SUMMARY.md
 - 2025-09-15T03:31:52Z 心跳紀錄（heartbeat-only）」
 - 2025-09-15T03:33:27Z 嚴格 TODO 掃描完成（todo_round.txt）
+- 2025-09-15T03:33:59Z 嚴格 TODO 掃描完成（todo_grep.txt, grep）
