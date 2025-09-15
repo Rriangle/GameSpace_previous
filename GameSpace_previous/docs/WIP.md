@@ -59,3 +59,4 @@
 - 2025-09-14T21:50:25Z 新增 docs/SECURITY.md 與 heartbeat
 - 2025-09-14T21:51:57Z 新增 .github/workflows/ci.yml（CI 只讀流程）
 - 2025-09-15T03:29:38Z 心跳記錄與檢查點（批次1）
+- 2025-09-15T03:29:47Z 產生 BT_SUMMARY.md
