@@ -1,0 +1,20 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+
+[*.cs]
+csharp_new_line_before_open_brace = all
+csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_style_var_for_locals = false:suggestion
+csharp_style_var_when_type_is_apparent = true:silent
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_prefer_simple_default_expression = true:suggestion
+
+[*.{cshtml,html,css,js}]
+indent_size = 2

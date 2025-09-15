@@ -1,0 +1,6 @@
+* text=auto eol=lf
+
+vendor/** linguist-vendored
+wwwroot/lib/** linguist-vendored
+**/*.min.* linguist-generated
+reports/_latest/* -diff
