@@ -77,3 +77,4 @@
 - 2025-09-15T03:42:27Z 新增 issue templates、心跳與檢查點
 - 2025-09-15T03:42:52Z 新增 docs/INDEX.md 與 BT_LATEST.md、heartbeat
 - 2025-09-15T03:43:19Z 新增 QA_CHECKLIST、heartbeat 與檢查點
+- 2025-09-15T03:43:43Z 新增 .github/SECURITY.md、heartbeat 與檢查點
