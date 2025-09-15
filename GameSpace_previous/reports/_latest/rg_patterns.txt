@@ -1,0 +1,13 @@
+TODO
+FIXME
+TBD
+NotImplementedException
+lorem ipsum
+xx/yy
+???
+待補
+佔位
+暫定
+示意
+隨便
+草稿
