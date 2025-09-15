@@ -1,0 +1,27 @@
+# Build artifacts
+bin/
+obj/
+TestResults/
+*.trx
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Package
+node_modules/
+
+# Other
+*.tmp
+~$*

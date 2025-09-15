@@ -83,3 +83,4 @@
 - 2025-09-15T04:02:33Z 更新 README 快速導航（加入索引與規範）、heartbeat 與檢查點
 - 2025-09-15T04:03:07Z 新增 CODE_OF_CONDUCT、heartbeat 與檢查點
 - 2025-09-15T04:03:39Z 追加 AUDIT 指向最新報告與 heartbeat
+- 2025-09-15T04:04:11Z 新增 .gitignore、heartbeat 與檢查點
