@@ -1,0 +1,154 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Index", "Home", new { area = "MiniGame" })">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-gamepad"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">MiniGame 後台</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Home", new { area = "MiniGame" })">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>儀表板</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        會員錢包系統
+    </div>
+
+    <!-- Nav Item - User Wallet -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseWallet"
+           aria-expanded="true" aria-controls="collapseWallet">
+            <i class="fas fa-fw fa-wallet"></i>
+            <span>會員錢包管理</span>
+        </a>
+        <div id="collapseWallet" class="collapse" aria-labelledby="headingWallet" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">錢包功能:</h6>
+                <a class="collapse-item" href="@Url.Action("Index", "AdminWallet", new { area = "MiniGame" })">會員錢包列表</a>
+                <a class="collapse-item" href="@Url.Action("Coupons", "AdminWallet", new { area = "MiniGame" })">優惠券管理</a>
+                <a class="collapse-item" href="@Url.Action("EVouchers", "AdminWallet", new { area = "MiniGame" })">禮券管理</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Wallet Types -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseWalletTypes"
+           aria-expanded="true" aria-controls="collapseWalletTypes">
+            <i class="fas fa-fw fa-tags"></i>
+            <span>券類型管理</span>
+        </a>
+        <div id="collapseWalletTypes" class="collapse" aria-labelledby="headingWalletTypes" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">類型管理:</h6>
+                <a class="collapse-item" href="@Url.Action("Index", "AdminWalletTypes", new { area = "MiniGame" })">類型總覽</a>
+                <a class="collapse-item" href="@Url.Action("CouponTypes", "AdminWalletTypes", new { area = "MiniGame" })">優惠券類型</a>
+                <a class="collapse-item" href="@Url.Action("EVoucherTypes", "AdminWalletTypes", new { area = "MiniGame" })">禮券類型</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        會員活動系統
+    </div>
+
+    <!-- Nav Item - Sign In Stats -->
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "AdminSignInStats", new { area = "MiniGame" })">
+            <i class="fas fa-fw fa-calendar-check"></i>
+            <span>簽到統計管理</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        寵物系統
+    </div>
+
+    <!-- Nav Item - Pet -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePet"
+           aria-expanded="true" aria-controls="collapsePet">
+            <i class="fas fa-fw fa-paw"></i>
+            <span>寵物管理</span>
+        </a>
+        <div id="collapsePet" class="collapse" aria-labelledby="headingPet" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">寵物功能:</h6>
+                <a class="collapse-item" href="@Url.Action("Index", "AdminPet", new { area = "MiniGame" })">寵物列表</a>
+                <a class="collapse-item" href="@Url.Action("Statistics", "AdminPet", new { area = "MiniGame" })">寵物統計</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        小遊戲系統
+    </div>
+
+    <!-- Nav Item - MiniGame -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMiniGame"
+           aria-expanded="true" aria-controls="collapseMiniGame">
+            <i class="fas fa-fw fa-gamepad"></i>
+            <span>小遊戲管理</span>
+        </a>
+        <div id="collapseMiniGame" class="collapse" aria-labelledby="headingMiniGame" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">遊戲功能:</h6>
+                <a class="collapse-item" href="@Url.Action("Index", "AdminMiniGame", new { area = "MiniGame" })">遊戲記錄</a>
+                <a class="collapse-item" href="@Url.Action("Statistics", "AdminMiniGame", new { area = "MiniGame" })">遊戲統計</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        系統工具
+    </div>
+
+    <!-- Nav Item - Health Check -->
+    <li class="nav-item">
+        <a class="nav-link" href="/health/db" target="_blank">
+            <i class="fas fa-fw fa-heartbeat"></i>
+            <span>資料庫健康檢查</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+<!-- End of Sidebar -->
