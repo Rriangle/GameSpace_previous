@@ -42,8 +42,8 @@ GameSpace_previous/
 - [部署指南](docs/DEPLOYMENT.md)
 - [營運手冊](docs/OPERATIONS.md)
 
-- [審計報告](../GameSpace/docs/AUDIT.md)
-- [工作進展](../GameSpace/docs/WIP.md)
+- [審計報告](GameSpace/docs/AUDIT.md)
+- [工作進展](GameSpace/docs/WIP.md)
 - [系統架構](docs/SYSTEM_ARCHITECTURE.md)
 - [部署指南](docs/DEPLOYMENT_CHECKLIST.md)
 - [測試政策](docs/TESTING_POLICY.md)
