@@ -58,3 +58,4 @@
 - 2025-09-14T21:45:40Z 產生 reports/_latest/SCAN_SUMMARY.md 並更新 AUDIT
 - 2025-09-14T21:50:25Z 新增 docs/SECURITY.md 與 heartbeat
 - 2025-09-14T21:51:57Z 新增 .github/workflows/ci.yml（CI 只讀流程）
+- 2025-09-15T03:29:38Z 心跳記錄與檢查點（批次1）
