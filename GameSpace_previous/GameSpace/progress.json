@@ -1,1 +1,31 @@
-{"version":"1.0","entries":[]}
+{
+  "overall": 15,
+  "stages": {
+    "stage0": 100,
+    "stage1": 100,
+    "stage2": 100,
+    "stage3": 100,
+    "stage4": 100,
+    "stage5": 100,
+    "stage6": 100,
+    "stage7": 100,
+    "stage8": 100,
+    "minigame_admin": 60
+  },
+  "updatedAt": "2025-01-15T14:30:00Z",
+  "currentStage": "MiniGame Area Admin Development",
+  "description": "MiniGame Area Admin 後台管理系統開發中",
+  "completedTasks": [
+    "建立 MiniGame Area Admin 基礎架構",
+    "實作 User_Wallet 後台管理功能",
+    "實作 CouponType/EVoucherType CRUD 功能",
+    "建立 SB Admin 樣式的版面配置",
+    "實作資料庫健康檢查端點"
+  ],
+  "pendingTasks": [
+    "實作 UserSignInStats 後台管理",
+    "實作 Pet 後台管理",
+    "實作 MiniGame 後台管理",
+    "建立完整的 Views 頁面"
+  ]
+}

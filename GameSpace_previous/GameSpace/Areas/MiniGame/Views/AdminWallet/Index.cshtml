@@ -1,0 +1,197 @@
+@model GameSpace.Areas.MiniGame.ViewModels.WalletIndexViewModel
+@{
+    ViewData["Title"] = "會員錢包列表";
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">會員錢包管理</h1>
+    <div class="d-none d-lg-inline-block">
+        <span class="text-muted">總計 @Model.TotalCount 個會員錢包</span>
+    </div>
+</div>
+
+<!-- Search and Filter Card -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">搜尋與篩選</h6>
+    </div>
+    <div class="card-body">
+        <form method="get" asp-action="Index">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="searchTerm">搜尋會員</label>
+                        <input type="text" class="form-control" id="searchTerm" name="searchTerm" 
+                               value="@Model.SearchTerm" placeholder="輸入帳號或暱稱">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="minPoints">最少點數</label>
+                        <input type="number" class="form-control" id="minPoints" name="minPoints" 
+                               value="@Model.MinPoints" placeholder="0">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="maxPoints">最多點數</label>
+                        <input type="number" class="form-control" id="maxPoints" name="maxPoints" 
+                               value="@Model.MaxPoints" placeholder="無上限">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-search"></i> 搜尋
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-undo"></i> 清除篩選
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- DataTables -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">會員錢包列表</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>會員ID</th>
+                        <th>帳號</th>
+                        <th>暱稱</th>
+                        <th>會員點數</th>
+                        <th>可用優惠券</th>
+                        <th>可用禮券</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Wallets.Any())
+                    {
+                        @foreach (var wallet in Model.Wallets)
+                        {
+                            <tr>
+                                <td>@wallet.UserId</td>
+                                <td>@wallet.UserAccount</td>
+                                <td>@wallet.UserNickName</td>
+                                <td>
+                                    <span class="badge badge-success">@wallet.UserPoint.ToString("N0") 點</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-info">@wallet.CouponCount 張</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-warning">@wallet.EVoucherCount 張</span>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Details", new { userId = wallet.UserId })" 
+                                       class="btn btn-primary btn-sm" title="查看詳細">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox fa-3x mb-3"></i>
+                                <br>
+                                沒有找到符合條件的錢包資料
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <!-- Pagination -->
+            <nav aria-label="錢包列表分頁">
+                <ul class="pagination justify-content-center">
+                    @if (Model.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { 
+                                page = Model.CurrentPage - 1, 
+                                pageSize = Model.PageSize,
+                                searchTerm = Model.SearchTerm,
+                                minPoints = Model.MinPoints,
+                                maxPoints = Model.MaxPoints 
+                            })">
+                                <i class="fas fa-chevron-left"></i> 上一頁
+                            </a>
+                        </li>
+                    }
+
+                    @for (int i = Math.Max(1, Model.CurrentPage - 2); i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2); i++)
+                    {
+                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { 
+                                page = i, 
+                                pageSize = Model.PageSize,
+                                searchTerm = Model.SearchTerm,
+                                minPoints = Model.MinPoints,
+                                maxPoints = Model.MaxPoints 
+                            })">@i</a>
+                        </li>
+                    }
+
+                    @if (Model.CurrentPage < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { 
+                                page = Model.CurrentPage + 1, 
+                                pageSize = Model.PageSize,
+                                searchTerm = Model.SearchTerm,
+                                minPoints = Model.MinPoints,
+                                maxPoints = Model.MaxPoints 
+                            })">
+                                下一頁 <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+            <div class="text-center text-muted">
+                第 @Model.CurrentPage 頁，共 @Model.TotalPages 頁 (總計 @Model.TotalCount 筆記錄)
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-submit form when page size changes
+        $('#pageSize').change(function() {
+            $(this).closest('form').submit();
+        });
+
+        // Clear search form
+        function clearSearch() {
+            $('#searchTerm').val('');
+            $('#minPoints').val('');
+            $('#maxPoints').val('');
+            $('form').submit();
+        }
+    </script>
+}
