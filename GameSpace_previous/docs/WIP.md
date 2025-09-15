@@ -81,3 +81,4 @@
 - 2025-09-15T04:00:21Z 新增 scripts/run_audit.sh（retry）、heartbeat 與檢查點
 - 2025-09-15T04:01:07Z 執行 scripts/run_audit.sh 並更新報告
 - 2025-09-15T04:02:33Z 更新 README 快速導航（加入索引與規範）、heartbeat 與檢查點
+- 2025-09-15T04:03:07Z 新增 CODE_OF_CONDUCT、heartbeat 與檢查點
