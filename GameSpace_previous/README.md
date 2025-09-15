@@ -36,6 +36,11 @@ GameSpace_previous/
 ```
 
 ## 快速導航
+- [文件索引](docs/INDEX.md)
+- [貢獻指南](docs/CONTRIBUTING.md)
+- [風格指南](docs/STYLEGUIDE.md)
+- [C# 規範](docs/CODING_STANDARDS.md)
+
 - [模組總覽](docs/MODULES.md)
 - [資料庫概要](docs/DATABASE.md)
 - [Admin 樣式規範](docs/ADMIN_TEMPLATE_STYLE.md)
