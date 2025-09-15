@@ -1,0 +1,15 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/SignInWriteRepository.cs(99,37): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.csproj]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/SignInWriteRepository.cs(122,45): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.csproj]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/UserWriteRepository.cs(146,36): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.csproj]
+
+Build FAILED.
+
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/SignInWriteRepository.cs(99,37): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.csproj]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/SignInWriteRepository.cs(122,45): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.csproj]
+/workspace/GameSpace_previous/GameSpace/GameSpace.Infrastructure/Repositories/UserWriteRepository.cs(146,36): error CS1009: Unrecognized escape sequence [/workspace/GameSpace_previous/GameSpace/GameSpace.csproj]
+    0 Warning(s)
+    3 Error(s)
+
+Time Elapsed 00:00:01.35
