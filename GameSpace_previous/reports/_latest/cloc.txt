@@ -1,4 +1,4 @@
-github.com/AlDanial/cloc v 2.04  T=0.50 s (1000.0 files/s, 443854.9 lines/s)
+github.com/AlDanial/cloc v 2.04  T=0.65 s (875.0 files/s, 347565.0 lines/s)
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 File                                                                                                                                      blank        comment           code
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -33,7 +33,6 @@ File                                                                            
 ./GameSpace/wwwroot/font-awesome/sprites/brands.svg                                                                                           0              5           1542
 ./GameSpace/wwwroot/lib/jquery-validation/dist/jquery.validate.js                                                                           244            189           1228
 ./GameSpace/wwwroot/font-awesome/js/conflict-detection.js                                                                                    36            189           1210
-./reports/_latest/todo_scan.txt                                                                                                               0              0           1203
 ./GameSpace/Services/Seeding/SeedDataRunner.cs                                                                                              247             42           1166
 ./GameSpace/wwwroot/font-awesome/js/brands.js                                                                                                15             17           1155
 ./GameSpace/reports/_latest/todo_scan.txt                                                                                                     0              0            927
@@ -45,6 +44,8 @@ File                                                                            
 ./GameSpace/reports/file_tree.txt                                                                                                             1              0            653
 ./GameSpace/wwwroot/lib/sb-admin/tables.html                                                                                                  0              4            630
 ./GameSpace/wwwroot/font-awesome/js/v4-shims.js                                                                                              13             11            623
+./reports/_latest/todo_scan.txt                                                                                                               0              0            575
+./reports/_latest/cloc.txt                                                                                                                    0              0            511
 ./GameSpace/wwwroot/font-awesome/sprites/regular.svg                                                                                          0              5            510
 ./GameSpace/docs/_archive/20250913-1423/AUDIT.md                                                                                             83              0            488
 ./GameSpace/reports/_latest/cloc.txt                                                                                                          0              0            486
@@ -70,6 +71,7 @@ File                                                                            
 ./GameSpace/Views/Home/Index.cshtml                                                                                                          22              4            289
 ./GameSpace/Views/Shared/_Layout.cshtml                                                                                                      35             18            280
 ./GameSpace/docs/_archive/20250913-1423/WIP.md                                                                                               34              0            279
+./reports/_latest/todo_grep.txt                                                                                                               0              0            274
 ./GameSpace/Views/Friendship/Index.cshtml                                                                                                    27             13            273
 ./My_Own_Source_Of_Data/new_0905.txt                                                                                                        259              0            273
 ./GameSpace/GameSpace.Models/AdditionalReadModel.cs                                                                                          24             72            271
@@ -144,6 +146,7 @@ File                                                                            
 ./GameSpace/Areas/Admin/Views/RBAC/Roles.cshtml                                                                                               5              0            133
 ./GameSpace/GameSpace.Api/Controllers/SignInController.cs                                                                                    19             25            132
 ./project-docs/_archive/20250914-0214/progress.json                                                                                           0              0            127
+./reports/_latest/todo_strict2.txt                                                                                                            0              0            126
 ./project-docs/_archive/20250914-0214/WIP_RUN.md                                                                                             16              0            125
 ./GameSpace/Views/Forum/Threads.cshtml                                                                                                       11              3            124
 ./GameSpace/wwwroot/lib/social_hub/css/chat.css                                                                                              15              0            124
@@ -186,6 +189,7 @@ File                                                                            
 ./GameSpace/Models/OrderItem.cs                                                                                                               2              0             80
 ./GameSpace/Services/Caching/MemoryCacheService.cs                                                                                            8              4             79
 ./GameSpace/Middleware/GlobalExceptionMiddleware.cs                                                                                           9              4             78
+./docs/WIP.md                                                                                                                                 4              0             77
 ./GameSpace/GameSpace.Api/Controllers/UsersController.cs                                                                                      6              0             76
 ./GameSpace/GameSpace.Tests/Stage2BreadthSliceTests.cs                                                                                       15             34             76
 ./GameSpace/GameSpace.Models/Stage3WriteModels.cs                                                                                            18             67             75
@@ -199,6 +203,7 @@ File                                                                            
 ./GameSpace/Areas/social_hub/Services/NotificationService.cs                                                                                 10             13             65
 ./GameSpace/Areas/social_hub/Views/Mutes/Preview.cshtml                                                                                       4              0             64
 ./GameSpace/Areas/Admin/Views/RBAC/AssignRole.cshtml                                                                                          7              0             63
+./reports/_latest/todo_strict.txt                                                                                                             0              0             63
 ./GameSpace/wwwroot/lib/sb-admin/password.html                                                                                                0              0             62
 ./GameSpace/GameSpace.Models/obj/GameSpace.Models.csproj.nuget.dgspec.json                                                                    0              0             61
 ./GameSpace/Areas/Admin/Views/Shared/_Layout.cshtml                                                                                          15             23             60
@@ -208,11 +213,11 @@ File                                                                            
 ./GameSpace/Models/ProductInfo.cs                                                                                                            19              4             58
 ./GameSpace/Models/UserToken.cs                                                                                                              22             69             58
 ./GameSpace/Areas/social_hub/Views/MessageCenter/Index.cshtml                                                                                 5              0             57
+./README.md                                                                                                                                  14              0             57
 ./GameSpace/Views/Auth/OAuthLogin.cshtml                                                                                                      8              4             56
 ./GameSpace/Areas/social_hub/Views/Mutes/Edit.cshtml                                                                                          7              1             52
 ./GameSpace/GameSpace.Infrastructure/Repositories/WalletReadOnlyRepository.cs                                                                 8             26             52
 ./GameSpace/wwwroot/lib/sb-admin/401.html                                                                                                     0              0             52
-./README.md                                                                                                                                  14              0             52
 ./GameSpace/wwwroot/lib/sb-admin/404.html                                                                                                     0              0             51
 ./GameSpace/wwwroot/lib/sb-admin/500.html                                                                                                     0              0             51
 ./GameSpace/wwwroot/lib/sb-admin/assets/demo/chart-area-demo.js                                                                               1              2             51
@@ -226,6 +231,7 @@ File                                                                            
 ./GameSpace/Views/Shared/_Sidebar.cshtml                                                                                                      6              6             47
 ./GameSpace/GameSpace.Api/Controllers/PetsController.cs                                                                                       4              0             46
 ./GameSpace/GameSpace.Models/LeaderboardAggregateReadModel.cs                                                                                25             92             46
+./docs/DEPLOYMENT.md                                                                                                                          7              0             46
 ./GameSpace/Models/Support_Ticket_Messages.cs                                                                                                 2              0             45
 ./GameSpace/Models/GameProductDetails.cs                                                                                                     39            117             44
 ./GameSpace/Models/PaymentTransaction.cs                                                                                                     12              4             44
@@ -234,6 +240,7 @@ File                                                                            
 ./GameSpace/Areas/social_hub/Views/Shared/_Layout.cshtml                                                                                     19             11             43
 ./GameSpace/Models/OtherProductDetails.cs                                                                                                     2              0             43
 ./GameSpace/wwwroot/lib/sb-admin/assets/demo/chart-bar-demo.js                                                                                1              2             43
+./reports/_latest/INDEX.md                                                                                                                    1              0             43
 ./GameSpace/Models/OrderAddress.cs                                                                                                           11              4             42
 ./GameSpace/Areas/social_hub/Filters/AdminOnlyAttribute.cs                                                                                    7              7             41
 ./GameSpace/Areas/social_hub/Views/Mutes/Create.cshtml                                                                                        7              1             41
@@ -243,6 +250,7 @@ File                                                                            
 ./GameSpace/Areas/social_hub/Views/Home/Index.cshtml                                                                                          2              3             40
 ./GameSpace/Models/GroupChat.cs                                                                                                              13              4             40
 ./GameSpace/Models/User.cs                                                                                                                   35              0             40
+./scripts/run_audit.sh                                                                                                                        6              5             40
 ./GameSpace/GameSpace.Models/RBACModels.cs                                                                                                    4             12             39
 ./GameSpace/GameSpace.Models/WalletOverviewReadModel.cs                                                                                      11             40             38
 ./GameSpace/Models/CouponType.cs                                                                                                             13              4             38
@@ -255,6 +263,7 @@ File                                                                            
 ./GameSpace/Models/Provider.cs                                                                                                               10              4             36
 ./GameSpace/Models/Supplier.cs                                                                                                               10              4             36
 ./GameSpace/GameSpace.Infrastructure/Repositories/ForumReadOnlyRepository.cs                                                                  7             29             35
+./docs/AUDIT.md                                                                                                                               9              0             35
 ./GameSpace/GameSpace.Api/Controllers/HealthController.cs                                                                                     2              9             34
 ./GameSpace/GameSpace.Core/Repositories/ICommunityReadOnlyRepository.cs                                                                       8             11             34
 ./GameSpace/Models/PlayerMarketProductImgs.cs                                                                                                 2              0             34
@@ -292,12 +301,14 @@ File                                                                            
 ./GameSpace/Models/OrderStatusHistory.cs                                                                                                      7              4             28
 ./GameSpace/Models/Support_Ticket_Assignments.cs                                                                                              2              0             28
 ./GameSpace/appsettings.json                                                                                                                  0              0             28
+./docs/ADMIN_TEMPLATE_STYLE.md                                                                                                                8              0             28
 ./GameSpace/Models/MiniGame.cs                                                                                                               22              0             27
 ./GameSpace/Models/Pet.cs                                                                                                                    21              0             26
 ./GameSpace/Views/Shared/_Chat.cshtml                                                                                                         4              7             26
 ./GameSpace/GameSpace.Api/obj/GameSpace.Api.csproj.nuget.g.props                                                                              0              0             25
 ./GameSpace/Models/NotificationSource.cs                                                                                                      7              4             25
 ./GameSpace/Views/Shared/_LoginPartial.cshtml                                                                                                 1              0             25
+./docs/MODULES.md                                                                                                                             5              0             25
 ./GameSpace/Models/GameMetricDaily.cs                                                                                                         2              3             24
 ./GameSpace/wwwroot/css/site.css                                                                                                              5              1             24
 ./GameSpace.sln                                                                                                                               1              1             23
@@ -320,6 +331,7 @@ File                                                                            
 ./GameSpace/Partials/GameSpaceDatabaseContext.cs                                                                                              3              0             21
 ./GameSpace/reports/_latest/build_report.txt                                                                                                  3              0             21
 ./coverlet.runsettings                                                                                                                        0              0             21
+./docs/CODING_STANDARDS.md                                                                                                                    6              0             21
 ./GameSpace/GameSpace.Core/Repositories/IUserReadOnlyRepository.cs                                                                            1              3             20
 ./GameSpace/Models/Game.cs                                                                                                                    2              3             20
 ./GameSpace/Models/ManagerRole.cs                                                                                                             4              1             20
@@ -329,6 +341,7 @@ File                                                                            
 ./GameSpace/Models/MetricSource.cs                                                                                                            2              3             19
 ./GameSpace/reports/_latest/dotnet_build.txt                                                                                                  3              0             19
 ./project-docs/_archive/20250914-0214/ARCHIVE_INDEX.md                                                                                        8              0             19
+./.github/workflows/ci.yml                                                                                                                    0              0             18
 ./GameSpace/GameSpace.Core/obj/Release/net8.0/GameSpace.Core.csproj.FileListAbsolute.txt                                                      0              0             18
 ./GameSpace/GameSpace.Data/obj/Debug/net8.0/GameSpace.Data.csproj.FileListAbsolute.txt                                                        0              0             18
 ./GameSpace/GameSpace.Infrastructure/GameSpace.Infrastructure.csproj                                                                          5              0             18
@@ -342,11 +355,18 @@ File                                                                            
 ./GameSpace/wwwroot/font-awesome/css/v5-font-face.css                                                                                         0              5             18
 ./GameSpace/wwwroot/lib/jquery-validation-unobtrusive/LICENSE.txt                                                                             5              0             18
 ./GameSpace/wwwroot/lib/jquery-validation/LICENSE.md                                                                                          4              0             18
+./docs/CONTRIBUTING.md                                                                                                                        5              0             18
+./docs/DATABASE.md                                                                                                                            4              0             18
+./docs/QA_CHECKLIST.md                                                                                                                        5              0             18
+./.editorconfig                                                                                                                               3              0             17
+./.github/ISSUE_TEMPLATE/bug_report.md                                                                                                        7              0             17
 ./GameSpace/GameSpace.Api/GameSpace.Api.csproj                                                                                                4              0             17
 ./GameSpace/Models/ChatMessage.cs                                                                                                            12              0             17
 ./GameSpace/Models/SystemLog.cs                                                                                                               2              3             17
 ./GameSpace/Models/WalletHistory.cs                                                                                                           2              3             17
 ./GameSpace/wwwroot/lib/jquery/LICENSE.txt                                                                                                    4              0             17
+./docs/OPERATIONS.md                                                                                                                          5              0             17
+./docs/STYLEGUIDE.md                                                                                                                          5              0             17
 ./GameSpace/GameSpace.Core/GameSpace.Core.csproj                                                                                              4              0             16
 ./GameSpace/GameSpace.Data/GameSpace.Data.csproj                                                                                              4              0             16
 ./GameSpace/GameSpace.Models/UserSignInStats.cs                                                                                               1              0             16
@@ -384,6 +404,8 @@ File                                                                            
 ./GameSpace/Models/PostMetricSnapshot.cs                                                                                                      9              0             14
 ./GameSpace/Models/UserWallet.cs                                                                                                              2              3             14
 ./GameSpace/Models/VwThreadPostsFlat.cs                                                                                                       9              0             14
+./docs/INDEX.md                                                                                                                               4              0             14
+./reports/_latest/dotnet_clean.1.txt                                                                                                          2              0             14
 ./GameSpace/GameSpace.Core/Repositories/ILeaderboardReadOnlyRepository.cs                                                                     6             43             13
 ./GameSpace/GameSpace.Core/obj/Release/net8.0/GameSpace.Core.GeneratedMSBuildEditorConfig.editorconfig                                        0              0             13
 ./GameSpace/GameSpace.Data/bin/Debug/net8.0/GameSpace.Data.runtimeconfig.json                                                                 0              0             13
@@ -396,6 +418,8 @@ File                                                                            
 ./GameSpace/Models/EVoucherRedeemLog.cs                                                                                                       8              0             13
 ./GameSpace/Models/Reaction.cs                                                                                                                8              0             13
 ./GameSpace/wwwroot/lib/sb-admin/assets/demo/chart-pie-demo.js                                                                                1              2             13
+./reports/_latest/rg_patterns.txt                                                                                                             0              0             13
+./.github/ISSUE_TEMPLATE/feature_request.md                                                                                                   5              0             12
 ./GameSpace/Areas/Forum/Controllers/HomeController.cs                                                                                         1              0             12
 ./GameSpace/Areas/MemberManagement/Controllers/HomeController.cs                                                                              1              0             12
 ./GameSpace/Areas/MiniGame/Controllers/HomeController.cs                                                                                      1              0             12
@@ -414,6 +438,10 @@ File                                                                            
 ./GameSpace/Models/UserRight.cs                                                                                                               7              0             12
 ./GameSpace/Models/VwForumOverview.cs                                                                                                         7              0             12
 ./GameSpace/obj/GameSpace.csproj.nuget.g.targets                                                                                              0              0             12
+./reports/_latest/dotnet_build.1.txt                                                                                                          3              0             12
+./reports/_latest/dotnet_build.2.txt                                                                                                          3              0             12
+./reports/_latest/dotnet_build.3.txt                                                                                                          3              0             12
+./reports/_latest/dotnet_build.txt                                                                                                            3              0             12
 ./GameSpace/Areas/Forum/Views/Home/Index.cshtml                                                                                               1              3             11
 ./GameSpace/Models/EVoucherToken.cs                                                                                                           6              0             11
 ./GameSpace/Models/MemberSalesProfile.cs                                                                                                      6              0             11
@@ -421,6 +449,7 @@ File                                                                            
 ./GameSpace/Services/Validation/IValidationService.cs                                                                                         0              3             11
 ./GameSpace/Views/Shared/_TopbarLevel2.cshtml                                                                                                 1              3             11
 ./GameSpace/obj/Release/net8.0/GameSpace.AssemblyInfo.cs                                                                                      4              9             11
+./reports/_latest/STATUS.md                                                                                                                   4              0             11
 ./GameSpace/Areas/social_hub/Views/Mutes/_ReloadCacheToolbar.cshtml                                                                           1              1             10
 ./GameSpace/GameSpace.Api/obj/GameSpace.Api.csproj.nuget.g.targets                                                                            0              0             10
 ./GameSpace/Models/PlayerMarketProductImg.cs                                                                                                  5              0             10
@@ -428,6 +457,9 @@ File                                                                            
 ./GameSpace/libman.json                                                                                                                       0              0             10
 ./GameSpace/obj/Release/net8.0/GameSpace.csproj.FileListAbsolute.txt                                                                          0              0             10
 ./GameSpace/wwwroot/lib/sb-admin/js/scripts.js                                                                                                3             13             10
+./reports/_latest/BUILD_ERRORS.md                                                                                                             0              0             10
+./reports/_latest/dotnet_clean.2.txt                                                                                                          2              0             10
+./reports/_latest/dotnet_clean.3.txt                                                                                                          2              0             10
 ./GameSpace/GameSpace.Core/Services/Seeding/ISeedDataRunner.cs                                                                                2              9              9
 ./GameSpace/GameSpace.Core/obj/Release/net8.0/GameSpace.Core.AssemblyInfo.cs                                                                  4              9              9
 ./GameSpace/GameSpace.Data/obj/Debug/net8.0/GameSpace.Data.AssemblyInfo.cs                                                                    4              9              9
@@ -437,6 +469,7 @@ File                                                                            
 ./GameSpace/Models/BannedWord.cs                                                                                                              4              0              9
 ./GameSpace/Models/RelationStatus.cs                                                                                                          4              0              9
 ./GameSpace/Models/UserSalesInformation.cs                                                                                                    4              0              9
+./reports/_latest/BT_RETRY_SUMMARY.md                                                                                                         0              0              9
 ./GameSpace/GameSpace.Api/appsettings.Development.json                                                                                        0              0              8
 ./GameSpace/GameSpace.HealthCheck/GameSpace.HealthCheck.csproj                                                                                2              0              8
 ./GameSpace/GameSpace.Infrastructure/obj/GameSpace.Infrastructure.csproj.nuget.g.targets                                                      0              0              8
@@ -451,11 +484,14 @@ File                                                                            
 ./GameSpace/Areas/social_hub/Services/IMuteFilter.cs                                                                                          2              2              6
 ./GameSpace/GameSpace.Infrastructure/obj/Release/net8.0/GameSpace.Infrastructure.csproj.FileListAbsolute.txt                                  0              0              6
 ./GameSpace/wwwroot/lib/sb-admin/js/datatables-simple-demo.js                                                                                 1              2              6
+./.github/SECURITY.md                                                                                                                         1              0              5
 ./GameSpace/Views/Home/Privacy.cshtml                                                                                                         1              0              5
 ./GameSpace/Views/Shared/_Footer.cshtml                                                                                                       0              0              5
+./docs/SECURITY.md                                                                                                                            0              0              5
 ./GameSpace/Areas/Admin/Views/_ViewImports.cshtml                                                                                             0              0              4
 ./GameSpace/obj/Release/net8.0/GameSpace.MvcApplicationPartsAssemblyInfo.cs                                                                   4              9              4
 ./GameSpace/obj/Release/net8.0/GameSpace.RazorAssemblyInfo.cs                                                                                 4              9              4
+./reports/_latest/SCAN_SUMMARY.md                                                                                                             1              0              4
 ./GameSpace/Areas/Admin/Views/_ViewStart.cshtml                                                                                               0              0              3
 ./GameSpace/Areas/Identity/Pages/_ViewStart.cshtml                                                                                            0              0              3
 ./GameSpace/GameSpace.Models/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs                                                  0              1              3
@@ -464,13 +500,15 @@ File                                                                            
 ./GameSpace/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs                                                                 0              1              3
 ./GameSpace/wwwroot/font-awesome/css/all.min.css                                                                                              1              5              3
 ./GameSpace/wwwroot/lib/sb-admin/assets/demo/datatables-demo.js                                                                               0              1              3
+./reports/_latest/BT_LATEST.md                                                                                                                1              0              3
+./reports/_latest/BT_SUMMARY.md                                                                                                               1              0              3
 ./GameSpace/GameSpace.Models/obj/GameSpace.Models.csproj.nuget.g.targets                                                                      0              0              2
 ./GameSpace/Views/Shared/_ValidationScriptsPartial.cshtml                                                                                     0              0              2
 ./GameSpace/wwwroot/font-awesome/css/fontawesome.min.css                                                                                      1              5              2
+./reports/_latest/dotnet_restore.3.txt                                                                                                        0              0              2
 ./GameSpace/GameSpace.Models/obj/Debug/net8.0/GameSpace.Models.sourcelink.json                                                                0              0              1
 ./GameSpace/obj/Release/net8.0/GameSpace.sourcelink.json                                                                                      0              0              1
 ./GameSpace/reports/_latest/cs_file_count.txt                                                                                                 0              0              1
-./GameSpace/reports/_latest/db_table_count.txt                                                                                                0              0              1
 ./GameSpace/reports/_latest/file_count.txt                                                                                                    0              0              1
 ./GameSpace/wwwroot/font-awesome/css/brands.min.css                                                                                           0              5              1
 ./GameSpace/wwwroot/font-awesome/css/regular.min.css                                                                                          0              5              1
@@ -505,7 +543,31 @@ File                                                                            
 ./GameSpace/wwwroot/lib/sb-admin/assets/img/error-404-monochrome.svg                                                                          0              0              1
 ./project-docs/_archive/20250914-0214/WIP.md                                                                                                  0              0              1
 ./project-docs/progress.json                                                                                                                  0              0              1
+./reports/_latest/db_table_count.txt                                                                                                          0              0              1
+./reports/_latest/patch-2025-09-14T21:50:47Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-14T21:51:57Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:29:38Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:31:52Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:33:27Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:33:59Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:34:22Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:34:39Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:35:35Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:37:04Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:38:32Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:39:00Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:39:21Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:40:03Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:40:19Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:41:11Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:41:37Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:41:59Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:42:27Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:42:52Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:43:19Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T03:43:43Z.json                                                                                             0              0              1
+./reports/_latest/patch-2025-09-15T04:00:21Z.json                                                                                             0              0              1
 ./GameSpace/GameSpace.Tests/Stage5/Stage5IntegrationTests.cs                                                                                  1              0              0
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-SUM:                                                                                                                                      27046           9072         187580
+SUM:                                                                                                                                      27161           9077         188582
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
