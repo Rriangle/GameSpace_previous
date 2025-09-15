@@ -11,8 +11,8 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Restore
-        run: dotnet restore GameSpace_previous/GameSpace/GameSpace.csproj
+        run: dotnet restore GameSpace/GameSpace.csproj
       - name: Build
-        run: dotnet build -c Release GameSpace_previous/GameSpace/GameSpace.csproj
+        run: dotnet build -c Release GameSpace/GameSpace.csproj
       - name: Test
-        run: dotnet test -c Release --no-build GameSpace_previous/GameSpace/GameSpace.csproj
+        run: dotnet test -c Release --no-build GameSpace/GameSpace.csproj
