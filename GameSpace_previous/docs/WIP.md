@@ -74,3 +74,4 @@
 - 2025-09-15T03:41:11Z 新增 STYLEGUIDE.md、心跳、檢查點
 - 2025-09-15T03:41:37Z 新增 CODING_STANDARDS.md、心跳與檢查點
 - 2025-09-15T03:41:59Z 新增 .editorconfig 與 .gitattributes、心跳與檢查點
+- 2025-09-15T03:42:27Z 新增 issue templates、心跳與檢查點
