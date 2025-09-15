@@ -1,0 +1,18 @@
+# 文件索引（繁中） @ 2025-09-15T03:42:52Z
+
+## 規範與指南
+- [CONTRIBUTING](CONTRIBUTING.md)
+- [STYLEGUIDE](STYLEGUIDE.md)
+- [CODING_STANDARDS](CODING_STANDARDS.md)
+
+## 稽核與進度
+- [AUDIT](../project-docs/AUDIT.md)
+- [WIP](WIP.md)
+
+## 部署與營運
+- [DEPLOYMENT](DEPLOYMENT.md)
+- [OPERATIONS](OPERATIONS.md)
+
+## 模組與資料庫
+- [MODULES](MODULES.md)
+- [DATABASE](DATABASE.md)
