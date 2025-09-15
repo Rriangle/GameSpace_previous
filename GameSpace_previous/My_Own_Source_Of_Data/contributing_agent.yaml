@@ -11,7 +11,7 @@ start_of_run:
     - "old_0905.txt"
     - "new_0905.txt"
     - "database.json"
-    - "seedMiniGame.sql"
+    - "seedMiniGameArea.json"
     - "index.txt"
   relationships_re_read_quotes:
     - >
@@ -19,9 +19,9 @@ start_of_run:
       For the remaining ~10% gaps or conflicts, database.json is the final authority for schema,
       constraints, and table definitions.
     - >
-      seedMiniGame.sql is the authoritative baseline for MiniGame Area 的「展示用假資料」：
-      務必使用該檔提供之資料讓頁面看起來真實飽滿；但 seedMiniGame.sql 不得覆蓋或違反 database.json 的結構/約束。
-      當 MiniGame 的資料層描述與其他來源有含糊之處時，優先以 seedMiniGame.sql 的資料內容作為展示用基準
+      seedMiniGameArea.json is the authoritative baseline for MiniGame Area 的「展示用假資料」：
+      務必使用該檔提供之資料讓頁面看起來真實飽滿；但 seedMiniGameArea.json 不得覆蓋或違反 database.json 的結構/約束。
+      當 MiniGame 的資料層描述與其他來源有含糊之處時，優先以 seedMiniGameArea.json 的資料內容作為展示用基準
       （前提是完全遵守 database.json 的 schema 與約束）。將你的判斷在 commit message 註記。
     - >
       Public (front site): follow index.txt for layout/interaction (Bootstrap-based).
@@ -30,7 +30,7 @@ start_of_run:
     steps:
       - "Stop adding new scope."
       - "Identify the drift (what conflicts with which source)."
-      - "Fix to comply with this file + old/new + database.json + seedMiniGame.sql + index.txt."
+      - "Fix to comply with this file + old/new + database.json + seedMiniGameArea.json + index.txt."
       - "Document in commit message: WHY drifted, HOW corrected."
       - "Only then resume."
     block_on_drift: true
@@ -64,7 +64,7 @@ setup_execution:
   steps:
     - "Install VS 2022+ and SQL Server 2019/2022."
     - "Run ./database.json in SSMS → 建立 GameSpaceDatabase 初始資料。"
-    - "Run ./seedMiniGame.sql → 匯入 MiniGame Area 的展示用假資料（不得違反 database.json 結構/約束）。"
+    - "Run ./seedMiniGameArea.json → 匯入 MiniGame Area 的展示用假資料（不得違反 database.json 結構/約束）。"
     - "Open ASP.NET Core MVC solution in VS2022."
     - "Set appsettings.json DefaultConnection（不得使用 EF Migrations 或修改 schema；schema 以 database.json 為準）。"
     - "Build & Run（Public 站台 localhost）。"
@@ -127,7 +127,7 @@ database_truth:
   fake_data_rules:
     use_existing_from_database_json: true
     minigame_seed_baseline:
-      file: "seedMiniGame.sql"
+      file: "seedMiniGameArea.json"
       baseline_for_demo: true
       do_not_overwrite_seed_rows: true
     generation_order_hint: ["new_0905.txt", "old_0905.txt", "database.json"]
@@ -305,12 +305,14 @@ micro_prompts:
   stage5: "RBAC/rate-limit/timeout/retry; unified error; short-TTL cache; tests."
   stage6: "TESTING_POLICY.md; test templates; parallel; snapshot tests."
   stage7: "Perf budgets; profiling; docs."
-  stage8: "Final QA; a11y; zh-TW proofreading; release notes."
+  stage8: "Final QA & Sign-off"
+  stage8: "Final QA & Sign-off"
+  stage8: "Final QA & Sign-off"
 
 self_audit:
   checks:
     - "Language rule zh-TW"
-    - "Mandatory reading present（含 seedMiniGame.sql、index.txt）"
+    - "Mandatory reading present（含 seedMiniGameArea.json、index.txt）"
     - "Authority: old/new 90% + database.json 10%; MiniGame 展示以 seed 為基準且不違反 schema"
     - "Visual: Public=index.txt; Admin=SB Admin; 禁止混用"
     - "Fake Data: 200 rows/table; idempotent; seed 計入; >200 保留並 DEMO-NOTE"
