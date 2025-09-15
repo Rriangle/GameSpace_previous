@@ -42,3 +42,10 @@
 - 不觸及四大不可變（Wallet / Sign-in / Pet / MiniGame）邏輯的前提下，先處理「註釋編碼/跳脫」等非邏輯修復。
 - 每批 ≤ 3 檔或 ≤ 400 行，更新 `docs/WIP.md` 與本檔狀態，並提交推送至 main。
 \n## Scan Snapshot @ 2025-09-14T21:45:40Z\n- 見 reports/_latest/SCAN_SUMMARY.md
+\n## 最新報告索引（_latest） @ 2025-09-15T04:03:39Z
+- [INDEX](reports/_latest/INDEX.md)
+- [SCAN_SUMMARY](reports/_latest/SCAN_SUMMARY.md)
+- [BT_LATEST](reports/_latest/BT_LATEST.md)
+- [BUILD_ERRORS](reports/_latest/BUILD_ERRORS.md)
+- [AUDIT_SUMMARY](reports/_latest/AUDIT_SUMMARY.md)
+- [STATUS](reports/_latest/STATUS.md)
